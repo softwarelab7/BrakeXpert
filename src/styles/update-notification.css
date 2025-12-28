@@ -186,6 +186,12 @@
     border-bottom-color: var(--border-primary);
 }
 
+[data-theme='orbital'] .bell-icon,
+[data-theme='orbital'] .empty-icon {
+    color: white;
+    opacity: 1;
+}
+
 [data-theme='orbital'] .unread-dot {
     background: var(--accent-secondary);
     box-shadow: 0 0 12px var(--accent-secondary-glow);
