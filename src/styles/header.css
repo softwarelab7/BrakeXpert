@@ -2,11 +2,11 @@
     position: sticky;
     top: 0;
     z-index: 1020;
-    background: rgba(30, 41, 59, 0.7);
+    background: var(--bg-glass);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+    border-bottom: 1px solid var(--border-glass);
+    box-shadow: var(--shadow-md);
     padding: 12px 0;
 }
 
