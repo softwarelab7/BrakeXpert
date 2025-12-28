@@ -5,6 +5,7 @@ import { VitePWA } from 'vite-plugin-pwa'
 // https://vite.dev/config/
 export default defineConfig(({ command }) => ({
   base: command === 'build' ? '/BrakeXAlfa/' : '/',
+
   plugins: [
     react(),
     VitePWA({
@@ -40,4 +41,16 @@ export default defineConfig(({ command }) => ({
       }
     })
   ],
+
+  // Configuración de build optimizada para cache-busting
+  build: {
+    rollupOptions: {
+      output: {
+        // Generar archivos con hashes únicos basados en contenido
+        entryFileNames: 'assets/[name]-[hash].js',
+        chunkFileNames: 'assets/[name]-[hash].js',
+        assetFileNames: 'assets/[name]-[hash].[ext]'
+      }
+    }
+  }
 }))
