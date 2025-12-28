@@ -59,6 +59,8 @@ interface AppState {
     closeHistoryModal: () => void;
     openProductDetailModal: (productId: string) => void;
     closeProductDetailModal: () => void;
+    openGuideModal: () => void;
+    closeGuideModal: () => void;
     addNotification: (notification: Omit<UIState['notifications'][0], 'id' | 'timestamp' | 'read'>) => void;
 
     // Notification Panel
@@ -188,6 +190,7 @@ const initialUIState: UIState = {
     isFavoritesModalOpen: false,
     isHistoryModalOpen: false,
     isProductDetailModalOpen: false,
+    isGuideModalOpen: false,
     selectedProductId: null,
     notifications: [],
 };
@@ -434,6 +437,16 @@ export const useAppStore = create<AppState>()(
                         isProductDetailModalOpen: false,
                         selectedProductId: null,
                     },
+                })),
+
+            openGuideModal: () =>
+                set((state) => ({
+                    ui: { ...state.ui, isGuideModalOpen: true },
+                })),
+
+            closeGuideModal: () =>
+                set((state) => ({
+                    ui: { ...state.ui, isGuideModalOpen: false },
                 })),
 
             addNotification: (notification) =>

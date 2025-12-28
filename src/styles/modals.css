@@ -15,23 +15,27 @@
     padding: 1rem;
 }
 
-/* Modal Content Container */
-.modal-content {
+/* Modal Container */
+.modal-container {
     background: var(--bg-secondary);
-    border: 1px solid var(--border-glass);
+    border: 1px solid var(--border-primary);
     border-radius: 1.25rem;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    box-shadow: var(--shadow-xl);
     width: 100%;
-    max-width: 900px;
+    max-width: 600px;
+    /* Default size */
     max-height: 90vh;
     position: relative;
     display: flex;
     flex-direction: column;
-    overflow-y: auto;
-    /* Changed from overflow: hidden */
+    overflow: hidden;
     transform: scale(0.95);
     opacity: 0;
     animation: popIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.modal-sm {
+    max-width: 450px;
 }
 
 .modal-large {

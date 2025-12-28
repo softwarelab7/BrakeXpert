@@ -13,6 +13,7 @@ import ProductDetailModal from './components/modals/ProductDetailModal';
 import FavoritesModal from './components/modals/FavoritesModal';
 import CompareModal from './components/modals/CompareModal';
 import HistoryModal from './components/modals/HistoryModal';
+import GuideModal from './components/modals/GuideModal';
 import NotificationPanel from './components/NotificationPanel';
 import ReloadPrompt from './components/ReloadPrompt';
 import './styles/global.css';
@@ -147,6 +148,7 @@ function App() {
       <FavoritesModal />
       <CompareModal />
       <HistoryModal />
+      <GuideModal />
     </div>
   );
 }

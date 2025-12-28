@@ -12,17 +12,20 @@
   --bg-glass: rgba(24, 24, 27, 0.7);
   --bg-sidebar: rgba(24, 24, 27, 0.95);
 
-  /* Zinc Text - High Contrast */
-  --text-primary: #fafafa;
-  --text-secondary: #a1a1aa;
-  --text-tertiary: #71717a;
-  --text-muted: #52525b;
+  /* Zinc Text - High Contrast Improvements */
+  --text-primary: #ffffff;
+  --text-secondary: #d1d1d6;
+  /* Brighter for better contrast on black */
+  --text-tertiary: #a1a1aa;
+  /* Brighter */
+  --text-muted: #71717a;
 
-  /* Zinc Borders - Subtle */
-  --border-primary: #27272a;
-  --border-secondary: #3f3f46;
-  --border-glass: rgba(255, 255, 255, 0.08);
-  --border-focus: #52525b;
+  /* Zinc Borders - More Defined */
+  --border-primary: #3f3f46;
+  /* Higher contrast borders */
+  --border-secondary: #52525b;
+  --border-glass: rgba(255, 255, 255, 0.12);
+  --border-focus: #71717a;
 
   /* Premium Shadows */
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.4);
@@ -42,17 +45,20 @@
   --bg-glass: rgba(255, 255, 255, 0.8);
   --bg-sidebar: rgba(250, 250, 250, 0.95);
 
-  /* Light Zinc Text */
-  --text-primary: #18181b;
-  --text-secondary: #52525b;
-  --text-tertiary: #71717a;
-  --text-muted: #a1a1aa;
+  /* Light Zinc Text - High Contrast Improvements */
+  --text-primary: #09090b;
+  /* Pure black text for white bg */
+  --text-secondary: #3f3f46;
+  /* Darker for better contrast */
+  --text-tertiary: #52525b;
+  /* Darker */
+  --text-muted: #8e8e93;
 
-  /* Light Borders */
-  --border-primary: #e4e4e7;
-  --border-secondary: #d4d4d8;
-  --border-glass: rgba(0, 0, 0, 0.08);
-  --border-focus: #a1a1aa;
+  /* Light Borders - More Defined */
+  --border-primary: #d1d1d6;
+  --border-secondary: #a1a1aa;
+  --border-glass: rgba(0, 0, 0, 0.12);
+  --border-focus: #71717a;
 
   /* Light Shadows */
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
@@ -72,17 +78,20 @@
   --bg-glass: rgba(88, 37, 141, 0.6);
   --bg-sidebar: rgba(45, 27, 78, 0.95);
 
-  /* Orbital Text */
-  --text-primary: #f5f3ff;
-  --text-secondary: #c4b5fd;
-  --text-tertiary: #a78bfa;
-  --text-muted: #8b5cf6;
+  /* Orbital Text - Contrast Improvements */
+  --text-primary: #ffffff;
+  --text-secondary: #e2e8f0;
+  /* Much lighter for better contrast on dark purple */
+  --text-tertiary: #cbd5e1;
+  /* More vibrant */
+  --text-muted: #a78bfa;
 
-  /* Orbital Borders */
-  --border-primary: rgba(167, 139, 202, 0.3);
-  --border-secondary: rgba(167, 139, 202, 0.5);
-  --border-glass: rgba(167, 139, 250, 0.12);
-  --border-focus: #8b5cf6;
+  /* Orbital Borders - More Defined */
+  --border-primary: rgba(196, 181, 253, 0.4);
+  /* Brighter borders */
+  --border-secondary: rgba(196, 181, 253, 0.6);
+  --border-glass: rgba(167, 139, 250, 0.2);
+  --border-focus: #c4b5fd;
 
   /* Orbital Shadows with Purple Glow */
   --shadow-sm: 0 1px 2px 0 rgba(139, 92, 246, 0.2);

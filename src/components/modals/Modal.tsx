@@ -8,7 +8,7 @@ interface ModalProps {
     onClose: () => void;
     title: string;
     children: ReactNode;
-    size?: 'default' | 'large' | 'xl';
+    size?: 'small' | 'default' | 'large' | 'xl';
 }
 
 const Modal = ({ isOpen, onClose, title, children, size = 'default' }: ModalProps) => {
@@ -39,7 +39,11 @@ const Modal = ({ isOpen, onClose, title, children, size = 'default' }: ModalProp
 
     if (!isOpen) return null;
 
-    const sizeClass = size === 'large' ? 'modal-large' : size === 'xl' ? 'modal-xl' : '';
+    const sizeClass =
+        size === 'small' ? 'modal-sm' :
+            size === 'large' ? 'modal-large' :
+                size === 'xl' ? 'modal-xl' :
+                    '';
 
     return createPortal(
         <div className="modal-overlay" onClick={onClose}>

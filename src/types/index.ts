@@ -55,6 +55,7 @@ export interface UIState {
   isFavoritesModalOpen: boolean;
   isHistoryModalOpen: boolean;
   isProductDetailModalOpen: boolean;
+  isGuideModalOpen: boolean;
   selectedProductId: string | null;
   notifications: Notification[];
 }
