@@ -89,8 +89,15 @@
 
 .empty-icon {
     margin-bottom: 16px;
-    opacity: 0.5;
-    color: var(--accent-secondary);
+    opacity: 0.8;
+    color: #000000;
+    /* Black for light mode */
+}
+
+[data-theme='dark'] .empty-icon,
+[data-theme='orbital'] .empty-icon {
+    color: #ffffff;
+    /* White for dark and orbital modes */
 }
 
 /* Item */
@@ -111,7 +118,14 @@
 }
 
 .bell-icon {
-    color: var(--accent-secondary);
+    color: #000000;
+    /* Black for light mode by default */
+}
+
+[data-theme='dark'] .bell-icon,
+[data-theme='orbital'] .bell-icon {
+    color: #ffffff;
+    /* White for dark and orbital modes */
 }
 
 .item-title {
@@ -184,12 +198,6 @@
 
 [data-theme='orbital'] .notification-header {
     border-bottom-color: var(--border-primary);
-}
-
-[data-theme='orbital'] .bell-icon,
-[data-theme='orbital'] .empty-icon {
-    color: white;
-    opacity: 1;
 }
 
 [data-theme='orbital'] .unread-dot {
