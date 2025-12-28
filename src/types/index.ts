@@ -36,7 +36,7 @@ export interface Filters {
 }
 
 // Theme Types
-export type Theme = 'light' | 'dark' | 'orbital';
+export type Theme = 'light' | 'dark';
 
 // Search History
 export interface SearchHistory {

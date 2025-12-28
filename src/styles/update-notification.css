@@ -94,10 +94,9 @@
     /* Black for light mode */
 }
 
-[data-theme='dark'] .empty-icon,
-[data-theme='orbital'] .empty-icon {
+[data-theme='dark'] .empty-icon {
     color: #ffffff;
-    /* White for dark and orbital modes */
+    /* White for dark mode */
 }
 
 /* Item */
@@ -122,10 +121,9 @@
     /* Black for light mode by default */
 }
 
-[data-theme='dark'] .bell-icon,
-[data-theme='orbital'] .bell-icon {
+[data-theme='dark'] .bell-icon {
     color: #ffffff;
-    /* White for dark and orbital modes */
+    /* White for dark mode */
 }
 
 .item-title {
@@ -189,21 +187,6 @@
     color: var(--text-tertiary);
 }
 
-/* Orbital Theme Specific Enhancements */
-[data-theme='orbital'] .notification-card {
-    background-color: var(--bg-secondary);
-    border-color: var(--border-primary);
-    box-shadow: 0 10px 40px -10px rgba(139, 92, 246, 0.3);
-}
-
-[data-theme='orbital'] .notification-header {
-    border-bottom-color: var(--border-primary);
-}
-
-[data-theme='orbital'] .unread-dot {
-    background: var(--accent-secondary);
-    box-shadow: 0 0 12px var(--accent-secondary-glow);
-}
 
 @keyframes slideIn {
     from {

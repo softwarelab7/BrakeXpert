@@ -1,4 +1,4 @@
-import { ArrowUp, Moon, Orbit } from 'lucide-react';
+import { ArrowUp, Moon } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useAppStore } from '../../store/useAppStore';
 import '../../styles/floating-buttons.css';
@@ -23,12 +23,8 @@ const FloatingButtons = () => {
         });
     };
 
-    const toggleDarkMode = () => {
+    const toggleTheme = () => {
         setTheme(theme === 'dark' ? 'light' : 'dark');
-    };
-
-    const toggleOrbitalMode = () => {
-        setTheme(theme === 'orbital' ? 'light' : 'orbital');
     };
 
     return (
@@ -43,19 +39,10 @@ const FloatingButtons = () => {
             </button>
 
             <button
-                className="floating-btn floating-btn-orbital"
-                onClick={toggleOrbitalMode}
-                title="Modo Orbital"
-                aria-label="Modo Orbital"
-            >
-                <Orbit size={24} />
-            </button>
-
-            <button
                 className="floating-btn floating-btn-dark"
-                onClick={toggleDarkMode}
-                title="Modo Oscuro"
-                aria-label="Modo Oscuro"
+                onClick={toggleTheme}
+                title="Cambiar tema"
+                aria-label="Cambiar tema"
             >
                 <Moon size={24} />
             </button>

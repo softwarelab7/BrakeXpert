@@ -1,4 +1,3 @@
-import { Sun, Moon, Orbit } from 'lucide-react';
 import { useAppStore } from '../../store/useAppStore';
 import { useEffect } from 'react';
 import '../../styles/theme-toggle.css';
@@ -11,30 +10,19 @@ const ThemeToggle = () => {
         document.documentElement.setAttribute('data-theme', theme);
     }, [theme]);
 
-    const cycleTheme = () => {
-        const themes: Array<'light' | 'dark' | 'orbital'> = ['light', 'dark', 'orbital'];
-        const currentIndex = themes.indexOf(theme);
-        const nextIndex = (currentIndex + 1) % themes.length;
-        setTheme(themes[nextIndex]);
+    const toggleTheme = () => {
+        setTheme(theme === 'light' ? 'dark' : 'light');
     };
 
     return (
-        <button
-            className="theme-toggle"
-            onClick={cycleTheme}
-            title={`Tema actual: ${theme === 'light' ? 'Claro' : theme === 'dark' ? 'Oscuro' : 'Orbital'}`}
-            aria-label="Cambiar tema"
-        >
-            <span className="theme-icon theme-icon-light">
-                <Sun size={20} />
-            </span>
-            <span className="theme-icon theme-icon-dark">
-                <Moon size={20} />
-            </span>
-            <span className="theme-icon theme-icon-orbital">
-                <Orbit size={20} />
-            </span>
-        </button>
+        <label className="switch-uiverse" title={`Cambiar a modo ${theme === 'light' ? 'oscuro' : 'claro'}`}>
+            <input
+                type="checkbox"
+                checked={theme === 'dark'}
+                onChange={toggleTheme}
+            />
+            <span className="slider-uiverse"></span>
+        </label>
     );
 };
 
