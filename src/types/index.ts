@@ -61,7 +61,9 @@ export interface UIState {
 
 export interface Notification {
   id: string;
-  type: 'success' | 'error' | 'info' | 'warning';
+  type: 'update' | 'data' | 'system';
+  title: string;
   message: string;
+  read: boolean;
   timestamp: number;
 }

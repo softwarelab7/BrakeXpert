@@ -22,28 +22,57 @@
 
 .logo-section {
     display: flex;
+    flex-direction: row;
     align-items: center;
-    gap: 1rem;
+    gap: 0.8rem;
 }
 
 .logo {
     font-family: 'Orbitron', sans-serif;
     font-size: 1.75rem;
     font-weight: 700;
-    background: linear-gradient(135deg, #3b82f6 0%, #ef4444 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    /* Remove text background clip for mixed content */
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 0.1rem;
     letter-spacing: 0.05em;
     user-select: none;
+    line-height: 1;
+}
+
+/* .header-x style is below, leaving it as is or ensuring it flows well */
+.header-x {
+    height: 0.8em;
+    /* Scale relative to font size */
+    width: auto;
+    margin-left: 8px;
+    /* Increased from 2px */
+}
+
+.logo .header-x path {
+    fill: #000000;
+    /* "Negro negro" (Pure Black) as requested */
+}
+
+.header-separator {
+    width: 2px;
+    height: 1.8rem;
+    /* Explicit height slightly larger than text x-height to look balanced */
+    background-color: var(--border-primary);
 }
 
 .tagline {
     font-size: 0.875rem;
     color: var(--text-secondary);
     font-style: italic;
-    border-left: 2px solid var(--border-primary);
-    padding-left: 1rem;
+    padding-left: 0;
+    margin: 0;
+    font-weight: 400;
+    letter-spacing: normal;
+    display: block;
+    /* Visual adjustment: Flexbox centers bounding boxes, but text has ascenders/descenders. 
+       Usually no margin is best start. unique font metrics might need 1px adjustment */
 }
 
 .header-actions {
@@ -60,16 +89,19 @@
     width: 2.5rem;
     height: 2.5rem;
     border-radius: 0.5rem;
-    background: var(--bg-secondary);
+    background: transparent;
+    /* Removed background */
     color: var(--text-primary);
-    border: 1px solid var(--border-primary);
+    border: none;
+    /* Removed border */
     transition: all 0.2s ease;
 }
 
 .icon-button:hover {
     background: var(--bg-primary);
     transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
+    /* Stronger shadow for better visibility */
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
 }
 
 .icon-button:active {

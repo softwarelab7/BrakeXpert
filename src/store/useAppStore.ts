@@ -18,10 +18,14 @@ interface AppState {
     // UI
     theme: Theme;
     ui: UIState;
+    notificationMessage: string | null;
+    pwaUpdateAvailable: boolean;
 
     // Product Actions
     setProducts: (products: Product[]) => void;
     setFilteredProducts: (products: Product[]) => void;
+    setNotificationMessage: (message: string | null) => void;
+    setPwaUpdateAvailable: (available: boolean) => void;
 
     // Filter Actions
     setSearchQuery: (query: string) => void;
@@ -55,8 +59,15 @@ interface AppState {
     closeHistoryModal: () => void;
     openProductDetailModal: (productId: string) => void;
     closeProductDetailModal: () => void;
-    addNotification: (notification: Omit<UIState['notifications'][0], 'id' | 'timestamp'>) => void;
+    addNotification: (notification: Omit<UIState['notifications'][0], 'id' | 'timestamp' | 'read'>) => void;
+
+    // Notification Panel
+    isNotificationPanelOpen: boolean;
+    toggleNotificationPanel: () => void;
+    closeNotificationPanel: () => void;
     removeNotification: (id: string) => void;
+    markAsRead: (id: string) => void;
+    clearAllNotifications: () => void;
 }
 
 const initialFilters: Filters = {
@@ -95,10 +106,18 @@ export const useAppStore = create<AppState>()(
             searchHistory: [],
             theme: 'light',
             ui: initialUIState,
+            isNotificationPanelOpen: false,
+            toggleNotificationPanel: () => set((state) => ({ isNotificationPanelOpen: !state.isNotificationPanelOpen })),
+            closeNotificationPanel: () => set({ isNotificationPanelOpen: false }),
+
+            notificationMessage: null,
+            pwaUpdateAvailable: false,
 
             // Product Actions
             setProducts: (products) => set({ products }),
             setFilteredProducts: (filteredProducts) => set({ filteredProducts }),
+            setNotificationMessage: (message) => set({ notificationMessage: message }),
+            setPwaUpdateAvailable: (available) => set({ pwaUpdateAvailable: available }),
 
             // Filter Actions
             setSearchQuery: (query) =>
@@ -183,7 +202,8 @@ export const useAppStore = create<AppState>()(
                     // Show notification if max reached
                     if (state.comparisons.length >= 4 && !state.comparisons.includes(id)) {
                         const notification = {
-                            type: 'warning' as const,
+                            type: 'system' as const,
+                            title: 'Límite de comparación',
                             message: 'Máximo 4 productos para comparar',
                         };
                         get().addNotification(notification);
@@ -270,13 +290,16 @@ export const useAppStore = create<AppState>()(
                 set((state) => {
                     const newNotification = {
                         ...notification,
-                        id: Date.now().toString(),
+                        id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
                         timestamp: Date.now(),
+                        read: false,
                     };
+                    // Keep only last 50 notifications
+                    const notifications = [newNotification, ...state.ui.notifications].slice(0, 50);
                     return {
                         ui: {
                             ...state.ui,
-                            notifications: [...state.ui.notifications, newNotification],
+                            notifications,
                         },
                     };
                 }),
@@ -288,6 +311,24 @@ export const useAppStore = create<AppState>()(
                         notifications: state.ui.notifications.filter((n) => n.id !== id),
                     },
                 })),
+
+            markAsRead: (id) =>
+                set((state) => ({
+                    ui: {
+                        ...state.ui,
+                        notifications: state.ui.notifications.map((n) =>
+                            n.id === id ? { ...n, read: true } : n
+                        ),
+                    },
+                })),
+
+            clearAllNotifications: () =>
+                set((state) => ({
+                    ui: {
+                        ...state.ui,
+                        notifications: [],
+                    },
+                })),
         }),
         {
             name: 'brake-x-storage',
@@ -296,6 +337,9 @@ export const useAppStore = create<AppState>()(
                 comparisons: state.comparisons,
                 searchHistory: state.searchHistory,
                 theme: state.theme,
+                // Do not persist notifications to start fresh, or persist if desired. 
+                // Given user request for "system", usually persist is good but maybe not for high volume.
+                // Assuming not persisting ui.notifications is safer for now or let it be (it's not listed in partialize).
             }),
         }
     )

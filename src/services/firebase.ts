@@ -1,24 +1,77 @@
 import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, getDocs, query, where, orderBy, limit } from 'firebase/firestore';
+import { getFirestore, collection, getDocs, query, where, orderBy, limit, writeBatch, doc, onSnapshot, type DocumentChange } from 'firebase/firestore';
+import { getAuth } from 'firebase/auth';
 import type { Product } from '../types';
 
 // Firebase configuration
 // TODO: Replace with your actual Firebase config
 const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_AUTH_DOMAIN",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_STORAGE_BUCKET",
-    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-    appId: "YOUR_APP_ID"
+    // Opción 1: Variables de entorno (Recomendado)
+    apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "AIzaSyCha4S_wLxI_CZY1Tc9FOJNA3cUTggISpU",
+    authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "brakexadmin.firebaseapp.com",
+    projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "brakexadmin",
+    storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "brakexadmin.firebasestorage.app",
+    messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "799264562947",
+    appId: import.meta.env.VITE_FIREBASE_APP_ID || "1:799264562947:web:52d860ae41a5c4b8f75336"
 };
+
+export const isFirebaseConfigured = Boolean(
+    firebaseConfig.apiKey &&
+    firebaseConfig.apiKey !== "YOUR_API_KEY" &&
+    firebaseConfig.apiKey !== "PEGAR_API_KEY_AQUI"
+);
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
+export const auth = getAuth(app);
 
 // Collections
-export const productsCollection = collection(db, 'products');
+export const productsCollection = collection(db, 'pastillas');
+
+// Real-time subscription
+export const subscribeToProducts = (callback: (products: Product[], changes: DocumentChange[]) => void) => {
+    return onSnapshot(productsCollection, (snapshot) => {
+        const products: Product[] = [];
+        snapshot.forEach((doc) => {
+            products.push({
+                id: doc.id,
+                ...doc.data() as Omit<Product, 'id'>
+            });
+        });
+        callback(products, snapshot.docChanges());
+    }, (error) => {
+        console.error("Error subscribing to products:", error);
+    });
+};
+
+// Seed Database with Mock Data
+export const seedDatabase = async () => {
+    const products = getMockProducts();
+    const batchSize = 500; // Firebase batch limit
+    const chunks = [];
+
+    for (let i = 0; i < products.length; i += batchSize) {
+        chunks.push(products.slice(i, i + batchSize));
+    }
+
+    let totalUploaded = 0;
+
+    for (const chunk of chunks) {
+        const batch = writeBatch(db);
+        chunk.forEach((product) => {
+            const docRef = doc(productsCollection, product.id || undefined); // Use ID if present, otherwise auto-id
+            // Remove helper properties if any, keep raw data
+            const productData = { ...product };
+            batch.set(docRef, productData);
+        });
+        await batch.commit();
+        totalUploaded += chunk.length;
+        console.log(`Uploaded batch of ${chunk.length} products. Total: ${totalUploaded}`);
+    }
+
+    return totalUploaded;
+};
 
 // Fetch all products
 export const fetchProducts = async (): Promise<Product[]> => {
