@@ -1,3 +1,6 @@
+/* Import the exact font used in localhost */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
+
 .header {
     position: sticky;
     top: 0;
@@ -7,58 +10,58 @@
     -webkit-backdrop-filter: blur(10px);
     border-bottom: 1px solid var(--border-glass);
     box-shadow: var(--shadow-md);
-    padding: 12px 0;
+    padding: 0.75rem 0;
 }
 
 .header-container {
     max-width: 1400px;
     margin: 0 auto;
-    padding: 0 24px;
+    padding: 0 1.5rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 32px;
+    gap: 2rem;
 }
 
 .logo-section {
     display: flex;
     flex-direction: row;
     align-items: center;
-    gap: 12.8px;
+    gap: 0.8rem;
 }
 
 .logo {
     font-family: 'Orbitron', sans-serif;
-    font-size: 28px;
+    font-size: 1.75rem;
     font-weight: 700;
-    color: #f1f5f9;
+    color: var(--text-primary);
     display: flex;
     align-items: center;
-    gap: 1.6px;
+    gap: 0.1rem;
     letter-spacing: 0.05em;
     user-select: none;
     line-height: 1;
 }
 
 .header-x {
-    height: 22.4px;
+    height: 0.8em;
     width: auto;
     margin-left: 8px;
 }
 
 .logo .header-x path {
-    fill: #f1f5f9;
+    fill: var(--text-primary);
 }
 
 .header-separator {
     width: 2px;
-    height: 28.8px;
-    background-color: rgba(71, 85, 105, 0.5);
+    height: 1.8rem;
+    background-color: var(--border-primary);
 }
 
 .tagline {
-    font-size: 14px;
-    color: #cbd5e1;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
     font-style: italic;
     padding-left: 0;
     margin: 0;
@@ -70,7 +73,7 @@
 .header-actions {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 1rem;
 }
 
 .icon-button {
@@ -78,17 +81,17 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 40px;
-    height: 40px;
-    border-radius: 8px;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 0.5rem;
     background: transparent;
-    color: #f1f5f9;
+    color: var(--text-primary);
     border: none;
     transition: all 0.2s ease;
 }
 
 .icon-button:hover {
-    background: #0f172a;
+    background: var(--bg-primary);
     transform: translateY(-2px);
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
 }
@@ -99,30 +102,30 @@
 
 .notification-badge {
     position: absolute;
-    top: -4px;
-    right: -4px;
-    min-width: 20px;
-    height: 20px;
-    background: #f97316;
+    top: -0.25rem;
+    right: -0.25rem;
+    min-width: 1.25rem;
+    height: 1.25rem;
+    background: var(--badge-notification);
     color: white;
     border-radius: 9999px;
-    font-size: 10px;
+    font-size: 0.625rem;
     font-weight: 700;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0 4px;
+    padding: 0 0.25rem;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 @media (max-width: 768px) {
     .header-container {
-        padding: 0 16px;
-        gap: 16px;
+        padding: 0 1rem;
+        gap: 1rem;
     }
 
     .logo {
-        font-size: 24px;
+        font-size: 1.5rem;
     }
 
     .tagline {
@@ -130,11 +133,11 @@
     }
 
     .header-actions {
-        gap: 8px;
+        gap: 0.5rem;
     }
 
     .icon-button {
-        width: 32px;
-        height: 32px;
+        width: 2rem;
+        height: 2rem;
     }
 }
