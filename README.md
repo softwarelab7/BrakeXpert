@@ -18,7 +18,7 @@ Una aplicación web moderna para consulta de pastillas de freno, construida con 
 - ❤️ **Sistema de Favoritos**: Guarda tus productos preferidos
 - ⚖️ **Comparación**: Compara hasta 4 productos simultáneamente
 - 🕒 **Historial**: Registro de búsquedas anteriores
-- 🎨 **3 Temas**: Light, Dark, y Orbital Mode
+- 🎨 **Temas**: Light y Dark Mode
 - 📱 **Responsive**: Diseño adaptable a todos los dispositivos
 - 💎 **Glassmorphism**: Efectos visuales modernos
 
@@ -109,7 +109,7 @@ npm run lint         # Ejecutar linter
 
 ## 🎨 Temas
 
-La aplicación incluye 3 temas personalizados:
+La aplicación incluye 2 temas personalizados:
 
 ### 🌞 Light Mode
 - Fondo claro (#f8fafc)
@@ -121,10 +121,6 @@ La aplicación incluye 3 temas personalizados:
 - Reducción de fatiga visual
 - Perfecto para uso nocturno
 
-### 🪐 Orbital Mode
-- Tema espacial púrpura
-- Efectos de brillo
-- Experiencia única
 
 ## 🔧 Configuración de Firebase
 
@@ -345,14 +341,6 @@ Este proyecto está bajo la Licencia MIT.
 
 ## 📸 Screenshots
 
-### Light Mode
-![Light Mode](screenshots/light-mode.png)
-
-### Dark Mode
-![Dark Mode](screenshots/dark-mode.png)
-
-### Orbital Mode
-![Orbital Mode](screenshots/orbital-mode.png)
 
 ---
 

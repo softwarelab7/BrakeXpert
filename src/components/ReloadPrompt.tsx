@@ -9,7 +9,9 @@ function ReloadPrompt() {
         updateServiceWorker,
     } = useRegisterSW({
         onRegistered(r) {
-            r && setInterval(() => r.update(), 60 * 60 * 1000);
+            if (r) {
+                setInterval(() => r.update(), 60 * 60 * 1000);
+            }
         },
     });
 

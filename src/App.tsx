@@ -27,17 +27,17 @@ function App() {
   const setCurrentPage = useAppStore(state => state.setCurrentPage);
 
   // Load products on mount
-  const loadProducts = async () => {
+  const loadProducts = useMemo(() => async () => {
     try {
       if (isFirebaseConfigured) {
         try {
           const data = await fetchProducts();
           setProducts(data);
-          // setFilteredProducts is now called inside setProducts in the store
-        } catch (firebaseError: any) {
+        } catch (firebaseError: unknown) {
           console.error('Error connecting to Firebase:', firebaseError);
           setProducts([]);
-          alert(`Error conectando a Firebase:\n${firebaseError.message}\n\nRevisa si tu base de datos Firestore está creada y si las Reglas de Seguridad permiten lectura (allow read: if true).`);
+          const message = firebaseError instanceof Error ? firebaseError.message : 'Error desconocido';
+          alert(`Error conectando a Firebase:\n${message}\n\nRevisa si tu base de datos Firestore está creada y si las Reglas de Seguridad permiten lectura (allow read: if true).`);
         }
       } else {
         console.error('Firebase not configured.');
@@ -47,7 +47,7 @@ function App() {
     } catch (error) {
       console.error('Error loading products:', error);
     }
-  };
+  }, [setProducts]);
 
   // Real-time updates subscription
   useEffect(() => {
@@ -63,7 +63,7 @@ function App() {
       if (!isInitialLoad && changes) {
         const store = useAppStore.getState();
 
-        changes.forEach((change: any) => {
+        changes.forEach((change) => {
           const data = change.doc.data();
           const pRef = data.referencia || (data.ref && data.ref[0]) || change.doc.id;
 
@@ -92,7 +92,7 @@ function App() {
     });
 
     return () => unsubscribe();
-  }, []);
+  }, [loadProducts, setProducts]);
 
   // Pagination
   const { currentPage, itemsPerPage } = ui;
@@ -136,9 +136,6 @@ function App() {
       </div>
 
       <Footer />
-
-
-
 
       <NotificationPanel />
       <ReloadPrompt />
