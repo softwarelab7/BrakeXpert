@@ -15,7 +15,7 @@
     padding: 0 1.5rem;
 }
 
-.main-content {
+.results-panel {
     flex: 1;
     padding: 1.5rem;
     max-width: calc(100% - 262px);
@@ -28,7 +28,7 @@
 }
 
 @media (max-width: 1024px) {
-    .main-content {
+    .results-panel {
         max-width: 100%;
         margin-left: 0;
     }
@@ -39,7 +39,7 @@
         flex-direction: column;
     }
 
-    .main-content {
+    .results-panel {
         padding: 1rem;
     }
 }

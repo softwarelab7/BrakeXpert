@@ -1,4 +1,4 @@
-import { Scale, Heart, History } from 'lucide-react';
+import { ArrowLeftRight, Heart, History } from 'lucide-react';
 import { useAppStore } from '../../store/useAppStore';
 import '../../styles/results-bar.css';
 
@@ -33,10 +33,9 @@ const ResultsBar = ({ totalResults, currentStart, currentEnd }: ResultsBarProps)
                     onClick={openCompareModal}
                     title="Comparar productos"
                 >
-                    <Scale size={18} />
-                    <span>Comparar</span>
+                    <ArrowLeftRight size={20} />
                     {comparisonsCount > 0 && (
-                        <span className="action-badge action-badge-compare">
+                        <span className="action-badge">
                             {comparisonsCount}
                         </span>
                     )}
@@ -47,10 +46,9 @@ const ResultsBar = ({ totalResults, currentStart, currentEnd }: ResultsBarProps)
                     onClick={openFavoritesModal}
                     title="Ver favoritos"
                 >
-                    <Heart size={18} />
-                    <span>Favoritos</span>
+                    <Heart size={20} fill={favoritesCount > 0 ? 'currentColor' : 'none'} />
                     {favoritesCount > 0 && (
-                        <span className="action-badge action-badge-favorite">
+                        <span className="action-badge">
                             {favoritesCount}
                         </span>
                     )}
@@ -61,8 +59,7 @@ const ResultsBar = ({ totalResults, currentStart, currentEnd }: ResultsBarProps)
                     onClick={openHistoryModal}
                     title="Historial de búsquedas"
                 >
-                    <History size={18} />
-                    <span>Historial</span>
+                    <History size={20} />
                 </button>
             </div>
         </div>

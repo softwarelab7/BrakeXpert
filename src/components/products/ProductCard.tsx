@@ -1,5 +1,5 @@
 import React from 'react';
-import { Scale, Heart } from 'lucide-react';
+import { ArrowLeftRight, Heart } from 'lucide-react';
 import { useAppStore } from '../../store/useAppStore';
 import type { Product } from '../../types';
 import '../../styles/product-card.css';
@@ -16,12 +16,6 @@ const ProductCard = React.memo(({ product }: ProductCardProps) => {
     const toggleComparison = useAppStore(state => state.toggleComparison);
     const openProductDetailModal = useAppStore(state => state.openProductDetailModal);
 
-    const getPositionClass = (position: string) => {
-        if (position === 'DELANTERA') return 'position-badge-delantera';
-        if (position === 'TRASERA') return 'position-badge-trasera';
-        return 'position-badge-ambas';
-    };
-
     const formatApplications = () => {
         if (!product.aplicaciones || product.aplicaciones.length === 0) return 'Sin aplicaciones';
 
@@ -29,7 +23,7 @@ const ProductCard = React.memo(({ product }: ProductCardProps) => {
         const remaining = product.aplicaciones.length - 1;
 
         let text = `${first.marca} ${first.modelo}`;
-        if (first.año) text += ` (${first.año})`;
+        // if (first.año) text += ` (${first.año})`; // In the image years are not always shown in the summary
 
         if (remaining > 0) {
             text += `, +${remaining} más`;
@@ -39,76 +33,61 @@ const ProductCard = React.memo(({ product }: ProductCardProps) => {
     };
 
     return (
-        <div className="product-card">
-            {/* Header Bar */}
+        <div className="product-card" onClick={() => openProductDetailModal(product.id)}>
+            {/* Header: Position and Actions */}
             <div className="card-header">
-                <span className={`position-badge ${getPositionClass(product.posicion)}`}>
+                <span className="position-badge">
                     {product.posicion}
                 </span>
                 <div className="action-icons">
                     <button
                         className={`action-icon action-icon-compare ${isInComparison ? 'active' : ''}`}
-                        onClick={() => toggleComparison(product.id)}
-                        title={isInComparison ? 'Quitar de comparación' : 'Agregar a comparación'}
-                        aria-label="Comparar"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            toggleComparison(product.id);
+                        }}
+                        title="Comparar"
                     >
-                        <Scale size={16} />
+                        <ArrowLeftRight size={18} />
                     </button>
                     <button
                         className={`action-icon action-icon-favorite ${isFavorite ? 'active' : ''}`}
-                        onClick={() => toggleFavorite(product.id)}
-                        title={isFavorite ? 'Quitar de favoritos' : 'Agregar a favoritos'}
-                        aria-label="Favorito"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            toggleFavorite(product.id);
+                        }}
+                        title="Favorito"
                     >
-                        <Heart size={16} fill={isFavorite ? 'currentColor' : 'none'} />
+                        <Heart size={18} fill={isFavorite ? 'var(--accent-primary)' : 'none'} />
                     </button>
                 </div>
             </div>
 
             {/* Image */}
-            <div className="image-container" onClick={() => openProductDetailModal(product.id)}>
+            <div className="image-container">
                 <img
                     src={product.imagenes?.[0] || 'https://via.placeholder.com/200x150?text=Brake+Pad'}
-                    alt={`Pastilla de freno ${product.referencia}`}
+                    alt={product.referencia}
                     className="product-image"
                     loading="lazy"
                 />
             </div>
 
-            {/* Reference Badges */}
-            <div className="ref-badges">
-                {(product.ref || []).map((ref, index) => (
+            {/* References */}
+            <div className="ref-section">
+                {(product.ref || []).map((reference, index) => (
                     <span
-                        key={ref}
-                        className={`ref-badge ${index % 2 === 0 ? 'ref-badge-blue' : 'ref-badge-red'}`}
+                        key={reference}
+                        className={`ref-badge ${index === 0 ? '' : index === 1 ? 'ref-badge-alt' : 'ref-badge-danger'}`}
                     >
-                        {ref}
+                        {reference}
                     </span>
                 ))}
             </div>
 
-            {/* Content */}
-            <div className="card-content">
-                <p className="manufacturer">{product.fabricante}</p>
+            {/* Application Detail */}
+            <div className="card-bottom">
                 <p className="applications">{formatApplications()}</p>
-
-                {product.medidas && (
-                    <div className="measurements">
-                        <span className="measurement-item">
-                            Ancho: {product.medidas.ancho}mm
-                        </span>
-                        <span className="measurement-item">
-                            Alto: {product.medidas.alto}mm
-                        </span>
-                    </div>
-                )}
-
-                <button
-                    className="view-details-btn"
-                    onClick={() => openProductDetailModal(product.id)}
-                >
-                    Ver Detalles
-                </button>
             </div>
         </div>
     );

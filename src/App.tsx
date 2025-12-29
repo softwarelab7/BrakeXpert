@@ -122,7 +122,7 @@ function App() {
           <Sidebar />
         </div>
 
-        <main className="main-content">
+        <main className="results-panel">
           <div className="content-wrapper">
             <ResultsBar
               totalResults={totalResults}

@@ -15,7 +15,7 @@ const ProductGrid = ({ products, loading = false, onClearFilters }: ProductGridP
     // Loading State
     if (loading) {
         return (
-            <div className="product-grid">
+            <div className="results-wrapper">
                 {Array.from({ length: 8 }).map((_, index) => (
                     <ProductCardSkeleton key={`skeleton-${index}`} />
                 ))}
@@ -26,7 +26,7 @@ const ProductGrid = ({ products, loading = false, onClearFilters }: ProductGridP
     // Empty State
     if (products.length === 0) {
         return (
-            <div className="product-grid">
+            <div className="results-wrapper">
                 <EmptyState onAction={onClearFilters} />
             </div>
         );
@@ -34,7 +34,7 @@ const ProductGrid = ({ products, loading = false, onClearFilters }: ProductGridP
 
     // Results State
     return (
-        <div className="product-grid">
+        <div className="results-wrapper">
             {products.map((product) => (
                 <ProductCard key={product.id} product={product} />
             ))}
