@@ -118,7 +118,9 @@ function App() {
       <Header />
 
       <div className="main-layout">
-        <Sidebar />
+        <div className="filters-column">
+          <Sidebar />
+        </div>
 
         <main className="main-content">
           <div className="content-wrapper">
