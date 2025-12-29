@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useAppStore } from './store/useAppStore';
 import { fetchProducts, isFirebaseConfigured, subscribeToProducts } from './services/firebase';
 import Header from './components/layout/Header';
@@ -20,6 +20,7 @@ import './styles/global.css';
 import './styles/app.css';
 
 function App() {
+  const [isLoading, setIsLoading] = useState(true);
   const filteredProducts = useAppStore(state => state.filteredProducts);
   const ui = useAppStore(state => state.ui);
   const setProducts = useAppStore(state => state.setProducts);
@@ -28,6 +29,7 @@ function App() {
 
   // Load products on mount
   const loadProducts = useMemo(() => async () => {
+    setIsLoading(true);
     try {
       if (isFirebaseConfigured) {
         try {
@@ -46,6 +48,8 @@ function App() {
       }
     } catch (error) {
       console.error('Error loading products:', error);
+    } finally {
+      setIsLoading(false);
     }
   }, [setProducts]);
 
@@ -59,6 +63,9 @@ function App() {
     let isInitialLoad = true;
     const unsubscribe = subscribeToProducts((newProducts, changes) => {
       setProducts(newProducts);
+      if (isInitialLoad) {
+        setIsLoading(false);
+      }
 
       if (!isInitialLoad && changes) {
         const store = useAppStore.getState();
@@ -123,6 +130,7 @@ function App() {
 
             <ProductGrid
               products={paginatedProducts}
+              loading={isLoading}
               onClearFilters={clearFilters}
             />
 

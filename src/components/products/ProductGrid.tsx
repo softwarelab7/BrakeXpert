@@ -1,33 +1,38 @@
-import { PackageOpen } from 'lucide-react';
 import ProductCard from './ProductCard';
+import ProductCardSkeleton from './ProductCardSkeleton';
+import EmptyState from '../common/EmptyState';
 import type { Product } from '../../types';
 import '../../styles/product-grid.css';
 
 interface ProductGridProps {
     products: Product[];
+    loading?: boolean;
     onClearFilters?: () => void;
 }
 
-const ProductGrid = ({ products, onClearFilters }: ProductGridProps) => {
-    if (products.length === 0) {
+const ProductGrid = ({ products, loading = false, onClearFilters }: ProductGridProps) => {
+
+    // Loading State
+    if (loading) {
         return (
             <div className="product-grid">
-                <div className="grid-empty">
-                    <PackageOpen className="empty-icon" />
-                    <h3 className="empty-title">No se encontraron productos</h3>
-                    <p className="empty-message">
-                        Intenta ajustar los filtros para ver más resultados
-                    </p>
-                    {onClearFilters && (
-                        <button className="empty-action" onClick={onClearFilters}>
-                            Borrar todos los filtros
-                        </button>
-                    )}
-                </div>
+                {Array.from({ length: 8 }).map((_, index) => (
+                    <ProductCardSkeleton key={`skeleton-${index}`} />
+                ))}
             </div>
         );
     }
 
+    // Empty State
+    if (products.length === 0) {
+        return (
+            <div className="product-grid">
+                <EmptyState onAction={onClearFilters} />
+            </div>
+        );
+    }
+
+    // Results State
     return (
         <div className="product-grid">
             {products.map((product) => (
