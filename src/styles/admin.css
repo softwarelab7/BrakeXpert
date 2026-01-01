@@ -49,7 +49,12 @@
     display: flex;
     flex-direction: column;
     gap: 2rem;
-    transition: background 0.3s ease, border-color 0.3s ease;
+    transition: all 0.3s ease;
+    z-index: 1000;
+}
+
+.admin-sidebar.mobile-open {
+    transform: translateX(0) !important;
 }
 
 .admin-main {
@@ -84,6 +89,16 @@
     background-clip: text;
     -webkit-text-fill-color: transparent;
     margin: 0;
+}
+
+.menu-toggle {
+    display: none;
+    background: var(--admin-glass);
+    border: 1px solid var(--admin-border);
+    color: var(--admin-text);
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
 }
 
 /* Glass Inputs */
@@ -161,8 +176,44 @@
     }
 
     .admin-sidebar {
-        display: none;
+        position: fixed;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        transform: translateX(-100%);
+        box-shadow: 20px 0 50px rgba(0, 0, 0, 0.5);
     }
+
+    .menu-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .admin-main {
+        padding: 1rem;
+    }
+
+    .admin-header {
+        gap: 1rem;
+    }
+
+    .admin-title {
+        font-size: 1.4rem;
+    }
+
+    .admin-table-container {
+        margin: 0 -1.25rem;
+        padding: 0 1.25rem;
+    }
+}
+
+.sidebar-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
+    z-index: 999;
 }
 
 /* Image Preview Styles */

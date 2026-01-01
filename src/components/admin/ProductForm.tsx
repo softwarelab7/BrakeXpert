@@ -612,6 +612,29 @@ const ProductForm: React.FC<ProductFormProps> = ({ initialData, onSave }) => {
                     gap: 0.25rem;
                 }
 
+                @media (max-width: 768px) {
+                    .image-edit-section {
+                        flex-direction: column;
+                        align-items: center;
+                    }
+                    .image-input-stack {
+                        width: 100%;
+                    }
+                    .extra-info-grid {
+                        grid-template-columns: 1fr;
+                    }
+                    .app-edit-grid {
+                        grid-template-columns: 1fr;
+                    }
+                    .save-all-btn {
+                        width: 100%;
+                        padding: 1rem 2rem;
+                    }
+                    .pos-selector {
+                        grid-template-columns: 1fr;
+                    }
+                }
+
                 .icon-btn {
                     display: flex;
                     align-items: center;

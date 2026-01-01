@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAppStore } from '../../store/useAppStore';
 import '../../styles/admin.css';
-import { Plus, Search, LogOut, Activity, Database, Edit3, ArrowLeft, AlertTriangle, CheckCircle2, XCircle, History, FileClock } from 'lucide-react';
+import { Plus, Search, LogOut, Activity, Database, Edit3, ArrowLeft, AlertTriangle, CheckCircle2, XCircle, History, FileClock, Menu } from 'lucide-react';
 import ProductForm from './ProductForm';
 import AdminLogin from './AdminLogin';
 import ThemeToggle from '../layout/ThemeToggle';
@@ -32,6 +32,7 @@ const AdminPanel: React.FC = () => {
     const [isLoadingHistory, setIsLoadingHistory] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
     const [notification, setNotification] = useState<{ message: string, type: 'success' | 'error' } | null>(null);
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     const showNotification = (message: string, type: 'success' | 'error' = 'success') => {
         setNotification({ message, type });
@@ -171,13 +172,16 @@ const AdminPanel: React.FC = () => {
 
     return (
         <div className="admin-layout">
+            {isMobileMenuOpen && (
+                <div className="sidebar-overlay" onClick={() => setIsMobileMenuOpen(false)} />
+            )}
             {notification && (
                 <div className={`toast-notification ${notification.type}`}>
                     {notification.type === 'success' ? <CheckCircle2 size={18} /> : <XCircle size={18} />}
                     {notification.message}
                 </div>
             )}
-            <aside className="admin-sidebar">
+            <aside className={`admin-sidebar ${isMobileMenuOpen ? 'mobile-open' : ''}`}>
                 <div className="admin-brand">
                     <h2 style={{ fontSize: '1.2rem', fontWeight: 800, color: 'var(--admin-text)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                         <Activity color="#3b82f6" /> BRAKE X ADMIN
@@ -186,25 +190,25 @@ const AdminPanel: React.FC = () => {
 
                 <nav style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginTop: '2rem' }}>
                     <button
-                        onClick={() => setActiveTab('catalog')}
+                        onClick={() => { setActiveTab('catalog'); setIsMobileMenuOpen(false); }}
                         className={`admin-nav-btn ${activeTab === 'catalog' ? 'active' : ''}`}
                     >
                         <Database size={20} /> Catálogo
                     </button>
                     <button
-                        onClick={handleNew}
+                        onClick={() => { handleNew(); setIsMobileMenuOpen(false); }}
                         className={`admin-nav-btn ${activeTab === 'new' ? 'active' : ''}`}
                     >
                         <Plus size={20} /> Nueva Pastilla
                     </button>
                     <button
-                        onClick={() => setActiveTab('audit')}
+                        onClick={() => { setActiveTab('audit'); setIsMobileMenuOpen(false); }}
                         className={`admin-nav-btn ${activeTab === 'audit' ? 'active' : ''}`}
                     >
                         <AlertTriangle size={20} /> Auditoría
                     </button>
                     <button
-                        onClick={() => setActiveTab('history')}
+                        onClick={() => { setActiveTab('history'); setIsMobileMenuOpen(false); }}
                         className={`admin-nav-btn ${activeTab === 'history' ? 'active' : ''}`}
                     >
                         <History size={20} /> Historial
@@ -220,15 +224,20 @@ const AdminPanel: React.FC = () => {
 
             <main className="admin-main">
                 <header className="admin-header">
-                    <div>
-                        {activeTab === 'edit' && (
-                            <button onClick={handleBack} className="back-btn">
-                                <ArrowLeft size={16} /> Volver al catálogo
-                            </button>
-                        )}
-                        <h1 className="admin-title" style={{ marginTop: activeTab === 'edit' ? '0.5rem' : 0 }}>
-                            {activeTab === 'catalog' ? 'Panel de Control' : activeTab === 'new' ? 'Nueva Referencia' : 'Editando Referencia'}
-                        </h1>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                        <button className="menu-toggle" onClick={() => setIsMobileMenuOpen(true)}>
+                            <Menu size={24} />
+                        </button>
+                        <div>
+                            {activeTab === 'edit' && (
+                                <button onClick={handleBack} className="back-btn">
+                                    <ArrowLeft size={16} /> Volver al catálogo
+                                </button>
+                            )}
+                            <h1 className="admin-title" style={{ marginTop: activeTab === 'edit' ? '0.5rem' : 0 }}>
+                                {activeTab === 'catalog' ? 'Panel de Control' : activeTab === 'new' ? 'Nueva Referencia' : 'Editando Referencia'}
+                            </h1>
+                        </div>
                     </div>
                     <ThemeToggle />
                 </header>
