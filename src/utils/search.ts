@@ -113,13 +113,15 @@ export const FILTER_STRATEGIES: Record<string, (item: Product, value: any, conte
         if (!value) return true;
         const val = parseFloat(value);
         if (isNaN(val)) return true;
-        return Math.abs((item.medidas?.ancho || 0) - val) <= 2;
+        const itemVal = typeof item.medidas?.ancho === 'string' ? parseFloat(item.medidas.ancho) : (item.medidas?.ancho || 0);
+        return Math.abs(itemVal - val) <= 2;
     },
     height: (item, value) => {
         if (!value) return true;
         const val = parseFloat(value);
         if (isNaN(val)) return true;
-        return Math.abs((item.medidas?.alto || 0) - val) <= 2;
+        const itemVal = typeof item.medidas?.alto === 'string' ? parseFloat(item.medidas.alto) : (item.medidas?.alto || 0);
+        return Math.abs(itemVal - val) <= 2;
     },
 
     // Position
