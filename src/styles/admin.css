@@ -101,6 +101,13 @@
     cursor: pointer;
 }
 
+.admin-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
 /* Glass Inputs */
 .admin-input {
     background: var(--admin-glass);
@@ -202,9 +209,32 @@
         font-size: 1.4rem;
     }
 
+    .admin-section-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .admin-section-header div {
+        width: 100% !important;
+        max-width: 100%;
+    }
+
     .admin-table-container {
         margin: 0 -1.25rem;
         padding: 0 1.25rem;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .admin-table {
+        min-width: 500px;
+        font-size: 0.9rem;
+    }
+
+    .admin-table td {
+        padding: 0.75rem 0.5rem;
     }
 }
 

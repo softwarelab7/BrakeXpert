@@ -235,7 +235,10 @@ const AdminPanel: React.FC = () => {
                                 </button>
                             )}
                             <h1 className="admin-title" style={{ marginTop: activeTab === 'edit' ? '0.5rem' : 0 }}>
-                                {activeTab === 'catalog' ? 'Panel de Control' : activeTab === 'new' ? 'Nueva Referencia' : 'Editando Referencia'}
+                                {activeTab === 'catalog' ? 'Panel de Control' :
+                                    activeTab === 'new' ? 'Nueva Referencia' :
+                                        activeTab === 'edit' ? 'Editando Referencia' :
+                                            activeTab === 'audit' ? 'Panel de Auditoría' : 'Historial de Cambios'}
                             </h1>
                         </div>
                     </div>
@@ -244,7 +247,7 @@ const AdminPanel: React.FC = () => {
 
                 {activeTab === 'catalog' && (
                     <div className="admin-card">
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+                        <div className="admin-section-header">
                             <h3 style={{ margin: 0, color: 'var(--admin-text)', fontSize: '1.1rem' }}>Listado de Productos</h3>
                             <div style={{ position: 'relative', width: '300px' }}>
                                 <Search style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', opacity: 0.5 }} size={18} />
