@@ -54,7 +54,7 @@
 
 .admin-main {
     flex: 1;
-    padding: 2rem 3rem;
+    padding: 1.5rem 2rem;
     overflow-y: auto;
     max-height: 100vh;
 }
@@ -64,7 +64,7 @@
     backdrop-filter: blur(16px);
     border: 1px solid var(--admin-border);
     border-radius: 1.5rem;
-    padding: 2rem;
+    padding: 1.25rem;
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
     transition: background 0.3s ease, border-color 0.3s ease;
 }
@@ -73,7 +73,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
 }
 
 .admin-title {

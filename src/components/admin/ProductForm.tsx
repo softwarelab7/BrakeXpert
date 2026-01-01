@@ -471,7 +471,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ initialData, onSave }) => {
                     display: flex;
                     align-items: center;
                     gap: 0.75rem;
-                    margin-bottom: 1.25rem;
+                    margin-bottom: 0.75rem;
                     color: var(--admin-text);
                     font-size: 1rem;
                     font-weight: 800;
@@ -481,11 +481,11 @@ const ProductForm: React.FC<ProductFormProps> = ({ initialData, onSave }) => {
                 
                 .image-edit-section {
                     display: flex;
-                    gap: 1.5rem;
-                    margin-bottom: 2rem;
+                    gap: 1.25rem;
+                    margin-bottom: 1.5rem;
                     background: var(--admin-glass);
-                    padding: 1.5rem;
-                    border-radius: 1.5rem;
+                    padding: 1rem;
+                    border-radius: 1rem;
                     border: 1px solid var(--admin-border);
                 }
                 .image-preview-container {
@@ -507,8 +507,8 @@ const ProductForm: React.FC<ProductFormProps> = ({ initialData, onSave }) => {
                 .extra-info-grid {
                     display: grid;
                     grid-template-columns: 1fr 1fr;
-                    gap: 1.5rem;
-                    margin-top: 1.5rem;
+                    gap: 1rem;
+                    margin-top: 1rem;
                 }
 
                 .form-group-stack label {
@@ -524,12 +524,12 @@ const ProductForm: React.FC<ProductFormProps> = ({ initialData, onSave }) => {
 
                 .new-app-box {
                     background: var(--admin-glass);
-                    padding: 1rem;
-                    border-radius: 1rem;
+                    padding: 0.75rem;
+                    border-radius: 0.75rem;
                     display: flex;
                     flex-direction: column;
-                    gap: 0.75rem;
-                    margin-bottom: 1.5rem;
+                    gap: 0.5rem;
+                    margin-bottom: 1rem;
                     border: 1px solid var(--admin-border);
                 }
                 .pos-selector {
@@ -580,11 +580,11 @@ const ProductForm: React.FC<ProductFormProps> = ({ initialData, onSave }) => {
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
-                    padding: 1rem;
+                    padding: 0.75rem 1rem;
                     background: var(--admin-glass);
                     border: 1px solid var(--admin-border);
                     border-radius: 0.75rem;
-                    margin-bottom: 0.5rem;
+                    margin-bottom: 0.35rem;
                     transition: all 0.2s;
                 }
                 .app-item-card:hover { border-color: var(--admin-accent); }

@@ -451,8 +451,8 @@ const AdminPanel: React.FC = () => {
                 }
                 .admin-table-container { overflow-x: auto; }
                 .admin-table { width: 100%; border-collapse: collapse; }
-                .admin-table th { text-align: left; padding: 1rem; color: var(--admin-text-muted); border-bottom: 1px solid var(--admin-border); }
-                .admin-table td { padding: 1rem; border-bottom: 1px solid var(--admin-border); color: var(--admin-text); }
+                .admin-table th { text-align: left; padding: 0.75rem; color: var(--admin-text-muted); border-bottom: 1px solid var(--admin-border); }
+                .admin-table td { padding: 0.75rem; border-bottom: 1px solid var(--admin-border); color: var(--admin-text); }
                 .edit-action-btn {
                     display: inline-flex;
                     align-items: center;
