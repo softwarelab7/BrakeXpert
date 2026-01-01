@@ -201,11 +201,8 @@ export const addHistoryLog = async (log: Omit<HistoryLog, 'id' | 'timestamp'>) =
 export const fetchHistoryLogs = async (limitCount = 50): Promise<HistoryLog[]> => {
     try {
         const q = query(historyCollection, limit(limitCount));
-        // Note: orderBy('timestamp', 'desc') requires an index, usually safe to add but might error first time.
-        // For now, let's try without orderBy or handle it client side if needed, 
-        // but strictly standard is orderBy. Let's add orderBy and where.
-        // Actually, basic query first.
-        const querySnapshot = await getDocs(query(historyCollection, limit(limitCount))); // we will sort client side to avoid index error delay
+
+        const querySnapshot = await getDocs(q);
         const logs: HistoryLog[] = [];
         querySnapshot.forEach(doc => {
             logs.push({ id: doc.id, ...doc.data() } as HistoryLog);
