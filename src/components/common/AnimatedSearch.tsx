@@ -49,20 +49,25 @@ const StyledWrapper = styled.div`
   .input {
     width: 100%;
     border-radius: 9999px;
-    padding: 0.6rem 2.2rem; /* Adjusted for icons on both sides */
+    padding: 0.65rem 2.5rem; /* Better balance for icons */
     border: 2px solid transparent;
     outline: none;
-    background: var(--bg-tertiary, #1e1e1e);
-    color: var(--text-primary, white);
-    placeholder-color: #9ca3af;
+    background: #ffffff;
+    color: #1a1a1b; /* Dark text for contrast */
     transition: all 0.3s ease;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
-    font-size: 0.875rem;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12), 0 4px 10px rgba(0, 0, 0, 0.06); /* Deeper shadow */
+    font-size: 0.9rem;
+    font-weight: 500;
   }
 
   .input:focus {
-    border-color: var(--accent-primary, #3b82f6);
-    background: var(--bg-primary, #000);
+    border-color: #3b82f6; /* Blue border on focus as per user snippet */
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+  }
+
+  .input::placeholder {
+    color: #9ca3af;
+    font-weight: 400;
   }
 
   .icon-btn {
@@ -74,19 +79,22 @@ const StyledWrapper = styled.div`
     justify-content: center;
     background: transparent;
     border: none;
-    padding: 4px;
+    padding: 6px;
     cursor: pointer;
-    color: var(--text-secondary, #9ca3af);
-    transition: color 0.2s;
+    color: #4b5563; /* Darker icons for white background */
+    transition: all 0.2s;
     z-index: 10;
   }
 
   .icon-btn:hover {
-    color: var(--text-primary, white);
+    color: #111827;
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 50%;
   }
 
   .search-btn {
     left: 8px;
+    pointer-events: none; /* Just an icon usually */
   }
 
   .reset-btn {

@@ -1,5 +1,5 @@
 import { useMemo, useState, useEffect } from 'react';
-import { Trash2 } from 'lucide-react';
+import { Trash2, Sparkles } from 'lucide-react';
 import { useAppStore } from '../../store/useAppStore';
 import type { Product } from '../../types';
 import AnimatedSearch from '../common/AnimatedSearch';
@@ -31,7 +31,7 @@ const Sidebar = () => {
             if (localQuery !== filters.searchQuery) store.setSearchQuery(localQuery);
         }, 300);
         return () => clearTimeout(timer);
-    }, [localQuery]);
+    }, [localQuery, filters.searchQuery, store]);
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -41,7 +41,7 @@ const Sidebar = () => {
             }
         }, 300);
         return () => clearTimeout(timer);
-    }, [localOem]);
+    }, [localOem, filters.oemReference, localQuery, store]);
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -51,21 +51,21 @@ const Sidebar = () => {
             }
         }, 300);
         return () => clearTimeout(timer);
-    }, [localFmsi]);
+    }, [localFmsi, filters.fmsiReference, localQuery, store]);
 
     useEffect(() => {
         const timer = setTimeout(() => {
             if (localWidth !== filters.width) store.setWidth(localWidth);
         }, 300);
         return () => clearTimeout(timer);
-    }, [localWidth]);
+    }, [localWidth, filters.width, store]);
 
     useEffect(() => {
         const timer = setTimeout(() => {
             if (localHeight !== filters.height) store.setHeight(localHeight);
         }, 300);
         return () => clearTimeout(timer);
-    }, [localHeight]);
+    }, [localHeight, filters.height, store]);
 
     // Track when to add to history
     useEffect(() => {
@@ -100,7 +100,7 @@ const Sidebar = () => {
         }, 1500); // 1.5s delay to "commit" to history
 
         return () => clearTimeout(timer);
-    }, [filters, filteredProducts.length]);
+    }, [filters, filteredProducts.length, store]);
 
     // Faceted logic
     const brands = useMemo(() => {
@@ -145,10 +145,14 @@ const Sidebar = () => {
         return Array.from(yearSet).sort((a, b) => b.localeCompare(a));
     }, [products]);
 
+    const hasActiveFilters = filteredProducts.length !== products.length;
+
     return (
         <aside className="sidebar">
             <div className="filter-section">
-                <h3 className="filter-section-title">Búsqueda Rápida</h3>
+                <div className="section-header">
+                    <h3 className="filter-section-title">Búsqueda Rápida</h3>
+                </div>
                 <AnimatedSearch
                     value={localQuery}
                     onChange={setLocalQuery}
@@ -157,9 +161,11 @@ const Sidebar = () => {
             </div>
 
             <div className="filter-section">
-                <h3 className="filter-section-title">Detalles del Vehículo</h3>
+                <div className="section-header">
+                    <h3 className="filter-section-title">Detalles del Vehículo</h3>
+                </div>
                 <div className="vehicle-details-grid">
-                    <div className="searchable-filter">
+                    <div className={`searchable-filter ${filters.selectedBrand ? 'has-value' : ''}`}>
                         <input
                             list="brands-list"
                             className="filter-select"
@@ -177,7 +183,7 @@ const Sidebar = () => {
                         </datalist>
                     </div>
 
-                    <div className="searchable-filter">
+                    <div className={`searchable-filter ${filters.selectedModel ? 'has-value' : ''}`}>
                         <input
                             list="models-list"
                             className="filter-select"
@@ -195,7 +201,7 @@ const Sidebar = () => {
                         </datalist>
                     </div>
 
-                    <div className="searchable-filter">
+                    <div className={`searchable-filter ${filters.selectedYear ? 'has-value' : ''}`}>
                         <input
                             list="years-list"
                             className="filter-select"
@@ -216,74 +222,88 @@ const Sidebar = () => {
             </div>
 
             <div className="filter-section">
-                <h3 className="filter-section-title">Posición</h3>
+                <div className="section-header">
+                    <h3 className="filter-section-title">Posición</h3>
+                </div>
                 <div className="position-grid">
                     <button
-                        className={`position-toggle-btn ${filters.selectedPositions.includes('delantera') ? 'active' : ''}`}
+                        className={`position-pill ${filters.selectedPositions.includes('delantera') ? 'active' : ''}`}
                         onClick={() => {
                             store.togglePosition('delantera');
                             setLocalQuery('');
                         }}
                     >
-                        Delantera
+                        <span>Delantera</span>
                     </button>
                     <button
-                        className={`position-toggle-btn ${filters.selectedPositions.includes('trasera') ? 'active' : ''}`}
+                        className={`position-pill ${filters.selectedPositions.includes('trasera') ? 'active' : ''}`}
                         onClick={() => {
                             store.togglePosition('trasera');
                             setLocalQuery('');
                         }}
                     >
-                        Trasera
+                        <span>Trasera</span>
                     </button>
                 </div>
             </div>
 
             <div className="filter-section">
-                <h3 className="filter-section-title">Referencias</h3>
+                <div className="section-header">
+                    <h3 className="filter-section-title">Referencias</h3>
+                </div>
                 <div className="references-grid">
-                    <input
-                        type="text"
-                        className="ref-input"
-                        placeholder="OEM"
-                        value={localOem}
-                        onChange={(e) => setLocalOem(e.target.value)}
-                    />
-                    <input
-                        type="text"
-                        className="ref-input"
-                        placeholder="FMSI"
-                        value={localFmsi}
-                        onChange={(e) => setLocalFmsi(e.target.value)}
-                    />
+                    <div className={`ref-input-wrapper ${localOem ? 'has-value' : ''}`}>
+                        <input
+                            type="text"
+                            className="ref-input"
+                            placeholder="OEM"
+                            value={localOem}
+                            onChange={(e) => setLocalOem(e.target.value)}
+                        />
+                    </div>
+                    <div className={`ref-input-wrapper ${localFmsi ? 'has-value' : ''}`}>
+                        <input
+                            type="text"
+                            className="ref-input"
+                            placeholder="FMSI"
+                            value={localFmsi}
+                            onChange={(e) => setLocalFmsi(e.target.value)}
+                        />
+                    </div>
                 </div>
             </div>
 
             <div className="filter-section">
-                <h3 className="filter-section-title">Medidas (mm)</h3>
+                <div className="section-header">
+                    <h3 className="filter-section-title">Medidas (mm)</h3>
+                </div>
                 <div className="measurements-grid">
-                    <input
-                        type="number"
-                        className="measure-input"
-                        placeholder="Ancho"
-                        step="0.1"
-                        value={localWidth}
-                        onChange={(e) => setLocalWidth(e.target.value)}
-                    />
-                    <input
-                        type="number"
-                        className="measure-input"
-                        placeholder="Alto"
-                        step="0.1"
-                        value={localHeight}
-                        onChange={(e) => setLocalHeight(e.target.value)}
-                    />
+                    <div className={`measure-input-wrapper ${localWidth ? 'has-value' : ''}`}>
+                        <input
+                            type="number"
+                            className="measure-input"
+                            placeholder="Ancho"
+                            step="0.1"
+                            value={localWidth}
+                            onChange={(e) => setLocalWidth(e.target.value)}
+                        />
+                    </div>
+                    <div className={`measure-input-wrapper ${localHeight ? 'has-value' : ''}`}>
+                        <input
+                            type="number"
+                            className="measure-input"
+                            placeholder="Alto"
+                            step="0.1"
+                            value={localHeight}
+                            onChange={(e) => setLocalHeight(e.target.value)}
+                        />
+                    </div>
                 </div>
             </div>
 
             <div className="action-buttons-container">
                 <button
-                    className="borrar-filtros-btn"
+                    className={`borrar-filtros-btn ${hasActiveFilters ? 'btn-active' : 'btn-disabled'}`}
                     onClick={() => {
                         store.clearFilters();
                         setLocalQuery('');
@@ -292,11 +312,10 @@ const Sidebar = () => {
                         setLocalWidth('');
                         setLocalHeight('');
                     }}
-                    disabled={filteredProducts.length === products.length}
-                    style={{ opacity: filteredProducts.length === products.length ? 0.6 : 1 }}
+                    disabled={!hasActiveFilters}
                 >
-                    <Trash2 size={16} />
-                    LIMPIAR ({filteredProducts.length})
+                    {hasActiveFilters ? <Sparkles size={16} /> : <Trash2 size={16} />}
+                    <span>{hasActiveFilters ? `LIMPIAR (${filteredProducts.length})` : 'SIN FILTROS'}</span>
                 </button>
             </div>
         </aside>
