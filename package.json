@@ -13,10 +13,12 @@
   },
   "homepage": "https://softwarelab7.github.io/BrakeXAlfa",
   "dependencies": {
+    "@types/styled-components": "^5.1.36",
     "firebase": "^12.7.0",
     "lucide-react": "^0.562.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
+    "styled-components": "^6.1.19",
     "zustand": "^5.0.9"
   },
   "devDependencies": {

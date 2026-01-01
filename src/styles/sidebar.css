@@ -3,7 +3,7 @@
     flex: 0 0 262px;
     width: 262px;
     z-index: 10;
-    padding-top: 1.5rem;
+    padding-top: 0.8rem;
     padding-bottom: 1.5rem;
 }
 
@@ -18,8 +18,8 @@
     box-shadow: var(--shadow-sm);
     transition: all var(--transition-base);
     position: sticky;
-    top: 5rem;
-    /* Adjusted for header + spacing */
+    top: 4.6rem;
+    /* Adjusted to match initial position ≈ Header(3.8) + Padding(0.8) */
 }
 
 /* Sections / Filter Groups (.filter-group in user spec) */
