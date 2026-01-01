@@ -16,7 +16,7 @@ const ResultsBar = ({ totalResults, currentStart, currentEnd }: ResultsBarProps)
     const openCompareModal = useAppStore(state => state.openCompareModal);
     const toggleShowFavoritesOnly = useAppStore(state => state.toggleShowFavoritesOnly);
     const showFavoritesOnly = useAppStore(state => state.filters.showFavoritesOnly);
-    const openHistoryModal = useAppStore(state => state.openHistoryModal);
+    const openHistoryPanel = useAppStore(state => state.openHistoryPanel);
     const { itemsPerPage, gridDensity } = useAppStore(state => state.ui);
     const setItemsPerPage = useAppStore(state => state.setItemsPerPage);
     const setGridDensity = useAppStore(state => state.setGridDensity);
@@ -129,7 +129,7 @@ const ResultsBar = ({ totalResults, currentStart, currentEnd }: ResultsBarProps)
 
                     <button
                         className="results-action-btn animate-hover-history"
-                        onClick={openHistoryModal}
+                        onClick={openHistoryPanel}
                         title="Historial de búsquedas"
                     >
                         <History size={20} />

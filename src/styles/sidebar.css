@@ -73,25 +73,6 @@
     border-color: var(--accent-primary);
 }
 
-/* Search Box */
-.search-box {
-    position: relative;
-}
-
-.search-input {
-    padding-left: 2.25rem;
-}
-
-.search-icon {
-    position: absolute;
-    left: 0.75rem;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--text-muted);
-    pointer-events: none;
-    width: 16px;
-    height: 16px;
-}
 
 /* Grid Layouts */
 .vehicle-details-grid {

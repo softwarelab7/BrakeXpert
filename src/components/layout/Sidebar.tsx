@@ -1,7 +1,8 @@
 import { useMemo, useState, useEffect } from 'react';
-import { Search, Trash2 } from 'lucide-react';
+import { Trash2 } from 'lucide-react';
 import { useAppStore } from '../../store/useAppStore';
 import type { Product } from '../../types';
+import AnimatedSearch from '../common/AnimatedSearch';
 import '../../styles/sidebar.css';
 
 const Sidebar = () => {
@@ -66,6 +67,41 @@ const Sidebar = () => {
         return () => clearTimeout(timer);
     }, [localHeight]);
 
+    // Track when to add to history
+    useEffect(() => {
+        // Only record if filters are not empty
+        const hasActiveFilters = Object.entries(filters).some(([key, value]) => {
+            if (key === 'showFavoritesOnly') return false;
+            if (Array.isArray(value)) return value.length > 0;
+            return !!value;
+        });
+
+        if (!hasActiveFilters) return;
+
+        const timer = setTimeout(() => {
+            // Generate summary
+            const parts = [];
+            if (filters.searchQuery) parts.push(filters.searchQuery);
+            if (filters.selectedBrand) parts.push(filters.selectedBrand);
+            if (filters.selectedModel) parts.push(filters.selectedModel);
+            if (filters.selectedYear) parts.push(filters.selectedYear);
+            if (filters.oemReference) parts.push(`OEM: ${filters.oemReference}`);
+            if (filters.fmsiReference) parts.push(`FMSI: ${filters.fmsiReference}`);
+            if (filters.width || filters.height) parts.push(`${filters.width || '?'}x${filters.height || '?'}`);
+
+            const summary = parts.join(' • ') || 'Nueva Búsqueda';
+
+            store.addToSearchHistory({
+                timestamp: Date.now(),
+                filters: { ...filters },
+                resultCount: filteredProducts.length,
+                summary
+            });
+        }, 1500); // 1.5s delay to "commit" to history
+
+        return () => clearTimeout(timer);
+    }, [filters, filteredProducts.length]);
+
     // Faceted logic
     const brands = useMemo(() => {
         const brandMap = new Map<string, number>();
@@ -113,16 +149,11 @@ const Sidebar = () => {
         <aside className="sidebar">
             <div className="filter-section">
                 <h3 className="filter-section-title">Búsqueda Rápida</h3>
-                <div className="search-box">
-                    <input
-                        type="text"
-                        className="search-input"
-                        placeholder="Chevrolet Onix, 2244, FMSI..."
-                        value={localQuery}
-                        onChange={(e) => setLocalQuery(e.target.value)}
-                    />
-                    <Search size={16} className="search-icon" />
-                </div>
+                <AnimatedSearch
+                    value={localQuery}
+                    onChange={setLocalQuery}
+                    placeholder="Buscar..."
+                />
             </div>
 
             <div className="filter-section">

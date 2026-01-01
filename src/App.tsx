@@ -11,7 +11,7 @@ import ProductGrid from './components/products/ProductGrid';
 import Pagination from './components/products/Pagination';
 import ProductDetailModal from './components/modals/ProductDetailModal';
 import CompareModal from './components/modals/CompareModal';
-import HistoryModal from './components/modals/HistoryModal';
+import HistoryPanel from './components/HistoryPanel';
 import GuideModal from './components/modals/GuideModal';
 import NotificationPanel from './components/NotificationPanel';
 import AdminPanel from './components/admin/AdminPanel';
@@ -185,7 +185,7 @@ function App() {
           {/* Modals */}
           <ProductDetailModal />
           <CompareModal />
-          <HistoryModal />
+          <HistoryPanel />
           <GuideModal />
         </>
       )}

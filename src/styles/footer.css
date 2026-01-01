@@ -200,12 +200,13 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    color: #475569;
+    color: white;
+    /* Pure white for maximum contrast */
     font-size: 0.75rem;
 }
 
 .copyright {
-    color: #64748b;
+    color: white;
 }
 
 .legal-links {
@@ -215,17 +216,42 @@
 }
 
 .legal-links a {
-    color: #64748b;
+    color: white;
     text-decoration: none;
-    transition: color 0.15s;
+    transition: opacity 0.15s;
 }
 
 .legal-links a:hover {
-    color: #94a3b8;
+    opacity: 0.8;
+}
+
+.legal-links .admin-link {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: #a78bfa;
+    /* Soft purple for visibility */
+    text-decoration: none;
+    transition: all 0.2s;
+    font-weight: 600;
+}
+
+.legal-links .admin-link:hover {
+    color: white;
+    text-shadow: 0 0 8px rgba(167, 139, 250, 0.4);
+}
+
+.legal-links .admin-link svg {
+    opacity: 0.8;
+}
+
+.legal-links .admin-link:hover svg {
+    opacity: 1;
 }
 
 .dot {
-    opacity: 0.3;
+    opacity: 0.5;
+    color: white;
 }
 
 /* Mobile Responsive */

@@ -1,4 +1,4 @@
-import { Zap, Mail, ArrowUpRight } from 'lucide-react';
+import { Zap, Mail, ArrowUpRight, Shield } from 'lucide-react';
 import { useAppStore } from '../../store/useAppStore';
 import '../../styles/footer.css';
 
@@ -6,7 +6,7 @@ const Footer = () => {
     const currentYear = new Date().getFullYear();
     const clearFilters = useAppStore(state => state.clearFilters);
     const openCompareModal = useAppStore(state => state.openCompareModal);
-    const openHistoryModal = useAppStore(state => state.openHistoryModal);
+    const openHistoryPanel = useAppStore(state => state.openHistoryPanel);
 
     const handleCatalogClick = (e: React.MouseEvent) => {
         e.preventDefault();
@@ -21,7 +21,7 @@ const Footer = () => {
 
     const handleHistoryClick = (e: React.MouseEvent) => {
         e.preventDefault();
-        openHistoryModal();
+        openHistoryPanel();
     };
 
     const handleContactClick = () => {
@@ -84,6 +84,11 @@ const Footer = () => {
                         <a href="#">Privacidad</a>
                         <span className="dot">·</span>
                         <a href="#">Términos</a>
+                        <span className="dot">·</span>
+                        <a href="#admin" className="admin-link">
+                            <Shield size={12} />
+                            <span>Modo Admin</span>
+                        </a>
                     </div>
                 </div>
             </div>

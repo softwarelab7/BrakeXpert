@@ -56,7 +56,7 @@ export interface UIState {
   itemsPerPage: number;
   gridDensity: 'compact' | 'normal' | 'comfortable';
   isCompareModalOpen: boolean;
-  isHistoryModalOpen: boolean;
+  isHistoryPanelOpen: boolean;
   isProductDetailModalOpen: boolean;
   isGuideModalOpen: boolean;
   selectedProductId: string | null;

@@ -56,8 +56,8 @@ interface AppState {
     setGridDensity: (density: 'compact' | 'normal' | 'comfortable') => void;
     openCompareModal: () => void;
     closeCompareModal: () => void;
-    openHistoryModal: () => void;
-    closeHistoryModal: () => void;
+    openHistoryPanel: () => void;
+    closeHistoryPanel: () => void;
     openProductDetailModal: (productId: string) => void;
     closeProductDetailModal: () => void;
     openGuideModal: () => void;
@@ -121,7 +121,7 @@ const initialUIState: UIState = {
     itemsPerPage: 24,
     gridDensity: 'normal',
     isCompareModalOpen: false,
-    isHistoryModalOpen: false,
+    isHistoryPanelOpen: false,
     isProductDetailModalOpen: false,
     isGuideModalOpen: false,
     selectedProductId: null,
@@ -366,14 +366,14 @@ export const useAppStore = create<AppState>()(
                     ui: { ...state.ui, isCompareModalOpen: false },
                 })),
 
-            openHistoryModal: () =>
+            openHistoryPanel: () =>
                 set((state) => ({
-                    ui: { ...state.ui, isHistoryModalOpen: true },
+                    ui: { ...state.ui, isHistoryPanelOpen: true },
                 })),
 
-            closeHistoryModal: () =>
+            closeHistoryPanel: () =>
                 set((state) => ({
-                    ui: { ...state.ui, isHistoryModalOpen: false },
+                    ui: { ...state.ui, isHistoryPanelOpen: false },
                 })),
 
             openProductDetailModal: (productId) =>
