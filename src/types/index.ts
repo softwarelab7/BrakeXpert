@@ -10,8 +10,8 @@ export interface Product {
   aplicaciones: VehicleApplication[];
   wva?: string;
   medidas: {
-    ancho: number;
-    alto: number;
+    ancho: number | string;
+    alto: number | string;
   };
 }
 

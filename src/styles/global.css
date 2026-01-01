@@ -46,19 +46,19 @@
   --bg-sidebar: var(--bg-primary);
 
   /* Light Zinc Text - High Contrast Improvements */
-  --text-primary: #09090b;
+  --text-primary: #000000;
   /* Pure black text for white bg */
-  --text-secondary: #3f3f46;
+  --text-secondary: #18181b;
   /* Darker for better contrast */
-  --text-tertiary: #52525b;
+  --text-tertiary: #27272a;
   /* Darker */
-  --text-muted: #8e8e93;
+  --text-muted: #4b5563;
 
   /* Light Borders - More Defined */
-  --border-primary: #d1d1d6;
-  --border-secondary: #a1a1aa;
-  --border-glass: rgba(0, 0, 0, 0.12);
-  --border-focus: #71717a;
+  --border-primary: #a1a1aa;
+  --border-secondary: #71717a;
+  --border-glass: rgba(0, 0, 0, 0.16);
+  --border-focus: #3f3f46;
 
   /* Light Shadows */
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);

@@ -100,11 +100,11 @@ const ProductDetailModal = () => {
                         <div className="detail-specs-grid">
                             <div>
                                 <span className="spec-label">Ancho</span>
-                                <span className="spec-value">{product.medidas.ancho} mm</span>
+                                <span className="spec-value">{product.medidas.ancho ? `${product.medidas.ancho} mm` : 'N/A'}</span>
                             </div>
                             <div>
                                 <span className="spec-label">Alto</span>
-                                <span className="spec-value">{product.medidas.alto} mm</span>
+                                <span className="spec-value">{product.medidas.alto ? `${product.medidas.alto} mm` : 'N/A'}</span>
                             </div>
                         </div>
                     </div>

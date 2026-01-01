@@ -27,17 +27,66 @@ export const auth = getAuth(app);
 // Collections
 export const productsCollection = collection(db, 'pastillas');
 
+// Helper to normalize product data coming FROM Firebase
+export const normalizeProduct = (docId: string, data: any): Product => {
+    const p = { id: docId, ...data };
+
+    // 1. Normalize Posicion
+    p.posicion = (p.posicion || p.posición || 'AMBAS').toUpperCase();
+
+    // 2. Normalize Medidas (Array string -> Object or String -> Object)
+    let rawMedidas = p.medidas;
+    let ancho: number | string = '';
+    let alto: number | string = '';
+
+    // Handle array case
+    if (Array.isArray(rawMedidas) && rawMedidas.length > 0) {
+        rawMedidas = rawMedidas[0];
+    }
+
+    if (typeof rawMedidas === 'string') {
+        const parts = rawMedidas.toLowerCase().split('x');
+        if (parts.length === 2) {
+            const a = parseFloat(parts[0].trim());
+            const h = parseFloat(parts[1].trim());
+            ancho = a || '';
+            alto = h || '';
+        }
+    } else if (rawMedidas && typeof rawMedidas === 'object') {
+        const a = parseFloat(rawMedidas.ancho) || parseFloat(rawMedidas.width);
+        const h = parseFloat(rawMedidas.alto) || parseFloat(rawMedidas.height) || parseFloat(rawMedidas.largo);
+        ancho = a || '';
+        alto = h || '';
+    }
+
+    p.medidas = { ancho, alto };
+
+    // 3. Normalize Arrays
+    const ensureArray = (val: any) => Array.isArray(val) ? val : (val ? [val] : []);
+    p.fmsi = ensureArray(p.fmsi);
+    p.oem = ensureArray(p.oem);
+    p.ref = ensureArray(p.ref);
+    p.imagenes = ensureArray(p.imagenes);
+    p.aplicaciones = ensureArray(p.aplicaciones).map((app: any) => ({
+        marca: app?.marca || '',
+        modelo: app?.modelo || app?.serie || '',
+        serie: app?.serie || '',
+        año: app?.año || '',
+        posicion: (app?.posicion || 'DELANTERA').toUpperCase()
+    }));
+
+    // 4. Fallback for reference
+    p.referencia = p.referencia || (p.ref && p.ref[0]) || 'SIN-REF';
+
+    return p as Product;
+};
+
 // Real-time subscription
 export const subscribeToProducts = (callback: (products: Product[], changes: DocumentChange[]) => void) => {
     return onSnapshot(productsCollection, (snapshot) => {
         const products: Product[] = [];
         snapshot.forEach((doc) => {
-            const data = doc.data();
-            products.push({
-                id: doc.id,
-                ...data,
-                posicion: data.posicion || data.posición || 'AMBAS'
-            } as Product);
+            products.push(normalizeProduct(doc.id, doc.data()));
         });
         callback(products, snapshot.docChanges());
     }, (error) => {
@@ -80,10 +129,7 @@ export const fetchProducts = async (): Promise<Product[]> => {
         const products: Product[] = [];
 
         querySnapshot.forEach((doc) => {
-            products.push({
-                id: doc.id,
-                ...doc.data() as Omit<Product, 'id'>
-            });
+            products.push(normalizeProduct(doc.id, doc.data()));
         });
 
         return products;
@@ -105,10 +151,7 @@ export const fetchProductsByPosition = async (position: string): Promise<Product
         const products: Product[] = [];
 
         querySnapshot.forEach((doc) => {
-            products.push({
-                id: doc.id,
-                ...doc.data() as Omit<Product, 'id'>
-            });
+            products.push(normalizeProduct(doc.id, doc.data()));
         });
 
         return products;
@@ -132,10 +175,7 @@ export const searchByReference = async (reference: string): Promise<Product[]> =
         const products: Product[] = [];
 
         querySnapshot.forEach((doc) => {
-            products.push({
-                id: doc.id,
-                ...doc.data() as Omit<Product, 'id'>
-            });
+            products.push(normalizeProduct(doc.id, doc.data()));
         });
 
         return products;
@@ -149,8 +189,13 @@ export const searchByReference = async (reference: string): Promise<Product[]> =
 export const updateProduct = async (id: string, productData: Partial<Product>) => {
     try {
         const productRef = doc(db, 'pastillas', id);
-        // Remove id from data to avoid saving it as a field
-        const { id: _, ...data } = productData as any;
+        const { id: _, ...data } = { ...productData } as any;
+
+        // CRITICAL: Convert measures back to legacy format for Firebase
+        if (data.medidas && typeof data.medidas === 'object' && !Array.isArray(data.medidas)) {
+            data.medidas = [`${data.medidas.ancho || 0} x ${data.medidas.alto || 0}`];
+        }
+
         await writeBatch(db).set(productRef, data, { merge: true }).commit();
         return true;
     } catch (error) {
@@ -163,7 +208,13 @@ export const updateProduct = async (id: string, productData: Partial<Product>) =
 export const addProduct = async (productData: Partial<Product>) => {
     try {
         const productRef = doc(productsCollection);
-        const { id: _, ...data } = productData as any;
+        const { id: _, ...data } = { ...productData } as any;
+
+        // CRITICAL: Convert measures back to legacy format for Firebase
+        if (data.medidas && typeof data.medidas === 'object' && !Array.isArray(data.medidas)) {
+            data.medidas = [`${data.medidas.ancho || 0} x ${data.medidas.alto || 0}`];
+        }
+
         await writeBatch(db).set(productRef, data).commit();
         return productRef.id;
     } catch (error) {

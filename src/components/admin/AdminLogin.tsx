@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { auth } from '../../services/firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { LogIn, Lock, Mail, Activity, AlertCircle } from 'lucide-react';
+import { LogIn, Lock, Mail, Activity, AlertCircle, Eye, EyeOff } from 'lucide-react';
 
 interface AdminLoginProps {
     onLoginSuccess: () => void;
@@ -11,6 +11,7 @@ interface AdminLoginProps {
 const AdminLogin: React.FC<AdminLoginProps> = ({ onLoginSuccess }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
 
@@ -54,12 +55,20 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ onLoginSuccess }) => {
                     <div className="input-group">
                         <Lock size={18} className="input-icon" />
                         <input
-                            type="password"
+                            type={showPassword ? "text" : "password"}
                             placeholder="Contraseña"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             required
                         />
+                        <button
+                            type="button"
+                            className="toggle-password"
+                            onClick={() => setShowPassword(!showPassword)}
+                            aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+                        >
+                            {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                        </button>
                     </div>
 
                     {error && (
@@ -103,7 +112,7 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ onLoginSuccess }) => {
                 .input-icon { position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: #64748b; }
                 .input-group input {
                     width: 100%;
-                    padding: 0.85rem 1rem 0.85rem 3rem;
+                    padding: 0.85rem 3.5rem 0.85rem 3rem;
                     background: rgba(0,0,0,0.2);
                     border: 1px solid rgba(255,255,255,0.1);
                     border-radius: 1rem;
@@ -116,6 +125,22 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ onLoginSuccess }) => {
                     border-color: #3b82f6;
                     box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
                 }
+                .toggle-password {
+                    position: absolute;
+                    right: 1rem;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    background: none;
+                    border: none;
+                    color: #64748b;
+                    cursor: pointer;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 0.5rem;
+                    transition: color 0.2s;
+                }
+                .toggle-password:hover { color: #3b82f6; }
                 .login-submit {
                     background: #3b82f6;
                     color: #fff;

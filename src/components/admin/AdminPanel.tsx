@@ -10,6 +10,19 @@ import type { Product } from '../../types';
 import { updateProduct, addProduct, auth, addHistoryLog, fetchHistoryLogs, type HistoryLog } from '../../services/firebase';
 import { onAuthStateChanged, signOut, type User } from 'firebase/auth';
 
+class ErrorBoundary extends React.Component<{ children: React.ReactNode, fallback: (error: any) => React.ReactNode }, { hasError: boolean, error: any }> {
+    constructor(props: any) {
+        super(props);
+        this.state = { hasError: false, error: null };
+    }
+    static getDerivedStateFromError(error: any) { return { hasError: true, error }; }
+    componentDidCatch(error: any, errorInfo: any) { console.error("Form Error Caught Deep:", error, errorInfo); }
+    render() {
+        if (this.state.hasError) return this.props.fallback(this.state.error);
+        return this.props.children;
+    }
+}
+
 const AdminPanel: React.FC = () => {
     const [user, setUser] = useState<User | null>(auth.currentUser);
     const [activeTab, setActiveTab] = useState<'catalog' | 'new' | 'edit' | 'audit' | 'history'>('catalog');
@@ -86,12 +99,14 @@ const AdminPanel: React.FC = () => {
         return <AdminLogin onLoginSuccess={() => setActiveTab('catalog')} />;
     }
 
-    const filteredProducts = products.filter(p =>
-        p.referencia?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        p.ref.some(r => r.toLowerCase().includes(searchTerm.toLowerCase()))
-    ).slice(0, 20);
+    const filteredProducts = products.filter(p => {
+        const refMatch = p.referencia?.toLowerCase().includes(searchTerm.toLowerCase());
+        const otherRefMatch = Array.isArray(p.ref) && p.ref.some(r => String(r).toLowerCase().includes(searchTerm.toLowerCase()));
+        return refMatch || otherRefMatch;
+    }).slice(0, 20);
 
     const handleEdit = (product: Product) => {
+        console.log("Starting edit for product:", product.id);
         setEditingProduct(product);
         setActiveTab('edit');
     };
@@ -221,7 +236,7 @@ const AdminPanel: React.FC = () => {
                 {activeTab === 'catalog' && (
                     <div className="admin-card">
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
-                            <h3 style={{ margin: 0, color: 'var(--admin-text)' }}>Listado de Productos</h3>
+                            <h3 style={{ margin: 0, color: 'var(--admin-text)', fontSize: '1.1rem' }}>Listado de Productos</h3>
                             <div style={{ position: 'relative', width: '300px' }}>
                                 <Search style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', opacity: 0.5 }} size={18} />
                                 <input
@@ -263,7 +278,7 @@ const AdminPanel: React.FC = () => {
 
                 {activeTab === 'audit' && (
                     <div className="admin-card">
-                        <h3 style={{ color: 'var(--admin-text)', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <h3 style={{ color: 'var(--admin-text)', marginBottom: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '1.1rem' }}>
                             <AlertTriangle color="var(--admin-danger)" /> Referencias con Datos Inconsistentes
                         </h3>
                         <p style={{ color: 'var(--admin-text-muted)', marginBottom: '2rem' }}>
@@ -299,7 +314,7 @@ const AdminPanel: React.FC = () => {
                                                 {p.posicion === 'DELANTERA' ? 'Tiene apps TRASERAS' : 'Tiene apps DELANTERAS'}
                                             </td>
                                             <td style={{ textAlign: 'right' }}>
-                                                <button onClick={() => handleEdit(p)} className="edit-action-btn" style={{ borderColor: 'var(--admin-danger)', color: '#fff' }}>
+                                                <button onClick={() => handleEdit(p)} className="edit-action-btn" style={{ borderColor: 'var(--admin-danger)', color: 'var(--admin-text)' }}>
                                                     <Edit3 size={16} /> Corregir
                                                 </button>
                                             </td>
@@ -313,7 +328,7 @@ const AdminPanel: React.FC = () => {
 
                 {activeTab === 'history' && (
                     <div className="admin-card">
-                        <h3 style={{ color: '#fff', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <h3 style={{ color: 'var(--admin-text)', marginBottom: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '1.1rem' }}>
                             <FileClock color="var(--admin-accent)" /> Historial de Cambios
                         </h3>
                         <div className="admin-table-container">
@@ -334,7 +349,7 @@ const AdminPanel: React.FC = () => {
                                         <tr><td colSpan={5} style={{ textAlign: 'center', padding: '2rem', color: '#9ca3af' }}>No hay cambios registrados aún.</td></tr>
                                     ) : historyLogs.map(log => (
                                         <tr key={log.id}>
-                                            <td style={{ fontSize: '0.85rem', color: '#9ca3af' }}>
+                                            <td style={{ fontSize: '0.85rem', color: 'var(--admin-text-muted)' }}>
                                                 {new Date(log.timestamp).toLocaleString()}
                                             </td>
                                             <td>{log.user}</td>
@@ -348,14 +363,23 @@ const AdminPanel: React.FC = () => {
                                             <td style={{ fontSize: '0.85rem', maxWidth: '300px' }}>
                                                 {log.changes?.length ? (
                                                     <ul style={{ margin: 0, paddingLeft: '1rem' }}>
-                                                        {log.changes.map((c, i) => (
-                                                            <li key={i}>
-                                                                <span style={{ color: '#9ca3af' }}>{c.field}:</span> {String(c.old).substring(0, 20)} ➝ <span style={{ color: 'var(--admin-text)' }}>{String(c.new).substring(0, 20)}</span>
-                                                            </li>
-                                                        )).slice(0, 3)}
+                                                        {log.changes.map((c, i) => {
+                                                            const vFormat = (v: any) => {
+                                                                if (typeof v === 'object' && v !== null) {
+                                                                    if ('ancho' in v && 'alto' in v) return `${v.ancho} x ${v.alto}`;
+                                                                    return JSON.stringify(v);
+                                                                }
+                                                                return String(v);
+                                                            };
+                                                            return (
+                                                                <li key={i}>
+                                                                    <span style={{ color: 'var(--admin-text-muted)', fontWeight: 600 }}>{c.field}:</span> {vFormat(c.old).substring(0, 30)} ➝ <span style={{ color: 'var(--admin-text)' }}>{vFormat(c.new).substring(0, 30)}</span>
+                                                                </li>
+                                                            );
+                                                        }).slice(0, 3)}
                                                         {log.changes.length > 3 && <li>...</li>}
                                                     </ul>
-                                                ) : <span style={{ color: '#64748b' }}>Sin cambios detectados</span>}
+                                                ) : <span style={{ color: 'var(--admin-text-muted)' }}>Sin cambios detectados</span>}
                                             </td>
                                         </tr>
                                     ))}
@@ -367,10 +391,26 @@ const AdminPanel: React.FC = () => {
 
                 {(activeTab === 'new' || activeTab === 'edit') && (
                     <div style={{ opacity: isSaving ? 0.7 : 1, pointerEvents: isSaving ? 'none' : 'auto' }}>
-                        <ProductForm
-                            initialData={editingProduct}
-                            onSave={handleSave}
-                        />
+                        <ErrorBoundary fallback={(error) => (
+                            <div className="admin-card" style={{ textAlign: 'center', padding: '3rem' }}>
+                                <AlertTriangle size={48} color="var(--admin-danger)" style={{ marginBottom: '1rem' }} />
+                                <h2 style={{ color: 'var(--admin-text)' }}>Error al cargar el formulario</h2>
+                                <p style={{ color: 'var(--admin-text-muted)', marginBottom: '1rem' }}>
+                                    {error?.message || "Esta referencia podría tener datos corruptos o incompatibles."}
+                                </p>
+                                <pre style={{ color: '#64748b', fontSize: '0.7rem', background: '#000', padding: '1rem', borderRadius: '0.5rem', overflow: 'auto', maxWidth: '100%', marginBottom: '2rem' }}>
+                                    {error?.stack}
+                                </pre>
+                                <button onClick={handleBack} className="save-all-btn" style={{ padding: '1rem 2rem' }}>
+                                    Volver al catálogo
+                                </button>
+                            </div>
+                        )}>
+                            <ProductForm
+                                initialData={editingProduct}
+                                onSave={handleSave}
+                            />
+                        </ErrorBoundary>
                     </div>
                 )}
             </main>

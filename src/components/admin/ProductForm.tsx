@@ -8,68 +8,77 @@ interface ProductFormProps {
     onSave: (data: Partial<Product>) => void;
 }
 
+const normalizeProductData = (data: any): Partial<Product> => {
+    if (!data) return {};
+    const normalized = { ...data };
+
+    // 1. Normalize Medidas (trust global normalizeProduct or re-run if needed)
+    let rawMedidas = normalized.medidas;
+    let ancho: number | string = '';
+    let alto: number | string = '';
+
+    if (Array.isArray(rawMedidas) && rawMedidas.length > 0) {
+        rawMedidas = rawMedidas[0];
+    }
+
+    if (typeof rawMedidas === 'string') {
+        const parts = rawMedidas.toLowerCase().split('x');
+        if (parts.length === 2) {
+            const a = parseFloat(parts[0].trim());
+            const h = parseFloat(parts[1].trim());
+            ancho = a || '';
+            alto = h || '';
+        }
+    } else if (rawMedidas && typeof rawMedidas === 'object') {
+        const a = parseFloat(rawMedidas.ancho) || parseFloat(rawMedidas.width);
+        const h = parseFloat(rawMedidas.alto) || parseFloat(rawMedidas.height);
+        ancho = a || '';
+        alto = h || '';
+    }
+
+    normalized.medidas = { ancho, alto };
+
+
+    // 2. Normalize Arrays
+    const ensureArray = (val: any) => {
+        if (Array.isArray(val)) return val;
+        if (val && typeof val === 'string') return [val];
+        return [];
+    };
+
+    normalized.fmsi = ensureArray(normalized.fmsi);
+    normalized.oem = ensureArray(normalized.oem);
+    normalized.ref = ensureArray(normalized.ref);
+    normalized.imagenes = ensureArray(normalized.imagenes);
+
+    // 3. Normalize Aplicaciones
+    normalized.aplicaciones = ensureArray(normalized.aplicaciones).map((app: any) => {
+        if (app && typeof app === 'object') {
+            return {
+                marca: String(app.marca || ''),
+                modelo: String(app.modelo || app.serie || ''),
+                serie: String(app.serie || ''),
+                año: String(app.año || ''),
+                posicion: String(app.posicion || 'DELANTERA').toUpperCase() as any
+            };
+        }
+        return { marca: 'Dato corrupto', modelo: String(app), año: '', posicion: 'DELANTERA' };
+    });
+
+    // 4. Normalize basic strings
+    normalized.posicion = String(normalized.posicion || normalized.posición || 'DELANTERA').toUpperCase() as any;
+
+    return normalized;
+};
+
 const ProductForm: React.FC<ProductFormProps> = ({ initialData, onSave }) => {
-    const [formData, setFormData] = useState<Partial<Product>>(initialData || {});
+    const [formData, setFormData] = useState<Partial<Product>>(() => normalizeProductData(initialData));
 
     // Sync formData when initialData changes
     useEffect(() => {
         if (initialData) {
-            console.log("ProductForm received initialData:", initialData);
-            const data = { ...initialData } as any;
-
-            console.log("Medidas before processing:", data.medidas);
-
-            // HANDLE LEGACY FORMAT: ["104.4 x 56.2"]
-            if (Array.isArray(data.medidas) && data.medidas.length > 0 && typeof data.medidas[0] === 'string') {
-                const parts = data.medidas[0].split('x');
-                if (parts.length === 2) {
-                    data.medidas = {
-                        ancho: parseFloat(parts[0].trim()) || 0,
-                        alto: parseFloat(parts[1].trim()) || 0
-                    };
-                    console.log("Parsed array format to object:", data.medidas);
-                }
-            }
-
-            // Ensure medidas object exists if it was null/undefined or empty array
-            if (!data.medidas || Array.isArray(data.medidas)) {
-                data.medidas = {};
-            }
-
-            console.log("Medidas before processing:", data.medidas);
-
-            // Helpers to check validity
-            const isInvalid = (val: any) => val === undefined || val === null || val === '';
-
-            // Robust check using helper
-            if (isInvalid(data.medidas.ancho) || isInvalid(data.medidas.alto)) {
-
-                // Helper to find value by potential keys
-                const findValue = (obj: any, keys: string[]) => {
-                    for (const key of keys) {
-                        // Direct match
-                        if (!isInvalid(obj[key])) return obj[key];
-                        // Case insensitive match
-                        const foundKey = Object.keys(obj).find(k => k.toLowerCase() === key.toLowerCase());
-                        if (foundKey && !isInvalid(obj[foundKey])) return obj[foundKey];
-                    }
-                    return undefined;
-                };
-
-                const anchoVal = findValue(data, ['ancho', 'width', 'medida_ancho', 'dimension_ancho']);
-                const altoVal = findValue(data, ['alto', 'height', 'largo', 'length', 'medida_alto']);
-
-                // If found, assign - coercing to Number
-                if (anchoVal !== undefined) data.medidas.ancho = Number(anchoVal);
-                if (altoVal !== undefined) data.medidas.alto = Number(altoVal);
-            }
-
-            // Final fallback to 0 if invalid or NaN
-            if (isInvalid(data.medidas.ancho) || isNaN(Number(data.medidas.ancho))) data.medidas.ancho = 0;
-            if (isInvalid(data.medidas.alto) || isNaN(Number(data.medidas.alto))) data.medidas.alto = 0;
-
-            console.log("Processed formData:", data);
-            setFormData(data);
+            console.log("ProductForm received initialData change, normalizing...");
+            setFormData(normalizeProductData(initialData));
         }
     }, [initialData]);
 
@@ -125,13 +134,32 @@ const ProductForm: React.FC<ProductFormProps> = ({ initialData, onSave }) => {
     const toggleAppPosition = (index: number) => {
         const positions: ('DELANTERA' | 'TRASERA' | 'AMBAS')[] = ['DELANTERA', 'TRASERA', 'AMBAS'];
         setFormData(prev => {
-            if (!prev.aplicaciones) return prev;
+            if (!prev.aplicaciones || !prev.aplicaciones[index]) return prev;
             const apps = [...prev.aplicaciones];
             const currentPos = apps[index].posicion || 'DELANTERA';
             const nextIdx = (positions.indexOf(currentPos as any) + 1) % positions.length;
             apps[index] = { ...apps[index], posicion: positions[nextIdx] };
             return { ...prev, aplicaciones: apps };
         });
+    };
+
+    const handleSaveClick = () => {
+        try {
+            console.log("Saving formData:", formData);
+            const dataToSave = { ...formData };
+
+            // Convert back to legacy format for storage if it's an object now
+            if (dataToSave.medidas && typeof dataToSave.medidas === 'object' && !Array.isArray(dataToSave.medidas)) {
+                const anchoFinal = dataToSave.medidas.ancho || 0;
+                const altoFinal = dataToSave.medidas.alto || 0;
+                dataToSave.medidas = [`${anchoFinal} x ${altoFinal}`] as any;
+            }
+
+            onSave(dataToSave);
+        } catch (err) {
+            console.error("Error in handleSaveClick:", err);
+            alert("Error al preparar los datos para guardar.");
+        }
     };
 
     return (
@@ -173,7 +201,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ initialData, onSave }) => {
                             value={formData.ref?.[0] || ''}
                             onChange={(e) => {
                                 const val = e.target.value;
-                                const currentRefs = formData.ref ? [...formData.ref] : [];
+                                const currentRefs = Array.isArray(formData.ref) ? [...formData.ref] : [];
                                 if (currentRefs.length > 0) {
                                     currentRefs[0] = val;
                                 } else {
@@ -189,7 +217,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ initialData, onSave }) => {
                                 type="text"
                                 className="admin-input"
                                 placeholder="Ej: D1234, 8432"
-                                value={formData.fmsi?.join(', ') || ''}
+                                value={Array.isArray(formData.fmsi) ? formData.fmsi.join(', ') : ''}
                                 onChange={(e) => setFormData({
                                     ...formData,
                                     fmsi: e.target.value.split(',').map(s => s.trim()).filter(Boolean)
@@ -197,17 +225,13 @@ const ProductForm: React.FC<ProductFormProps> = ({ initialData, onSave }) => {
                             />
                         </div>
 
-
-
-
-
                         <div style={{ marginTop: '1rem' }}>
                             <label>OEM (Separadas por coma)</label>
                             <input
                                 type="text"
                                 className="admin-input"
                                 placeholder="Ej: 1K0698151A, 5K0698151"
-                                value={formData.oem?.join(', ') || ''}
+                                value={Array.isArray(formData.oem) ? formData.oem.join(', ') : ''}
                                 onChange={(e) => setFormData({
                                     ...formData,
                                     oem: e.target.value.split(',').map(s => s.trim()).filter(Boolean)
@@ -220,17 +244,17 @@ const ProductForm: React.FC<ProductFormProps> = ({ initialData, onSave }) => {
                             <div className="pos-selector">
                                 <button
                                     type="button"
-                                    className={`pos-btn ${formData.posicion?.toUpperCase() === 'DELANTERA' ? 'active del' : ''}`}
+                                    className={`pos-btn ${String(formData.posicion || '').toUpperCase() === 'DELANTERA' ? 'active del' : ''}`}
                                     onClick={() => setFormData({ ...formData, posicion: 'DELANTERA' })}
                                 >DELANTERA</button>
                                 <button
                                     type="button"
-                                    className={`pos-btn ${formData.posicion?.toUpperCase() === 'TRASERA' ? 'active tras' : ''}`}
+                                    className={`pos-btn ${String(formData.posicion || '').toUpperCase() === 'TRASERA' ? 'active tras' : ''}`}
                                     onClick={() => setFormData({ ...formData, posicion: 'TRASERA' })}
                                 >TRASERA</button>
                                 <button
                                     type="button"
-                                    className={`pos-btn ${formData.posicion?.toUpperCase() === 'AMBAS' ? 'active ambas-btn' : ''}`}
+                                    className={`pos-btn ${String(formData.posicion || '').toUpperCase() === 'AMBAS' ? 'active ambas-btn' : ''}`}
                                     onClick={() => setFormData({ ...formData, posicion: 'AMBAS' })}
                                 >AMBAS</button>
                             </div>
@@ -240,25 +264,37 @@ const ProductForm: React.FC<ProductFormProps> = ({ initialData, onSave }) => {
                             <div>
                                 <label><Ruler size={14} /> Ancho (mm)</label>
                                 <input
-                                    type="number"
+                                    type="text"
                                     className="admin-input"
-                                    value={formData.medidas?.ancho || ''}
-                                    onChange={(e) => setFormData({
-                                        ...formData,
-                                        medidas: { ...(formData.medidas || { ancho: 0, alto: 0 }), ancho: Number(e.target.value) || 0 }
-                                    })}
+                                    placeholder="0.0"
+                                    value={(formData.medidas as any)?.ancho ?? ''}
+                                    onChange={(e) => {
+                                        const val = e.target.value.replace(',', '.');
+                                        if (val === '' || /^\d*\.?\d*$/.test(val)) {
+                                            setFormData({
+                                                ...formData,
+                                                medidas: { ...(formData.medidas as any || { ancho: '', alto: '' }), ancho: val }
+                                            });
+                                        }
+                                    }}
                                 />
                             </div>
                             <div>
                                 <label><Ruler size={14} /> Alto (mm)</label>
                                 <input
-                                    type="number"
+                                    type="text"
                                     className="admin-input"
-                                    value={formData.medidas?.alto || ''}
-                                    onChange={(e) => setFormData({
-                                        ...formData,
-                                        medidas: { ...(formData.medidas || { ancho: 0, alto: 0 }), alto: Number(e.target.value) || 0 }
-                                    })}
+                                    placeholder="0.0"
+                                    value={(formData.medidas as any)?.alto ?? ''}
+                                    onChange={(e) => {
+                                        const val = e.target.value.replace(',', '.');
+                                        if (val === '' || /^\d*\.?\d*$/.test(val)) {
+                                            setFormData({
+                                                ...formData,
+                                                medidas: { ...(formData.medidas as any || { ancho: '', alto: '' }), alto: val }
+                                            });
+                                        }
+                                    }}
                                 />
                             </div>
                         </div>
@@ -315,26 +351,26 @@ const ProductForm: React.FC<ProductFormProps> = ({ initialData, onSave }) => {
 
                     {/* Applications List */}
                     <div className="apps-list-container">
-                        {formData.aplicaciones?.map((app, idx) => (
+                        {Array.isArray(formData.aplicaciones) && formData.aplicaciones.map((app, idx) => (
                             <div key={idx} className={`app-item-card ${editingAppIndex === idx ? 'editing' : ''}`}>
                                 {editingAppIndex === idx && tempApp ? (
                                     // EDIT MODE
                                     <div className="app-edit-grid">
                                         <input
                                             className="admin-input small"
-                                            value={tempApp.marca}
+                                            value={tempApp.marca || ''}
                                             onChange={e => setTempApp({ ...tempApp, marca: e.target.value })}
                                             placeholder="Marca"
                                         />
                                         <input
                                             className="admin-input small"
-                                            value={tempApp.serie || tempApp.modelo}
+                                            value={tempApp.serie || tempApp.modelo || ''}
                                             onChange={e => setTempApp({ ...tempApp, serie: e.target.value, modelo: e.target.value })}
                                             placeholder="Serie/Modelo"
                                         />
                                         <input
                                             className="admin-input small"
-                                            value={tempApp.año}
+                                            value={tempApp.año || ''}
                                             onChange={e => setTempApp({ ...tempApp, año: e.target.value })}
                                             placeholder="Año"
                                         />
@@ -345,30 +381,28 @@ const ProductForm: React.FC<ProductFormProps> = ({ initialData, onSave }) => {
                                     </div>
                                 ) : (
                                     // VIEW MODE
-                                    <>
+                                    <div style={{ display: 'flex', width: '100%', alignItems: 'center', justifyContent: 'space-between' }}>
                                         <div style={{ flex: 1 }}>
-                                            <strong style={{ color: '#fff', fontSize: '1rem', display: 'block' }}>
-                                                {app.marca} <span style={{ color: 'var(--admin-accent)' }}>{app.serie || app.modelo || '(Sin Serie)'}</span>
+                                            <strong style={{ color: 'var(--admin-text)', fontSize: '1rem', display: 'block' }}>
+                                                {app?.marca || 'N/A'} <span style={{ color: 'var(--admin-accent)' }}>{app?.serie || app?.modelo || '(Sin Serie)'}</span>
                                             </strong>
-                                            <span style={{ fontSize: '0.85rem', color: '#9ca3af', fontWeight: 500 }}>
-                                                Año: {app.año || 'N/A'}
+                                            <span style={{ fontSize: '0.85rem', color: 'var(--admin-text-muted)', fontWeight: 500 }}>
+                                                Año: {app?.año || 'N/A'}
                                             </span>
                                         </div>
 
                                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                                             <span
-                                                className={`pos-badge ${(app.posicion || formData.posicion || 'delantera').toLowerCase()}`}
+                                                className={`pos-badge ${String(app?.posicion || formData.posicion || 'delantera').toLowerCase()}`}
                                                 onClick={() => toggleAppPosition(idx)}
                                                 style={{ cursor: 'pointer', userSelect: 'none' }}
                                                 title="Click para cambiar posición"
                                             >
-                                                {(app.posicion || formData.posicion) ?
-                                                    ((app.posicion || formData.posicion) === 'AMBAS' ? 'AMBAS' : (app.posicion || formData.posicion)?.substring(0, 3).toUpperCase())
-                                                    : 'N/A'}
+                                                {(app?.posicion || formData.posicion || 'N/A')}
                                             </span>
 
                                             <button
-                                                onClick={() => startEditingApp(idx, app)}
+                                                onClick={() => app && startEditingApp(idx, app)}
                                                 className="icon-btn edit"
                                                 title="Editar Vehículo"
                                             >
@@ -383,7 +417,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ initialData, onSave }) => {
                                                 <Trash2 size={16} />
                                             </button>
                                         </div>
-                                    </>
+                                    </div>
                                 )}
                             </div>
                         ))}
@@ -394,7 +428,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ initialData, onSave }) => {
             <div className="form-footer-actions">
                 <button
                     className="save-all-btn"
-                    onClick={() => onSave(formData)}
+                    onClick={handleSaveClick}
                 >
                     Guardar Todos los Cambios
                 </button>
@@ -406,6 +440,13 @@ const ProductForm: React.FC<ProductFormProps> = ({ initialData, onSave }) => {
                     display: flex;
                     justify-content: center;
                     padding-bottom: 2rem;
+                }
+                label {
+                    color: var(--admin-text-muted);
+                    font-size: 0.85rem;
+                    font-weight: 600;
+                    margin-bottom: 0.5rem;
+                    display: block;
                 }
                 .save-all-btn {
                     background: var(--admin-accent);
@@ -430,9 +471,9 @@ const ProductForm: React.FC<ProductFormProps> = ({ initialData, onSave }) => {
                     display: flex;
                     align-items: center;
                     gap: 0.75rem;
-                    margin-bottom: 2rem;
-                    color: #fff;
-                    font-size: 1.2rem;
+                    margin-bottom: 1.25rem;
+                    color: var(--admin-text);
+                    font-size: 1rem;
                     font-weight: 800;
                     letter-spacing: -0.02em;
                 }
@@ -442,10 +483,10 @@ const ProductForm: React.FC<ProductFormProps> = ({ initialData, onSave }) => {
                     display: flex;
                     gap: 1.5rem;
                     margin-bottom: 2rem;
-                    background: rgba(255, 255, 255, 0.02);
+                    background: var(--admin-glass);
                     padding: 1.5rem;
                     border-radius: 1.5rem;
-                    border: 1px solid rgba(255, 255, 255, 0.05);
+                    border: 1px solid var(--admin-border);
                 }
                 .image-preview-container {
                     width: 120px;
@@ -456,10 +497,10 @@ const ProductForm: React.FC<ProductFormProps> = ({ initialData, onSave }) => {
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    border: 1px solid rgba(255, 255, 255, 0.1);
+                    border: 1px solid var(--admin-border);
                 }
                 .admin-img-preview { width: 100%; height: 100%; object-fit: contain; }
-                .no-image-placeholder { display: flex; flex-direction: column; align-items: center; color: #475569; font-size: 0.7rem; gap: 0.5rem; }
+                .no-image-placeholder { display: flex; flex-direction: column; align-items: center; color: var(--admin-text-muted); font-size: 0.7rem; gap: 0.5rem; }
                 
                 .image-input-stack { flex: 1; display: flex; flex-direction: column; justify-content: center; }
                 
@@ -475,14 +516,14 @@ const ProductForm: React.FC<ProductFormProps> = ({ initialData, onSave }) => {
                     align-items: center;
                     gap: 0.5rem;
                     margin-bottom: 0.5rem;
-                    color: #94a3b8;
+                    color: var(--admin-text-muted);
                     font-size: 0.85rem;
                     font-weight: 600;
                 }
                 .input-group { margin-bottom: 1rem; }
 
                 .new-app-box {
-                    background: rgba(255, 255, 255, 0.03);
+                    background: var(--admin-glass);
                     padding: 1rem;
                     border-radius: 1rem;
                     display: flex;
@@ -501,19 +542,19 @@ const ProductForm: React.FC<ProductFormProps> = ({ initialData, onSave }) => {
                     border-radius: 0.5rem;
                     border: 1px solid var(--admin-border);
                     background: transparent;
-                    color: #fff;
+                    color: var(--admin-text);
                     cursor: pointer;
                     font-size: 0.7rem;
                     font-weight: 700;
                     transition: all 0.2s;
                 }
-                .pos-btn.active.del { background: rgba(59, 130, 246, 0.2); border-color: #3b82f6; color: #60a5fa; }
-                .pos-btn.active.tras { background: rgba(239, 68, 68, 0.2); border-color: #ef4444; color: #f87171; }
-                .pos-btn.active.ambas-btn { background: linear-gradient(90deg, #3b82f6, #ef4444); border: none; }
+                .pos-btn.active.del { background: rgba(59, 130, 246, 0.2); border-color: #3b82f6; color: #3b82f6; }
+                .pos-btn.active.tras { background: rgba(239, 68, 68, 0.2); border-color: #ef4444; color: #ef4444; }
+                .pos-btn.active.ambas-btn { background: var(--accent-primary); color: #fff; border: none; }
                 
                 .add-app-btn {
-                    background: #fff;
-                    color: #000;
+                    background: var(--admin-text);
+                    color: var(--admin-card-bg);
                     border: none;
                     padding: 0.75rem;
                     border-radius: 0.75rem;
@@ -523,6 +564,11 @@ const ProductForm: React.FC<ProductFormProps> = ({ initialData, onSave }) => {
                     justify-content: center;
                     gap: 0.5rem;
                     cursor: pointer;
+                    transition: all 0.2s;
+                }
+                .add-app-btn:hover {
+                    opacity: 0.9;
+                    transform: translateY(-1px);
                 }
                 .apps-list-container {
                     max-height: 400px;
@@ -535,16 +581,16 @@ const ProductForm: React.FC<ProductFormProps> = ({ initialData, onSave }) => {
                     justify-content: space-between;
                     align-items: center;
                     padding: 1rem;
-                    background: rgba(255, 255, 255, 0.03);
-                    border: 1px solid rgba(255, 255, 255, 0.05);
+                    background: var(--admin-glass);
+                    border: 1px solid var(--admin-border);
                     border-radius: 0.75rem;
                     margin-bottom: 0.5rem;
                     transition: all 0.2s;
                 }
-                .app-item-card:hover { border-color: rgba(255, 255, 255, 0.15); }
+                .app-item-card:hover { border-color: var(--admin-accent); }
                 .app-item-card.editing {
-                    background: rgba(59, 130, 246, 0.1);
-                    border-color: #3b82f6;
+                    background: var(--admin-glass-hover);
+                    border-color: var(--admin-accent);
                 }
 
                 .app-edit-grid {
@@ -558,7 +604,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ initialData, onSave }) => {
                 .admin-input.small {
                     padding: 0.5rem;
                     font-size: 0.85rem;
-                    background: rgba(0, 0, 0, 0.3);
+                    background: var(--admin-glass);
                 }
 
                 .edit-app-actions {
@@ -576,8 +622,8 @@ const ProductForm: React.FC<ProductFormProps> = ({ initialData, onSave }) => {
                     border: none;
                     cursor: pointer;
                     transition: all 0.2s;
-                    background: rgba(255, 255, 255, 0.05);
-                    color: #fff;
+                    background: var(--admin-glass);
+                    color: var(--admin-text);
                 }
                 .icon-btn:hover { background: rgba(255, 255, 255, 0.15); transform: scale(1.05); }
                 .icon-btn.edit { color: #60a5fa; }
@@ -592,9 +638,9 @@ const ProductForm: React.FC<ProductFormProps> = ({ initialData, onSave }) => {
                     font-weight: 700;
                     text-transform: uppercase;
                 }
-                .pos-badge.delantera { background: rgba(59, 130, 246, 0.2); color: #60a5fa; }
-                .pos-badge.trasera { background: rgba(239, 68, 68, 0.2); color: #f87171; }
-                .pos-badge.ambas { background: linear-gradient(90deg, rgba(59, 130, 246, 0.2), rgba(239, 68, 68, 0.2)); color: #fff; border: 1px solid rgba(255, 255, 255, 0.1); }
+                .pos-badge.delantera { background: rgba(59, 130, 246, 0.2); color: #3b82f6; }
+                .pos-badge.trasera { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
+                .pos-badge.ambas { background: var(--accent-primary); color: #fff; border: none; }
 `}</style>
         </div>
     );

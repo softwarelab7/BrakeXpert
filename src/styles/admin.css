@@ -24,11 +24,11 @@
     --admin-glass: rgba(0, 0, 0, 0.03);
     --admin-glass-hover: rgba(0, 0, 0, 0.06);
     --admin-border: rgba(0, 0, 0, 0.1);
-    --admin-text: #0f172a;
-    --admin-text-muted: #64748b;
-    --admin-layout-bg: radial-gradient(circle at top right, #e2e8f0, #f8fafc);
-    --admin-title-gradient-start: #0f172a;
-    --admin-input-focus: rgba(0, 0, 0, 0.05);
+    --admin-text: #000000;
+    --admin-text-muted: #2d3748;
+    --admin-layout-bg: radial-gradient(circle at top right, #e2e8f0, #f1f5f9);
+    --admin-title-gradient-start: #000000;
+    --admin-input-focus: rgba(0, 0, 0, 0.08);
 }
 
 .admin-layout {
@@ -41,11 +41,11 @@
 }
 
 .admin-sidebar {
-    width: 260px;
+    width: 210px;
     background: var(--admin-sidebar-bg);
     border-right: 1px solid var(--admin-border);
     backdrop-filter: blur(20px);
-    padding: 2rem 1.5rem;
+    padding: 2rem 1rem;
     display: flex;
     flex-direction: column;
     gap: 2rem;
@@ -73,14 +73,15 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 3rem;
+    margin-bottom: 2rem;
 }
 
 .admin-title {
-    font-size: 2.5rem;
+    font-size: 1.8rem;
     font-weight: 800;
     background: linear-gradient(to right, var(--admin-title-gradient-start), var(--admin-text-muted));
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
     margin: 0;
 }
