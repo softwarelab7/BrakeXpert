@@ -32,10 +32,12 @@ export const subscribeToProducts = (callback: (products: Product[], changes: Doc
     return onSnapshot(productsCollection, (snapshot) => {
         const products: Product[] = [];
         snapshot.forEach((doc) => {
+            const data = doc.data();
             products.push({
                 id: doc.id,
-                ...doc.data() as Omit<Product, 'id'>
-            });
+                ...data,
+                posicion: data.posicion || data.posición || 'AMBAS'
+            } as Product);
         });
         callback(products, snapshot.docChanges());
     }, (error) => {
@@ -143,6 +145,78 @@ export const searchByReference = async (reference: string): Promise<Product[]> =
     }
 };
 
+// Update a product
+export const updateProduct = async (id: string, productData: Partial<Product>) => {
+    try {
+        const productRef = doc(db, 'pastillas', id);
+        // Remove id from data to avoid saving it as a field
+        const { id: _, ...data } = productData as any;
+        await writeBatch(db).set(productRef, data, { merge: true }).commit();
+        return true;
+    } catch (error) {
+        console.error('Error updating product:', error);
+        throw error;
+    }
+};
+
+// Add a new product
+export const addProduct = async (productData: Partial<Product>) => {
+    try {
+        const productRef = doc(productsCollection);
+        const { id: _, ...data } = productData as any;
+        await writeBatch(db).set(productRef, data).commit();
+        return productRef.id;
+    } catch (error) {
+        console.error('Error adding product:', error);
+        throw error;
+    }
+};
+
+
+// History / Audit Log
+export interface HistoryLog {
+    id?: string;
+    productId: string;
+    productRef?: string; // e.g. "D123"
+    action: 'CREATE' | 'UPDATE' | 'DELETE';
+    changes?: { field: string; old: any; new: any }[];
+    user: string; // email
+    timestamp: number;
+}
+
+export const historyCollection = collection(db, 'history');
+
+export const addHistoryLog = async (log: Omit<HistoryLog, 'id' | 'timestamp'>) => {
+    try {
+        await writeBatch(db).set(doc(historyCollection), {
+            ...log,
+            timestamp: Date.now()
+        }).commit();
+    } catch (error) {
+        console.error("Error adding history log:", error);
+        // Don't throw, history logging failure shouldn't block main action
+    }
+};
+
+export const fetchHistoryLogs = async (limitCount = 50): Promise<HistoryLog[]> => {
+    try {
+        const q = query(historyCollection, limit(limitCount));
+        // Note: orderBy('timestamp', 'desc') requires an index, usually safe to add but might error first time.
+        // For now, let's try without orderBy or handle it client side if needed, 
+        // but strictly standard is orderBy. Let's add orderBy and where.
+        // Actually, basic query first.
+        const querySnapshot = await getDocs(query(historyCollection, limit(limitCount))); // we will sort client side to avoid index error delay
+        const logs: HistoryLog[] = [];
+        querySnapshot.forEach(doc => {
+            logs.push({ id: doc.id, ...doc.data() } as HistoryLog);
+        });
+        return logs.sort((a, b) => b.timestamp - a.timestamp);
+    } catch (error) {
+        console.error("Error fetching history:", error);
+        return [];
+    }
+};
+
 // Mock data for development (remove when Firebase is configured)
 export const getMockProducts = (): Product[] => {
     return Array.from({ length: 723 }, (_, i) => ({
@@ -161,12 +235,14 @@ export const getMockProducts = (): Product[] => {
             {
                 marca: ['Chevrolet', 'Nissan', 'Hyundai', 'Kia', 'Ford', 'Toyota', 'Honda', 'Mazda', 'Volkswagen', 'Renault'][i % 10],
                 modelo: ['Aveo', 'Spark', 'Cruze', 'Malibu', 'Silverado', 'Corolla', 'Civic', '3', 'Jetta', 'Logan'][i % 10],
-                año: `${2010 + (i % 15)}`
+                año: `${2010 + (i % 15)}`,
+                posicion: ['DELANTERA', 'TRASERA', 'AMBAS'][i % 3] as 'DELANTERA' | 'TRASERA' | 'AMBAS'
             },
             {
                 marca: ['Fiat', 'Peugeot', 'Citroën', 'Mg', 'Ram', 'Acura', 'Jetour'][i % 7],
                 modelo: ['Uno', '208', 'C3', 'ZS', '1500', 'TLX', 'X70'][i % 7],
-                año: `${2012 + (i % 12)}`
+                año: `${2012 + (i % 12)}`,
+                posicion: ['DELANTERA', 'TRASERA', 'AMBAS'][(i + 1) % 3] as 'DELANTERA' | 'TRASERA' | 'AMBAS'
             }
         ],
         medidas: {

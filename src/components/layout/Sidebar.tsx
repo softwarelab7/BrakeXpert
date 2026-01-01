@@ -1,164 +1,233 @@
+import { useMemo, useState, useEffect } from 'react';
 import { Search, Trash2 } from 'lucide-react';
 import { useAppStore } from '../../store/useAppStore';
+import type { Product } from '../../types';
 import '../../styles/sidebar.css';
 
-
 const Sidebar = () => {
-    const filters = useAppStore(state => state.filters);
-    const setSearchQuery = useAppStore(state => state.setSearchQuery);
-    const setSelectedBrand = useAppStore(state => state.setSelectedBrand);
-    const setSelectedModel = useAppStore(state => state.setSelectedModel);
-    const setSelectedYear = useAppStore(state => state.setSelectedYear);
-    const setSelectedPosition = useAppStore(state => state.setSelectedPosition);
-    const setOemReference = useAppStore(state => state.setOemReference);
-    const setFmsiReference = useAppStore(state => state.setFmsiReference);
-    const setWidth = useAppStore(state => state.setWidth);
-    const setHeight = useAppStore(state => state.setHeight);
-    const clearFilters = useAppStore(state => state.clearFilters);
+    const store = useAppStore();
+    const { filters, products, filteredProducts } = store;
 
-    const products = useAppStore(state => state.products);
+    // Local state for smooth typing
+    const [localQuery, setLocalQuery] = useState(filters.searchQuery);
+    const [localOem, setLocalOem] = useState(filters.oemReference);
+    const [localFmsi, setLocalFmsi] = useState(filters.fmsiReference);
+    const [localWidth, setLocalWidth] = useState(filters.width);
+    const [localHeight, setLocalHeight] = useState(filters.height);
 
-    // Dynamically get brands from products
-    const brands = Array.from(new Set(
-        products.flatMap(p => p.aplicaciones.map(app => app.marca))
-    )).sort();
+    // Sync local state when global filters are cleared
+    useEffect(() => {
+        setLocalQuery(filters.searchQuery);
+        setLocalOem(filters.oemReference);
+        setLocalFmsi(filters.fmsiReference);
+        setLocalWidth(filters.width);
+        setLocalHeight(filters.height);
+    }, [filters.searchQuery, filters.oemReference, filters.fmsiReference, filters.width, filters.height]);
 
-    // Dynamically get models based on selected brand
-    const models = filters.selectedBrand
-        ? Array.from(new Set(
-            products.flatMap(p =>
-                p.aplicaciones
-                    .filter(app => app.marca.toLowerCase() === filters.selectedBrand.toLowerCase())
-                    .map(app => app.modelo)
-            )
-        )).sort()
-        : [];
+    // Debounce effects to update global store
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            if (localQuery !== filters.searchQuery) store.setSearchQuery(localQuery);
+        }, 300);
+        return () => clearTimeout(timer);
+    }, [localQuery]);
 
-    // Dynamically get years based on selected model
-    const years = (filters.selectedBrand && filters.selectedModel)
-        ? Array.from(new Set(
-            products.flatMap(p =>
-                p.aplicaciones
-                    .filter(app =>
-                        app.marca.toLowerCase() === filters.selectedBrand.toLowerCase() &&
-                        app.modelo.toLowerCase() === filters.selectedModel.toLowerCase()
-                    )
-                    .map(app => app.año)
-            )
-        )).filter(Boolean).sort((a, b) => parseInt(b || '0') - parseInt(a || '0'))
-        : [];
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            if (localOem !== filters.oemReference) {
+                store.setOemReference(localOem);
+                if (localOem && localQuery) setLocalQuery('');
+            }
+        }, 300);
+        return () => clearTimeout(timer);
+    }, [localOem]);
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            if (localFmsi !== filters.fmsiReference) {
+                store.setFmsiReference(localFmsi);
+                if (localFmsi && localQuery) setLocalQuery('');
+            }
+        }, 300);
+        return () => clearTimeout(timer);
+    }, [localFmsi]);
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            if (localWidth !== filters.width) store.setWidth(localWidth);
+        }, 300);
+        return () => clearTimeout(timer);
+    }, [localWidth]);
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            if (localHeight !== filters.height) store.setHeight(localHeight);
+        }, 300);
+        return () => clearTimeout(timer);
+    }, [localHeight]);
+
+    // Faceted logic
+    const brands = useMemo(() => {
+        const brandMap = new Map<string, number>();
+        products.forEach((p: Product) => {
+            if (p.aplicaciones && Array.isArray(p.aplicaciones)) {
+                p.aplicaciones.forEach((app: any) => {
+                    if (app && app.marca) {
+                        brandMap.set(app.marca, (brandMap.get(app.marca) || 0) + 1);
+                    }
+                });
+            }
+        });
+        return Array.from(brandMap.entries()).sort((a, b) => a[0].localeCompare(b[0]));
+    }, [products]);
+
+    const models = useMemo(() => {
+        const modelMap = new Map<string, number>();
+        products.forEach((p: Product) => {
+            if (p.aplicaciones && Array.isArray(p.aplicaciones)) {
+                p.aplicaciones.forEach((app: any) => {
+                    if (app && app.modelo) {
+                        modelMap.set(app.modelo, (modelMap.get(app.modelo) || 0) + 1);
+                    }
+                });
+            }
+        });
+        return Array.from(modelMap.keys()).sort((a, b) => a.localeCompare(b));
+    }, [products]);
+
+    const years = useMemo(() => {
+        const yearSet = new Set<string>();
+        products.forEach((p: Product) => {
+            if (p.aplicaciones && Array.isArray(p.aplicaciones)) {
+                p.aplicaciones.forEach((app: any) => {
+                    if (app && app.año) {
+                        yearSet.add(String(app.año));
+                    }
+                });
+            }
+        });
+        return Array.from(yearSet).sort((a, b) => b.localeCompare(a));
+    }, [products]);
 
     return (
         <aside className="sidebar">
-            {/* Quick Search */}
             <div className="filter-section">
                 <h3 className="filter-section-title">Búsqueda Rápida</h3>
                 <div className="search-box">
                     <input
                         type="text"
                         className="search-input"
-                        placeholder="Marca, Serie, Ref, OEM..."
-                        value={filters.searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
+                        placeholder="Chevrolet Onix, 2244, FMSI..."
+                        value={localQuery}
+                        onChange={(e) => setLocalQuery(e.target.value)}
                     />
-                    <Search size={18} className="search-icon" />
+                    <Search size={16} className="search-icon" />
                 </div>
             </div>
 
-
-
-            {/* Vehicle Details */}
             <div className="filter-section">
                 <h3 className="filter-section-title">Detalles del Vehículo</h3>
                 <div className="vehicle-details-grid">
-                    <select
-                        className="filter-select"
-                        value={filters.selectedBrand}
-                        onChange={(e) => setSelectedBrand(e.target.value)}
-                    >
-                        <option value="">Marca</option>
-                        {brands.map(brand => (
-                            <option key={brand} value={brand.toLowerCase()}>{brand}</option>
-                        ))}
-                    </select>
+                    <div className="searchable-filter">
+                        <input
+                            list="brands-list"
+                            className="filter-select"
+                            placeholder="Marca"
+                            value={filters.selectedBrand || ''}
+                            onChange={(e) => {
+                                store.setSelectedBrand(e.target.value);
+                                if (e.target.value) setLocalQuery('');
+                            }}
+                        />
+                        <datalist id="brands-list">
+                            {brands.map(([name]) => (
+                                <option key={name} value={name} />
+                            ))}
+                        </datalist>
+                    </div>
 
-                    <select
-                        className="filter-select"
-                        value={filters.selectedModel}
-                        onChange={(e) => setSelectedModel(e.target.value)}
-                        disabled={!filters.selectedBrand}
-                    >
-                        <option value="">Modelo/Serie</option>
-                        {models.map(model => (
-                            <option key={model} value={model.toLowerCase()}>{model}</option>
-                        ))}
-                    </select>
+                    <div className="searchable-filter">
+                        <input
+                            list="models-list"
+                            className="filter-select"
+                            placeholder="Modelo/Serie"
+                            value={filters.selectedModel || ''}
+                            onChange={(e) => {
+                                store.setSelectedModel(e.target.value);
+                                if (e.target.value) setLocalQuery('');
+                            }}
+                        />
+                        <datalist id="models-list">
+                            {models.map(name => (
+                                <option key={name} value={name} />
+                            ))}
+                        </datalist>
+                    </div>
 
-                    <select
-                        className="filter-select"
-                        value={filters.selectedYear}
-                        onChange={(e) => setSelectedYear(e.target.value)}
-                        disabled={!filters.selectedModel}
-                    >
-                        <option value="">Año</option>
-                        {years.map(year => (
-                            <option key={year} value={year}>{year}</option>
-                        ))}
-                    </select>
+                    <div className="searchable-filter">
+                        <input
+                            list="years-list"
+                            className="filter-select"
+                            placeholder="Año"
+                            value={filters.selectedYear || ''}
+                            onChange={(e) => {
+                                store.setSelectedYear(e.target.value);
+                                if (e.target.value) setLocalQuery('');
+                            }}
+                        />
+                        <datalist id="years-list">
+                            {years.map(year => (
+                                <option key={year} value={year} />
+                            ))}
+                        </datalist>
+                    </div>
                 </div>
             </div>
 
-
-
-            {/* Position */}
             <div className="filter-section">
                 <h3 className="filter-section-title">Posición</h3>
                 <div className="position-grid">
                     <button
-                        className={`position-toggle-btn ${filters.selectedPosition === 'delantera' ? 'active' : ''}`}
-                        onClick={() => setSelectedPosition(filters.selectedPosition === 'delantera' ? null : 'delantera')}
+                        className={`position-toggle-btn ${filters.selectedPositions.includes('delantera') ? 'active' : ''}`}
+                        onClick={() => {
+                            store.togglePosition('delantera');
+                            setLocalQuery('');
+                        }}
                     >
                         Delantera
                     </button>
                     <button
-                        className={`position-toggle-btn ${filters.selectedPosition === 'trasera' ? 'active' : ''}`}
-                        onClick={() => setSelectedPosition(filters.selectedPosition === 'trasera' ? null : 'trasera')}
+                        className={`position-toggle-btn ${filters.selectedPositions.includes('trasera') ? 'active' : ''}`}
+                        onClick={() => {
+                            store.togglePosition('trasera');
+                            setLocalQuery('');
+                        }}
                     >
                         Trasera
                     </button>
                 </div>
             </div>
 
-
-
-            {/* References */}
             <div className="filter-section">
                 <h3 className="filter-section-title">Referencias</h3>
                 <div className="references-grid">
-                    <div className="ref-input-group">
-                        <input
-                            type="text"
-                            className="ref-input"
-                            placeholder="OEM"
-                            value={filters.oemReference}
-                            onChange={(e) => setOemReference(e.target.value)}
-                        />
-                    </div>
-                    <div className="ref-input-group">
-                        <input
-                            type="text"
-                            className="ref-input"
-                            placeholder="FMSI"
-                            value={filters.fmsiReference}
-                            onChange={(e) => setFmsiReference(e.target.value)}
-                        />
-                    </div>
+                    <input
+                        type="text"
+                        className="ref-input"
+                        placeholder="OEM"
+                        value={localOem}
+                        onChange={(e) => setLocalOem(e.target.value)}
+                    />
+                    <input
+                        type="text"
+                        className="ref-input"
+                        placeholder="FMSI"
+                        value={localFmsi}
+                        onChange={(e) => setLocalFmsi(e.target.value)}
+                    />
                 </div>
             </div>
 
-
-
-            {/* Measurements */}
             <div className="filter-section">
                 <h3 className="filter-section-title">Medidas (mm)</h3>
                 <div className="measurements-grid">
@@ -166,24 +235,37 @@ const Sidebar = () => {
                         type="number"
                         className="measure-input"
                         placeholder="Ancho"
-                        value={filters.width}
-                        onChange={(e) => setWidth(e.target.value)}
+                        step="0.1"
+                        value={localWidth}
+                        onChange={(e) => setLocalWidth(e.target.value)}
                     />
                     <input
                         type="number"
                         className="measure-input"
                         placeholder="Alto"
-                        value={filters.height}
-                        onChange={(e) => setHeight(e.target.value)}
+                        step="0.1"
+                        value={localHeight}
+                        onChange={(e) => setLocalHeight(e.target.value)}
                     />
                 </div>
             </div>
 
-            {/* Action Buttons */}
             <div className="action-buttons-container">
-                <button className="borrar-filtros-btn" onClick={clearFilters}>
-                    <Trash2 size={18} />
-                    BORRAR FILTROS
+                <button
+                    className="borrar-filtros-btn"
+                    onClick={() => {
+                        store.clearFilters();
+                        setLocalQuery('');
+                        setLocalOem('');
+                        setLocalFmsi('');
+                        setLocalWidth('');
+                        setLocalHeight('');
+                    }}
+                    disabled={filteredProducts.length === products.length}
+                    style={{ opacity: filteredProducts.length === products.length ? 0.6 : 1 }}
+                >
+                    <Trash2 size={16} />
+                    LIMPIAR ({filteredProducts.length})
                 </button>
             </div>
         </aside>

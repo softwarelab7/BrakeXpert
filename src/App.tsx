@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useAppStore } from './store/useAppStore';
-import { fetchProducts, isFirebaseConfigured, subscribeToProducts } from './services/firebase';
+import { fetchProducts, isFirebaseConfigured, subscribeToProducts, seedDatabase } from './services/firebase';
 import Header from './components/layout/Header';
 
 import Sidebar from './components/layout/Sidebar';
@@ -14,13 +14,22 @@ import CompareModal from './components/modals/CompareModal';
 import HistoryModal from './components/modals/HistoryModal';
 import GuideModal from './components/modals/GuideModal';
 import NotificationPanel from './components/NotificationPanel';
+import AdminPanel from './components/admin/AdminPanel';
 import ReloadPrompt from './components/ReloadPrompt';
 import './styles/global.css';
 import './styles/app.css';
 
 function App() {
+  const [view, setView] = useState(window.location.hash || '#search');
   const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const handleHashChange = () => setView(window.location.hash);
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
   const filteredProducts = useAppStore(state => state.filteredProducts);
+  const allProducts = useAppStore(state => state.products); // Get all products checking
   const ui = useAppStore(state => state.ui);
   const setProducts = useAppStore(state => state.setProducts);
   const clearFilters = useAppStore(state => state.clearFilters);
@@ -100,6 +109,23 @@ function App() {
     return () => unsubscribe();
   }, [loadProducts, setProducts]);
 
+  // Handle Database Seeding
+  const handleSeedDatabase = async () => {
+    if (confirm('¿Estás seguro de que quieres cargar datos de prueba? Esto escribirá en tu base de datos Firebase.')) {
+      setIsLoading(true);
+      try {
+        const count = await seedDatabase();
+        alert(`Se cargaron exitosamente ${count} productos.`);
+        // Reload triggered by subscription automatically
+      } catch (error) {
+        console.error('Error seeding database:', error);
+        alert('Error cargando datos. Revisa la consola para más detalles.');
+      } finally {
+        setIsLoading(false);
+      }
+    }
+  };
+
   // Pagination
   const { currentPage, itemsPerPage } = ui;
   const totalResults = filteredProducts.length;
@@ -114,46 +140,55 @@ function App() {
 
   return (
     <div className="app">
-      <Header />
+      {/* Simple View Switcher */}
+      {view === '#admin' ? (
+        <AdminPanel />
+      ) : (
+        <>
+          <Header />
 
-      <div className="main-layout">
-        <div className="filters-column">
-          <Sidebar />
-        </div>
+          <div className="main-layout">
+            <div className="filters-column">
+              <Sidebar />
+            </div>
 
-        <main className="results-panel">
-          <div className="content-wrapper">
-            <ResultsBar
-              totalResults={totalResults}
-              currentStart={startIndex + 1}
-              currentEnd={endIndex}
-            />
+            <main className="results-panel">
+              <div className="content-wrapper">
+                <ResultsBar
+                  totalResults={totalResults}
+                  currentStart={startIndex + 1}
+                  currentEnd={endIndex}
+                />
 
-            <ProductGrid
-              products={paginatedProducts}
-              loading={isLoading}
-              onClearFilters={clearFilters}
-            />
+                <ProductGrid
+                  products={paginatedProducts}
+                  loading={isLoading}
+                  onClearFilters={clearFilters}
+                  hasProducts={allProducts.length > 0}
+                  onSeedDatabase={handleSeedDatabase}
+                />
 
-            <Pagination
-              currentPage={currentPage}
-              totalPages={totalPages}
-              onPageChange={setCurrentPage}
-            />
+                <Pagination
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  onPageChange={setCurrentPage}
+                />
+              </div>
+            </main>
           </div>
-        </main>
-      </div>
 
-      <Footer />
+          <Footer />
 
-      <NotificationPanel />
-      <ReloadPrompt />
+          <NotificationPanel />
+          <ReloadPrompt />
 
-      {/* Modals */}
-      <ProductDetailModal />
-      <CompareModal />
-      <HistoryModal />
-      <GuideModal />
+          {/* Modals */}
+          <ProductDetailModal />
+          <CompareModal />
+          <HistoryModal />
+          <GuideModal />
+        </>
+      )}
     </div>
   );
 }

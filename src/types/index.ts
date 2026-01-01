@@ -1,4 +1,3 @@
-// Product Types
 export interface Product {
   id: string;
   referencia: string;
@@ -6,9 +5,10 @@ export interface Product {
   oem: string[];
   fmsi: string[];
   fabricante: string;
-  posicion: 'DELANTERA' | 'TRASERA' | 'AMBAS';
+  posicion?: 'DELANTERA' | 'TRASERA' | 'AMBAS'; // Optional now
   imagenes: string[];
   aplicaciones: VehicleApplication[];
+  wva?: string;
   medidas: {
     ancho: number;
     alto: number;
@@ -18,7 +18,9 @@ export interface Product {
 export interface VehicleApplication {
   marca: string;
   modelo: string;
+  serie?: string;
   año: string;
+  posicion: 'DELANTERA' | 'TRASERA' | 'AMBAS'; // Mandatory here
 }
 
 // Filter Types
@@ -27,7 +29,7 @@ export interface Filters {
   selectedBrand: string;
   selectedModel: string;
   selectedYear: string;
-  selectedPosition: 'delantera' | 'trasera' | null;
+  selectedPositions: string[];
   selectedBrandTags: string[];
   oemReference: string;
   fmsiReference: string;

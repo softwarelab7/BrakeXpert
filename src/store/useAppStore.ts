@@ -32,7 +32,7 @@ interface AppState {
     setSelectedBrand: (brand: string) => void;
     setSelectedModel: (model: string) => void;
     setSelectedYear: (year: string) => void;
-    setSelectedPosition: (position: 'delantera' | 'trasera' | null) => void;
+    togglePosition: (position: string) => void;
     toggleBrandTag: (brand: string) => void;
     setOemReference: (ref: string) => void;
     setFmsiReference: (ref: string) => void;
@@ -71,112 +71,33 @@ interface AppState {
     clearAllNotifications: () => void;
 }
 
+import { FILTER_STRATEGIES, getSortableRefNumber } from '../utils/search';
+
 const applyFilters = (products: Product[], filters: Filters, favorites: string[]): Product[] => {
-    if (!products.length) return [];
+    if (!products || !Array.isArray(products) || !products.length) return [];
+    if (!filters) return products;
 
-    return products.filter((product) => {
-        // Show favorites only filter
-        if (filters.showFavoritesOnly && !favorites.includes(product.id)) {
-            return false;
-        }
-
-        // Search query filter
-        if (filters.searchQuery) {
-            const query = filters.searchQuery.toLowerCase();
-            const matchesRef = (product.referencia || '').toLowerCase().includes(query);
-            const matchesRefs = (product.ref || []).some((ref) =>
-                (ref || '').toLowerCase().includes(query)
-            );
-            const matchesOem = (product.oem || []).some((oem) =>
-                (oem || '').toLowerCase().includes(query)
-            );
-            const matchesFmsi = (product.fmsi || []).some((fmsi) =>
-                (fmsi || '').toLowerCase().includes(query)
-            );
-            const matchesFabricante = (product.fabricante || '').toLowerCase().includes(query);
-            const matchesApplications = (product.aplicaciones || []).some((app) =>
-                (app.marca || '').toLowerCase().includes(query) ||
-                (app.modelo || '').toLowerCase().includes(query)
-            );
-
-            if (!matchesRef && !matchesRefs && !matchesOem && !matchesFmsi && !matchesFabricante && !matchesApplications) {
-                return false;
+    const filtered = products.filter((product) => {
+        return Object.entries(filters).every(([key, value]) => {
+            // Map store filter keys to strategy keys if needed, or ensure they match
+            // Using direct mapping based on the provided strategy implementation
+            const strategy = FILTER_STRATEGIES[key];
+            if (strategy) {
+                // Pass context (favorites) for strategies that need it
+                return strategy(product, value, { favorites });
             }
-        }
-
-        // Position filter
-        if (filters.selectedPosition) {
-            const position = filters.selectedPosition.toUpperCase();
-            if (product.posicion !== position && product.posicion !== 'AMBAS') {
-                return false;
-            }
-        }
-
-        // Vehicle details filter (Brand/Model/Year)
-        if (filters.selectedBrand) {
-            const hasBrand = product.aplicaciones.some(app =>
-                app.marca.toLowerCase() === filters.selectedBrand.toLowerCase()
-            );
-            if (!hasBrand) return false;
-
-            if (filters.selectedModel) {
-                const hasModel = product.aplicaciones.some(app =>
-                    app.marca.toLowerCase() === filters.selectedBrand.toLowerCase() &&
-                    app.modelo.toLowerCase() === filters.selectedModel.toLowerCase()
-                );
-                if (!hasModel) return false;
-
-                if (filters.selectedYear) {
-                    const hasYear = product.aplicaciones.some(app =>
-                        app.marca.toLowerCase() === filters.selectedBrand.toLowerCase() &&
-                        app.modelo.toLowerCase() === filters.selectedModel.toLowerCase() &&
-                        app.año === filters.selectedYear
-                    );
-                    if (!hasYear) return false;
-                }
-            }
-        }
-
-        // Brand tags filter
-        if (filters.selectedBrandTags.length > 0) {
-            const hasMatchingBrand = product.aplicaciones.some((app) =>
-                filters.selectedBrandTags.some(
-                    (tag) => tag.toLowerCase() === app.marca.toLowerCase()
-                )
-            );
-            if (!hasMatchingBrand) return false;
-        }
-
-        // OEM reference filter
-        if (filters.oemReference) {
-            const matchesOem = (product.oem || []).some((oem) =>
-                (oem || '').toLowerCase().includes(filters.oemReference.toLowerCase())
-            );
-            if (!matchesOem) return false;
-        }
-
-        // FMSI reference filter
-        if (filters.fmsiReference) {
-            const matchesFmsi = (product.fmsi || []).some((fmsi) =>
-                (fmsi || '').toLowerCase().includes(filters.fmsiReference.toLowerCase())
-            );
-            if (!matchesFmsi) return false;
-        }
-
-        // Width filter
-        if (filters.width) {
-            const width = parseFloat(filters.width);
-            if (product.medidas.ancho !== width) return false;
-        }
-
-        // Height filter
-        if (filters.height) {
-            const height = parseFloat(filters.height);
-            if (product.medidas.alto !== height) return false;
-        }
-
-        return true;
+            return true;
+        });
     });
+
+    // Sort by reference number if no search query is active
+    if (!filters.searchQuery) {
+        filtered.sort((a, b) => {
+            return getSortableRefNumber(a.ref) - getSortableRefNumber(b.ref);
+        });
+    }
+
+    return filtered;
 };
 
 const initialFilters: Filters = {
@@ -184,7 +105,7 @@ const initialFilters: Filters = {
     selectedBrand: '',
     selectedModel: '',
     selectedYear: '',
-    selectedPosition: null,
+    selectedPositions: [],
     selectedBrandTags: [],
     oemReference: '',
     fmsiReference: '',
@@ -245,7 +166,7 @@ export const useAppStore = create<AppState>()(
 
             setSelectedBrand: (brand) =>
                 set((state) => {
-                    const newFilters = { ...state.filters, selectedBrand: brand, selectedModel: '', selectedYear: '' };
+                    const newFilters = { ...state.filters, selectedBrand: brand };
                     return {
                         filters: newFilters,
                         filteredProducts: applyFilters(state.products, newFilters, state.favorites),
@@ -255,7 +176,7 @@ export const useAppStore = create<AppState>()(
 
             setSelectedModel: (model) =>
                 set((state) => {
-                    const newFilters = { ...state.filters, selectedModel: model, selectedYear: '' };
+                    const newFilters = { ...state.filters, selectedModel: model };
                     return {
                         filters: newFilters,
                         filteredProducts: applyFilters(state.products, newFilters, state.favorites),
@@ -273,9 +194,15 @@ export const useAppStore = create<AppState>()(
                     };
                 }),
 
-            setSelectedPosition: (position) =>
+            togglePosition: (position) =>
                 set((state) => {
-                    const newFilters = { ...state.filters, selectedPosition: position };
+                    const currentPositions = state.filters.selectedPositions || [];
+                    const isSelected = currentPositions.includes(position);
+                    const newPositions = isSelected
+                        ? currentPositions.filter(p => p !== position)
+                        : [...currentPositions, position];
+
+                    const newFilters = { ...state.filters, selectedPositions: newPositions };
                     return {
                         filters: newFilters,
                         filteredProducts: applyFilters(state.products, newFilters, state.favorites),
@@ -350,7 +277,7 @@ export const useAppStore = create<AppState>()(
             clearFilters: () =>
                 set((state) => ({
                     filters: initialFilters,
-                    filteredProducts: state.products, // Reset to all products when filters are cleared
+                    filteredProducts: applyFilters(state.products, initialFilters, state.favorites),
                     ui: { ...state.ui, currentPage: 1 },
                 })),
 
