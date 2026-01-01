@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAppStore } from '../../store/useAppStore';
 import '../../styles/admin.css';
-import { Plus, Search, LogOut, Activity, Database, Edit3, ArrowLeft, AlertTriangle, CheckCircle2, XCircle, History, FileClock, Menu } from 'lucide-react';
+import { Plus, Search, LogOut, Activity, Database, Edit3, ArrowLeft, AlertTriangle, CheckCircle2, XCircle, History, FileClock, Menu, Cloud, Download, LayoutGrid, Server } from 'lucide-react';
 import ProductForm from './ProductForm';
 import AdminLogin from './AdminLogin';
 import ThemeToggle from '../layout/ThemeToggle';
@@ -25,7 +25,7 @@ class ErrorBoundary extends React.Component<{ children: React.ReactNode, fallbac
 
 const AdminPanel: React.FC = () => {
     const [user, setUser] = useState<User | null>(auth.currentUser);
-    const [activeTab, setActiveTab] = useState<'catalog' | 'new' | 'edit' | 'audit' | 'history'>('catalog');
+    const [activeTab, setActiveTab] = useState<'catalog' | 'new' | 'edit' | 'audit' | 'history' | 'database'>('catalog');
     const [editingProduct, setEditingProduct] = useState<Product | undefined>(undefined);
     const [searchTerm, setSearchTerm] = useState('');
     const [historyLogs, setHistoryLogs] = useState<HistoryLog[]>([]);
@@ -170,6 +170,21 @@ const AdminPanel: React.FC = () => {
         }
     };
 
+    const handleExportJSON = () => {
+        const dataStr = JSON.stringify(products, null, 2);
+        const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
+
+        const exportFileDefaultName = `brakex_db_backup_${new Date().toISOString().split('T')[0]}.json`;
+
+        const linkElement = document.createElement('a');
+        linkElement.setAttribute('href', dataUri);
+        linkElement.setAttribute('download', exportFileDefaultName);
+        linkElement.click();
+        showNotification('Base de datos exportada con éxito');
+    };
+
+    const totalApps = products.reduce((acc, p) => acc + (p.aplicaciones?.length || 0), 0);
+
     return (
         <div className="admin-layout">
             {isMobileMenuOpen && (
@@ -193,7 +208,7 @@ const AdminPanel: React.FC = () => {
                         onClick={() => { setActiveTab('catalog'); setIsMobileMenuOpen(false); }}
                         className={`admin-nav-btn ${activeTab === 'catalog' ? 'active' : ''}`}
                     >
-                        <Database size={20} /> Catálogo
+                        <LayoutGrid size={20} /> Catálogo
                     </button>
                     <button
                         onClick={() => { handleNew(); setIsMobileMenuOpen(false); }}
@@ -212,6 +227,12 @@ const AdminPanel: React.FC = () => {
                         className={`admin-nav-btn ${activeTab === 'history' ? 'active' : ''}`}
                     >
                         <History size={20} /> Historial
+                    </button>
+                    <button
+                        onClick={() => { setActiveTab('database'); setIsMobileMenuOpen(false); }}
+                        className={`admin-nav-btn ${activeTab === 'database' ? 'active' : ''}`}
+                    >
+                        <Server size={20} /> Base de Datos
                     </button>
                 </nav>
 
@@ -238,7 +259,8 @@ const AdminPanel: React.FC = () => {
                                 {activeTab === 'catalog' ? 'Panel de Control' :
                                     activeTab === 'new' ? 'Nueva Referencia' :
                                         activeTab === 'edit' ? 'Editando Referencia' :
-                                            activeTab === 'audit' ? 'Panel de Auditoría' : 'Historial de Cambios'}
+                                            activeTab === 'audit' ? 'Panel de Auditoría' :
+                                                activeTab === 'history' ? 'Historial de Cambios' : 'Gestión de Base de Datos'}
                             </h1>
                         </div>
                     </div>
@@ -397,6 +419,58 @@ const AdminPanel: React.FC = () => {
                                     ))}
                                 </tbody>
                             </table>
+                        </div>
+                    </div>
+                )}
+
+                {activeTab === 'database' && (
+                    <div className="admin-card">
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '2rem' }}>
+                            <div className="status-indicator success" />
+                            <h3 style={{ margin: 0, color: 'var(--admin-text)', fontSize: '1.2rem' }}>Estado del Sistema</h3>
+                        </div>
+
+                        <div className="stats-grid">
+                            <div className="stat-card">
+                                <div className="stat-icon" style={{ background: 'rgba(59, 130, 246, 0.1)', color: '#3b82f6' }}>
+                                    <LayoutGrid size={24} />
+                                </div>
+                                <div className="stat-info">
+                                    <span className="stat-label">Total Referencias</span>
+                                    <span className="stat-value">{products.length}</span>
+                                </div>
+                            </div>
+
+                            <div className="stat-card">
+                                <div className="stat-icon" style={{ background: 'rgba(16, 185, 129, 0.1)', color: '#10b981' }}>
+                                    <Activity size={24} />
+                                </div>
+                                <div className="stat-info">
+                                    <span className="stat-label">Total Aplicaciones</span>
+                                    <span className="stat-value">{totalApps}</span>
+                                </div>
+                            </div>
+
+                            <div className="stat-card">
+                                <div className="stat-icon" style={{ background: 'rgba(245, 158, 11, 0.1)', color: '#f59e0b' }}>
+                                    <Cloud size={24} />
+                                </div>
+                                <div className="stat-info">
+                                    <span className="stat-label">Servidor Firebase</span>
+                                    <span className="stat-value" style={{ fontSize: '1rem', color: '#10b981' }}>Conectado</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style={{ marginTop: '3rem', padding: '2rem', background: 'var(--admin-glass)', borderRadius: '1rem', border: '1px solid var(--admin-border)', textAlign: 'center' }}>
+                            <Database size={48} style={{ opacity: 0.2, marginBottom: '1rem' }} />
+                            <h4 style={{ color: 'var(--admin-text)', marginBottom: '0.5rem' }}>Respaldar Información</h4>
+                            <p style={{ color: 'var(--admin-text-muted)', marginBottom: '1.5rem', fontSize: '0.9rem' }}>
+                                Descarga una copia de seguridad completa de todos los productos y aplicaciones en formato JSON.
+                            </p>
+                            <button onClick={handleExportJSON} className="save-all-btn" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.75rem', width: 'auto', padding: '1rem 2rem' }}>
+                                <Download size={20} /> Descargar JSON
+                            </button>
                         </div>
                     </div>
                 )}

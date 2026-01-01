@@ -2,6 +2,7 @@ import ProductCard from './ProductCard';
 import ProductCardSkeleton from './ProductCardSkeleton';
 import EmptyState from '../common/EmptyState';
 import type { Product } from '../../types';
+import { useAppStore } from '../../store/useAppStore';
 import '../../styles/product-grid.css';
 import { Database } from 'lucide-react';
 
@@ -76,8 +77,13 @@ const ProductGrid = ({
     }
 
     // Results State
+    const { gridDensity } = useAppStore(state => state.ui);
+
     return (
-        <div className="results-wrapper">
+        <div
+            className="results-wrapper"
+            data-density={gridDensity}
+        >
             {products.map((product) => (
                 <ProductCard key={product.id} product={product} />
             ))}

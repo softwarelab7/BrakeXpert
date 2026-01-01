@@ -82,7 +82,7 @@
 
 /* Image Container */
 .image-container {
-    padding: 1rem 2rem;
+    padding: var(--card-padding, 1rem);
     flex: 1;
     display: flex;
     align-items: center;
@@ -92,7 +92,7 @@
 
 .product-image {
     max-width: 100%;
-    max-height: 160px;
+    max-height: var(--card-image-height, 160px);
     object-fit: contain;
     transition: transform 0.3s ease;
 }

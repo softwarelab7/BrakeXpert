@@ -54,6 +54,7 @@ export interface SearchHistory {
 export interface UIState {
   currentPage: number;
   itemsPerPage: number;
+  gridDensity: 'compact' | 'normal' | 'comfortable';
   isCompareModalOpen: boolean;
   isHistoryModalOpen: boolean;
   isProductDetailModalOpen: boolean;

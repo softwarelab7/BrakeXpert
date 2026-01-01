@@ -52,6 +52,8 @@ interface AppState {
 
     // UI Actions
     setCurrentPage: (page: number) => void;
+    setItemsPerPage: (count: number) => void;
+    setGridDensity: (density: 'compact' | 'normal' | 'comfortable') => void;
     openCompareModal: () => void;
     closeCompareModal: () => void;
     openHistoryModal: () => void;
@@ -117,6 +119,7 @@ const initialFilters: Filters = {
 const initialUIState: UIState = {
     currentPage: 1,
     itemsPerPage: 24,
+    gridDensity: 'normal',
     isCompareModalOpen: false,
     isHistoryModalOpen: false,
     isProductDetailModalOpen: false,
@@ -343,6 +346,16 @@ export const useAppStore = create<AppState>()(
                     ui: { ...state.ui, currentPage: page },
                 })),
 
+            setItemsPerPage: (itemsPerPage) =>
+                set((state) => ({
+                    ui: { ...state.ui, itemsPerPage, currentPage: 1 },
+                })),
+
+            setGridDensity: (gridDensity) =>
+                set((state) => ({
+                    ui: { ...state.ui, gridDensity },
+                })),
+
             openCompareModal: () =>
                 set((state) => ({
                     ui: { ...state.ui, isCompareModalOpen: true },
@@ -442,6 +455,8 @@ export const useAppStore = create<AppState>()(
                 comparisons: state.comparisons,
                 searchHistory: state.searchHistory,
                 theme: state.theme,
+                itemsPerPage: state.ui.itemsPerPage,
+                gridDensity: state.ui.gridDensity,
                 // Do not persist notifications to start fresh, or persist if desired. 
                 // Given user request for "system", usually persist is good but maybe not for high volume.
                 // Assuming not persisting ui.notifications is safer for now or let it be (it's not listed in partialize).

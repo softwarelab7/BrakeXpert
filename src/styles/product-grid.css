@@ -1,8 +1,30 @@
 .results-wrapper {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    /* Default Density Variables (Normal) */
+    --card-padding: 1rem 2rem;
+    --card-image-height: 160px;
+    --grid-min-width: 240px;
+
+    grid-template-columns: repeat(auto-fill, minmax(var(--grid-min-width), 1fr));
     gap: 0.8rem;
-    padding: 1.5rem 0;
+    padding: 0 0 1.5rem 0;
+    transition: gap 0.3s ease;
+}
+
+/* Compact Mode */
+.results-wrapper[data-density="compact"] {
+    --card-padding: 0.5rem 1rem;
+    --card-image-height: 100px;
+    --grid-min-width: 180px;
+    gap: 0.5rem;
+}
+
+/* Comfortable Mode */
+.results-wrapper[data-density="comfortable"] {
+    --card-padding: 1.5rem 2rem;
+    --card-image-height: 220px;
+    --grid-min-width: 300px;
+    gap: 1.5rem;
 }
 
 .grid-empty {
