@@ -1,53 +1,319 @@
-.footer {
+/* Base Layout */
+.footer-wrapper {
     background: #0f172a;
-    color: #cbd5e1;
-    padding: 2rem 0;
+    /* Force Dark Background */
+    color: #e2e8f0;
+    /* Light text for dark bg */
     margin-top: auto;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
+    position: relative;
+    overflow: hidden;
 }
 
-.footer-container {
+.footer-accent-line {
+    height: 1px;
     width: 100%;
-    padding: 0 1.5rem;
+    background: linear-gradient(90deg,
+            transparent 0%,
+            rgba(139, 92, 246, 0.5) 50%,
+            /* Purple tint */
+            transparent 100%);
+    opacity: 0.7;
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2.5rem 2rem;
+    /* Reduced vertical padding */
+    display: grid;
+    grid-template-columns: 2fr 1fr 1.5fr;
+    gap: 2rem;
+    /* Reduced gap */
+}
+
+/* 1. Brand Section Stylization */
+.footer-brand-section {
     display: flex;
     flex-direction: column;
-    align-items: center;
     gap: 1rem;
-    text-align: center;
+    max-width: 380px;
 }
 
-.footer-powered {
-    font-size: 0.875rem;
+.brand-header {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-    justify-content: center;
+    gap: 0.8rem;
 }
 
-.footer-link {
-    color: #3b82f6;
+.footer-logo {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.8rem;
+    /* Slightly smaller */
+    font-weight: 800;
+    color: white;
+    letter-spacing: -0.02em;
+    margin: 0;
+}
+
+.version-badge {
+    background: rgba(139, 92, 246, 0.2);
+    color: #a78bfa;
+    font-size: 0.65rem;
+    font-weight: 700;
+    padding: 0.15rem 0.5rem;
+    border-radius: 999px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border: 1px solid rgba(139, 92, 246, 0.3);
+}
+
+
+.footer-description {
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: #cbd5e1;
+    /* Lighter Slate 300 */
+}
+
+/* ... */
+
+.nav-item {
+    color: #cbd5e1;
+    /* Lighter Slate 300 */
     text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 400;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+}
+
+/* ... */
+
+.social-sub {
+    font-size: 0.7rem;
+    color: #94a3b8;
+    /* Lighter Slate 400 */
+}
+
+.arrow-icon {
+    color: #94a3b8;
+    /* Lighter Slate 400 */
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+/* ... */
+
+.bar-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #94a3b8;
+    /* Lighter Slate 400 */
+    font-size: 0.75rem;
+}
+
+.legal-links a {
+    color: #94a3b8;
+    /* Lighter Slate 400 */
+    text-decoration: none;
+    transition: color 0.15s;
+}
+
+.contact-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #e2e8f0;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
     font-weight: 500;
-    transition: color 0.2s ease;
+    font-size: 0.85rem;
+    width: fit-content;
+    cursor: pointer;
+    transition: all 0.2s ease;
 }
 
-.footer-link:hover {
-    color: #60a5fa;
-    text-decoration: underline;
+.contact-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border-color: rgba(255, 255, 255, 0.2);
 }
 
-.footer-copyright {
-    font-size: 0.8125rem;
+/* 2. Navigation Styling */
+.column-title {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: #cbd5e1;
+    /* Slate 300 */
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    margin-bottom: 1rem;
+}
+
+.footer-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.nav-item {
+    color: #94a3b8;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 400;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+}
+
+.nav-item:hover {
+    color: white;
+    padding-left: 4px;
+}
+
+/* 3. Social Cards (Transparent/Glassy) */
+.social-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.social-card {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    background: rgba(255, 255, 255, 0.03);
+    /* Transparent */
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 0.6rem 0.8rem;
+    border-radius: 10px;
+    text-decoration: none;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.icon-box {
+    width: 32px;
+    height: 32px;
+    background: rgba(139, 92, 246, 0.15);
+    /* Purple tint */
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #c084fc;
+    /* Purple accent */
+}
+
+.social-info {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.social-name {
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: #e2e8f0;
+}
+
+.social-sub {
+    font-size: 0.7rem;
+    color: #64748b;
+}
+
+.arrow-icon {
+    color: #475569;
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.social-card:hover {
+    background: rgba(139, 92, 246, 0.08);
+    border-color: rgba(139, 92, 246, 0.3);
+}
+
+.social-card:hover .arrow-icon {
+    color: #c084fc;
+    transform: translate(2px, -2px);
+}
+
+/* Bottom Bar */
+.footer-bar {
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    background: rgba(15, 23, 42, 0.5);
+    /* Slightly darker shade */
+    padding: 1rem 0;
+}
+
+.bar-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #94a3b8;
+    font-size: 0.75rem;
+}
+
+.copyright {
+    color: #cbd5e1;
+    /* Ensuring high visibility */
+    opacity: 0.9;
+}
+
+.legal-links {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.legal-links a {
+    color: #64748b;
+    text-decoration: none;
+    transition: color 0.15s;
+}
+
+.legal-links a:hover {
     color: #94a3b8;
 }
 
-@media (max-width: 768px) {
-    .footer {
-        padding: 1.5rem 0;
+.dot {
+    opacity: 0.3;
+}
+
+/* Mobile Responsive */
+@media (max-width: 968px) {
+    .footer-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        padding: 2rem 1.5rem;
     }
 
-    .footer-container {
-        padding: 0 1rem;
+    .footer-brand-section {
+        max-width: 100%;
+        text-align: center;
+        align-items: center;
+    }
+
+    .footer-links-column,
+    .footer-social-column {
+        text-align: center;
+    }
+
+    .footer-nav {
+        align-items: center;
+    }
+
+    .bar-content {
+        flex-direction: column;
+        gap: 0.8rem;
+        text-align: center;
     }
 }
