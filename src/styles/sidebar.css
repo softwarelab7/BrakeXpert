@@ -195,11 +195,77 @@
         position: static;
     }
 
-    .filter-select,
-    .ref-input,
-    .measure-input,
     .position-pill {
         height: 50px;
         font-size: 1rem;
     }
+}
+
+/* Red Delete Button Refactored */
+.borrar-filtros-container {
+    margin-top: 1rem;
+}
+
+.borrar-filtros-red {
+    border: none;
+    display: block;
+    position: relative;
+    padding: 0.65em 2em;
+    font-size: 13px;
+    background: transparent;
+    cursor: pointer;
+    user-select: none;
+    overflow: hidden;
+    color: var(--color-danger);
+    z-index: 1;
+    font-family: inherit;
+    font-weight: 700;
+    border-radius: 50px;
+    width: 100%;
+}
+
+.borrar-filtros-red.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    filter: grayscale(1);
+    pointer-events: none;
+}
+
+.borrar-filtros-red span {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    z-index: -1;
+    border: 3px solid var(--color-danger);
+    border-radius: 50px;
+}
+
+.borrar-filtros-red span::before {
+    content: "";
+    display: block;
+    position: absolute;
+    width: 20%;
+    height: 2000%;
+    background: var(--bg-primary);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-60deg);
+    transition: transform 0.6s cubic-bezier(0.3, 1, 0.2, 1), background 0.6s ease;
+}
+
+.borrar-filtros-red:hover:not(.disabled) span::before {
+    transform: translate(-50%, -50%) rotate(-90deg);
+    width: 100%;
+    background: var(--color-danger);
+}
+
+.borrar-filtros-red:hover:not(.disabled) {
+    color: white;
+}
+
+.borrar-filtros-red:active:not(.disabled) span::before {
+    background: #dc2626;
 }

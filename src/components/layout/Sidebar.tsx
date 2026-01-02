@@ -1,5 +1,5 @@
 import { useMemo, useState, useEffect } from 'react';
-import styled from 'styled-components';
+
 import { useAppStore } from '../../store/useAppStore';
 import type { Product } from '../../types';
 import AnimatedSearch from '../common/AnimatedSearch';
@@ -314,86 +314,18 @@ const Sidebar = () => {
                 </div>
             </div>
 
-            <StyledWrapper>
+            <div className="borrar-filtros-container">
                 <button
                     onClick={clearFilters}
                     disabled={!hasActiveFilters}
-                    className={!hasActiveFilters ? 'disabled' : ''}
+                    className={`borrar-filtros-red ${!hasActiveFilters ? 'disabled' : ''}`}
                 >
                     BORRAR FILTROS
                     <span />
                 </button>
-            </StyledWrapper>
+            </div>
         </aside>
     );
 };
 
 export default Sidebar;
-
-const StyledWrapper = styled.div`
-  margin-top: 1rem; /* Lower the button */
-
-  button {
-    border: none;
-    display: block;
-    position: relative;
-    padding: 0.65em 2em; /* Slightly taller */
-    font-size: 13px;
-    background: transparent;
-    cursor: pointer;
-    user-select: none;
-    overflow: hidden;
-    color: var(--color-danger);
-    z-index: 1;
-    font-family: inherit;
-    font-weight: 700;
-    border-radius: 50px;
-    width: 100%;
-  }
-
-  button.disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    filter: grayscale(1);
-    pointer-events: none;
-  }
-
-  button span {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background: transparent;
-    z-index: -1;
-    border: 3px solid var(--color-danger);
-    border-radius: 50px;
-  }
-
-  button span::before {
-    content: "";
-    display: block;
-    position: absolute;
-    width: 20%; /* Increased from 8% for a bolder diagonal/better coverage start */
-    height: 2000%; /* Increased drastically from 500% to ensure it covers the entire button width when rotated */
-    background: var(--bg-primary);
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) rotate(-60deg);
-    transition: transform 0.6s cubic-bezier(0.3, 1, 0.2, 1), background 0.6s ease; /* Added bezier for smoother feel */
-  }
-
-  button:hover:not(.disabled) span::before {
-    transform: translate(-50%, -50%) rotate(-90deg);
-    width: 100%;
-    background: var(--color-danger);
-  }
-
-  button:hover:not(.disabled) {
-    color: white;
-  }
-
-  button:active:not(.disabled) span::before {
-    background: #dc2626; /* Darker red */
-  }
-`;
