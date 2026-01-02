@@ -3,6 +3,7 @@ import { useMemo, useState, useEffect } from 'react';
 import { useAppStore } from '../../store/useAppStore';
 import type { Product } from '../../types';
 import AnimatedSearch from '../common/AnimatedSearch';
+import SearchableSelect from '../common/SearchableSelect';
 import '../../styles/sidebar.css';
 
 const Sidebar = () => {
@@ -174,59 +175,38 @@ const Sidebar = () => {
                     <h3 className="filter-section-title">Detalles del Vehículo</h3>
                 </div>
                 <div className="vehicle-details-grid">
-                    <div className={`searchable-filter ${filters.selectedBrand ? 'has-value' : ''}`}>
-                        <input
-                            list="brands-list"
-                            className="filter-select"
-                            placeholder="Marca"
-                            value={filters.selectedBrand || ''}
-                            onChange={(e) => {
-                                store.setSelectedBrand(e.target.value);
-                                if (e.target.value) setLocalQuery('');
-                            }}
-                        />
-                        <datalist id="brands-list">
-                            {brands.map(([name]) => (
-                                <option key={name} value={name} />
-                            ))}
-                        </datalist>
-                    </div>
+                    <SearchableSelect
+                        placeholder="Marca"
+                        value={filters.selectedBrand || ''}
+                        options={brands.map(([name]) => name)}
+                        onChange={(value) => {
+                            store.setSelectedBrand(value);
+                            if (value) setLocalQuery('');
+                        }}
+                        className={filters.selectedBrand ? 'has-value' : ''}
+                    />
 
-                    <div className={`searchable-filter ${filters.selectedModel ? 'has-value' : ''}`}>
-                        <input
-                            list="models-list"
-                            className="filter-select"
-                            placeholder="Modelo/Serie"
-                            value={filters.selectedModel || ''}
-                            onChange={(e) => {
-                                store.setSelectedModel(e.target.value);
-                                if (e.target.value) setLocalQuery('');
-                            }}
-                        />
-                        <datalist id="models-list">
-                            {models.map(name => (
-                                <option key={name} value={name} />
-                            ))}
-                        </datalist>
-                    </div>
+                    <SearchableSelect
+                        placeholder="Modelo/Serie"
+                        value={filters.selectedModel || ''}
+                        options={models}
+                        onChange={(value) => {
+                            store.setSelectedModel(value);
+                            if (value) setLocalQuery('');
+                        }}
+                        className={filters.selectedModel ? 'has-value' : ''}
+                    />
 
-                    <div className={`searchable-filter ${filters.selectedYear ? 'has-value' : ''}`}>
-                        <input
-                            list="years-list"
-                            className="filter-select"
-                            placeholder="Año"
-                            value={filters.selectedYear || ''}
-                            onChange={(e) => {
-                                store.setSelectedYear(e.target.value);
-                                if (e.target.value) setLocalQuery('');
-                            }}
-                        />
-                        <datalist id="years-list">
-                            {years.map(year => (
-                                <option key={year} value={year} />
-                            ))}
-                        </datalist>
-                    </div>
+                    <SearchableSelect
+                        placeholder="Año"
+                        value={filters.selectedYear || ''}
+                        options={years}
+                        onChange={(value) => {
+                            store.setSelectedYear(value);
+                            if (value) setLocalQuery('');
+                        }}
+                        className={filters.selectedYear ? 'has-value' : ''}
+                    />
                 </div>
             </div>
 

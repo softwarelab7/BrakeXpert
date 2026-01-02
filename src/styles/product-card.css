@@ -80,6 +80,10 @@
     color: var(--accent-primary);
 }
 
+.action-icon-compare.active {
+    color: var(--badge-compare);
+}
+
 /* Image Container */
 .image-container {
     padding: var(--card-padding, 1rem);

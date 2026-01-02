@@ -124,11 +124,11 @@
 }
 
 .position-pill {
-    height: 38px;
+    height: 32px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: var(--bg-primary);
+    background-color: var(--bg-tertiary);
     border: 1px solid var(--border-primary);
     border-radius: 45px;
     font-size: 11px;
@@ -196,7 +196,7 @@
     }
 
     .position-pill {
-        height: 50px;
+        height: 40px;
         font-size: 1rem;
     }
 }
@@ -249,7 +249,7 @@
     position: absolute;
     width: 20%;
     height: 2000%;
-    background: var(--bg-primary);
+    background: transparent;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%) rotate(-60deg);
