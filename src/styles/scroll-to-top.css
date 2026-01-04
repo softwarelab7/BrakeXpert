@@ -1,0 +1,63 @@
+/* Scroll to Top Button */
+.scroll-to-top-btn {
+    position: fixed;
+    bottom: 30px;
+    /* Lower position */
+    right: 30px;
+    width: 48px;
+    height: 48px;
+    background: white;
+    /* White solid background */
+    border: 2px solid #ef4444;
+    /* Red border */
+    border-radius: 50%;
+    /* Circular button */
+    color: #ef4444;
+    /* Red arrow */
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15), 0 2px 8px rgba(239, 68, 68, 0.2);
+    /* Subtle shadow with red hint */
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1000;
+    animation: fadeInUp 0.3s ease-out;
+}
+
+.scroll-to-top-btn:hover {
+    background: #ef4444;
+    /* Red background on hover */
+    color: white;
+    /* White arrow on hover */
+    border-color: #dc2626;
+    transform: translateY(-4px) scale(1.05);
+    box-shadow: 0 8px 30px rgba(239, 68, 68, 0.3), 0 4px 12px rgba(0, 0, 0, 0.2);
+    /* Enhanced shadow on hover */
+}
+
+.scroll-to-top-btn:active {
+    transform: translateY(-2px) scale(1.02);
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .scroll-to-top-btn {
+        bottom: 20px;
+        right: 20px;
+        width: 44px;
+        height: 44px;
+    }
+}

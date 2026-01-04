@@ -103,7 +103,7 @@ const ProductDetailModal = () => {
             isOpen={isProductDetailModalOpen}
             onClose={closeProductDetailModal}
             title={product.referencia}
-            size="xl"
+            size="large"
             hideHeader={true}
             noPadding={true}
         >
@@ -115,22 +115,21 @@ const ProductDetailModal = () => {
                         onClick={() => toggleComparison(product.id)}
                         title={isComparing ? "Quitar de comparar" : "Comparar"}
                     >
-                        <ArrowRightLeft size={18} />
+                        <ArrowRightLeft size={28} />
                     </button>
                     <button
                         className={`action-btn-toolbar ${isFavorite ? 'active' : ''}`}
                         onClick={() => toggleFavorite(product.id)}
                         title={isFavorite ? "Quitar de favoritos" : "Guardar"}
                     >
-                        <Bookmark checked={isFavorite} onChange={() => { }} size={18} />
+                        <Bookmark checked={isFavorite} onChange={() => { }} size={28} />
                     </button>
-                    <div className="toolbar-divider"></div>
                     <button
                         className="close-btn-toolbar"
                         onClick={closeProductDetailModal}
                         title="Cerrar"
                     >
-                        <X size={20} />
+                        <X size={32} />
                     </button>
                 </div>
 
@@ -186,8 +185,6 @@ const ProductDetailModal = () => {
                     <div className="specs-section">
                         <h4 className="specs-header">ESPECIFICACIONES</h4>
                         <div className="specs-rows">
-
-
                             <div className="spec-row">
                                 <span className="spec-key">Platina FMSI</span>
                                 <span className="spec-val">{product.fmsi?.join(', ') || 'N/A'}</span>
@@ -198,12 +195,10 @@ const ProductDetailModal = () => {
                                     Ancho: {product.medidas.ancho} x Alto: {product.medidas.alto}
                                 </span>
                             </div>
-                            <div className="spec-row">
-                                <span className="spec-key">Especificación</span>
-                                <span className="spec-val">N/A</span>
-                            </div>
                         </div>
                     </div>
+
+
                 </div>
 
                 {/* Right Column: Image */}
@@ -215,11 +210,9 @@ const ProductDetailModal = () => {
                             alt={product.referencia}
                             className="main-product-image"
                         />
-                        <div className="measurements-overlay">
-                            <div className="measure-box">L <span className="measure-val">{product.medidas.ancho}</span></div>
-                            <div className="measure-box">W <span className="measure-val">{product.medidas.alto}</span></div>
-                        </div>
                     </div>
+
+
 
 
                 </div>

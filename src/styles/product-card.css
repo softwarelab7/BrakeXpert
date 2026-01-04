@@ -38,48 +38,58 @@
     justify-content: space-between;
     padding: var(--header-padding, 0.5rem 0.75rem);
     /* Responsive padding */
-    background: var(--bg-tertiary);
-    /* Structured background */
-    border-bottom: 1px solid var(--border-glass);
-    /* Divider */
+    background: transparent;
+    /* Background removed for seamless look */
+    border-bottom: none;
+    /* Divider removed */
     z-index: 10;
 }
 
 .position-badge {
     font-size: var(--badge-font-size, 0.78rem);
     font-weight: 700;
-    padding: var(--badge-padding, 0.1rem 0.48rem);
-    border-radius: 0.3rem;
+    /* Reverted to 700 for better visibility */
+    padding: var(--badge-padding, 0.2rem 0.6rem);
+    /* Increased padding slighty */
+    border-radius: 0.4rem;
+    /* Soft rounded corners */
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    background: transparent;
-    color: #3b82f6;
-    border: 0.5px solid #3b82f6;
+    background: #3b82f6;
+    /* Solid Blue */
+    color: white;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    border: none;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     line-height: normal;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .badge-trasera {
-    color: #ef4444;
-    border-color: #ef4444;
+    background: #ef4444;
+    /* Solid Red */
+    color: white;
 }
 
 .badge-ambas {
-    background: linear-gradient(90deg,
-            #3b82f6 0%,
-            #8b5cf6 50%,
-            #ef4444 100%);
+    background: #8b5cf6;
+    /* Solid Purple */
     color: white;
-    border: none;
-    font-weight: 700;
-    letter-spacing: 0.5px;
+    /* Removed linear gradient */
 }
 
 .action-icons {
     display: flex;
-    gap: var(--icon-gap, 0.4rem);
+    gap: var(--icon-gap, 0.5rem);
+    /* Reverted to simple layout */
+}
+
+.action-icons:hover {
+    /* Removed floating hover effect */
 }
 
 .action-icon {
@@ -138,16 +148,16 @@
     padding: var(--ref-padding, 0.5rem 1rem);
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
-    /* Align badges to center */
+    justify-content: flex-start;
+    /* Align badges to start (left) per reference image */
     gap: 0.25rem;
     /* Reduced from 0.5rem per "mas juntas" */
-    border-top: 1px solid var(--border-glass);
-    /* Subtle divider */
-    border-bottom: 1px solid var(--border-glass);
-    /* Subtle divider */
-    background: var(--bg-tertiary);
-    /* Structured background */
+    border-top: 1px solid #e2e8f0;
+    /* Divider restored */
+    border-bottom: 1px solid #e2e8f0;
+    /* Divider restored */
+    background: transparent;
+    /* Background removed for seamless look */
     min-height: var(--ref-section-height, 4.5rem);
     /* Responsive fixed minimum */
     height: var(--ref-section-height, 4.5rem);
@@ -158,55 +168,64 @@
 }
 
 .ref-badge {
-    font-size: var(--ref-badge-font-size, 0.75rem);
-    font-weight: 800;
-    padding: var(--ref-badge-padding, 0.1rem 0.45rem);
-    border-radius: 0.3rem;
-    color: #2563eb;
-    background: transparent;
-    border: 1px solid #2563eb;
+    font-size: var(--ref-badge-font-size, 0.68rem) !important;
+    font-weight: 700;
+    padding: var(--ref-badge-padding, 0.15rem 0.5rem) !important;
+    border-radius: 0.4rem;
+    /* Soft rounded corners */
+    color: white !important;
+    background: #3b82f6 !important;
+    /* Solid Blue (Lighter: Blue 500) */
+    border: none !important;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     text-align: center;
     line-height: normal;
     letter-spacing: 0.025em;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .ref-badge-alt {
-    color: #1e293b;
-    border: 1px solid #1e293b;
-    background: transparent;
+    color: white !important;
+    background: #334155 !important;
+    /* Slate 700 (Lighter than 900) */
+    border: none !important;
 }
 
 .ref-badge-danger {
-    color: #be123c;
-    border: 1px solid #be123c;
-    background: transparent;
+    color: white !important;
+    background: #ef4444 !important;
+    /* Red 500 (Lighter than 700) */
+    border: none !important;
 }
 
 .ref-badge-gray {
-    color: #334155;
-    border: 1px solid #334155;
-    background: transparent;
+    color: white !important;
+    background: #64748b !important;
+    /* Slate 500 (Medium) */
+    border: none !important;
 }
 
 .ref-badge-red {
-    color: #b91c1c;
-    border: 1px solid #b91c1c;
-    background: transparent;
+    color: white !important;
+    background: #ef4444 !important;
+    /* Red 500 */
+    border: none !important;
 }
 
 .ref-badge-lightblue {
-    color: #0284c7;
-    border: 1px solid #0284c7;
-    background: transparent;
+    color: white !important;
+    background: #0ea5e9 !important;
+    /* Sky 500 (Lighter than 600) */
+    border: none !important;
 }
 
 .ref-badge-mint {
-    color: #10b981;
-    border: 1px solid #10b981;
-    background: transparent;
+    color: white !important;
+    background: #10b981 !important;
+    /* Emerald 500 */
+    border: none !important;
 }
 
 
@@ -214,7 +233,7 @@
 /* Applications Section */
 .card-bottom {
     padding: var(--footer-padding, 0.75rem 1rem 1rem);
-    border-top: 1px solid var(--border-primary);
+    border-top: none;
 }
 
 .applications {

@@ -16,6 +16,7 @@ import GuideModal from './components/modals/GuideModal';
 import NotificationPanel from './components/NotificationPanel';
 import AdminPanel from './components/admin/AdminPanel';
 import ReloadPrompt from './components/ReloadPrompt';
+import ScrollToTop from './components/common/ScrollToTop';
 import './styles/global.css';
 import './styles/app.css';
 
@@ -179,6 +180,7 @@ function App() {
 
           <Footer />
 
+          <ScrollToTop />
           <NotificationPanel />
           <ReloadPrompt />
 

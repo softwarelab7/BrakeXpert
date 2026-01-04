@@ -37,7 +37,7 @@
 }
 
 .modal-large {
-    max-width: 900px;
+    max-width: 1100px;
 }
 
 .modal-xl {
@@ -97,7 +97,192 @@
     background: var(--bg-secondary);
 }
 
-/* Animations */
+
+/* Product Detail Modal Specifics */
+.detail-layout {
+    display: flex;
+    gap: 2rem;
+    position: relative;
+    /* Anchor for floating toolbar */
+    min-height: 400px;
+}
+
+.modal-actions-toolbar {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: flex;
+    gap: 0.75rem;
+    background: transparent;
+    /* Eliminated container visuals */
+    padding: 0.5rem 1.25rem;
+    border-radius: 0;
+    /* Eliminated radius */
+    box-shadow: none;
+    /* Eliminated shadow */
+    border: none;
+    /* Eliminated border */
+    align-items: center;
+    z-index: 20;
+    animation: slideDownFade 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideDownFade {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.action-btn-toolbar,
+.close-btn-toolbar {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0.25rem;
+    color: #475569;
+    /* Darker slate for better visibility */
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.action-btn-toolbar:hover,
+.close-btn-toolbar:hover {
+    color: var(--accent-primary);
+    transform: scale(1.1);
+}
+
+.action-btn-toolbar.active {
+    color: var(--accent-primary);
+    /* Active color (Heart/Compare) */
+}
+
+.action-btn-toolbar.active svg {
+    fill: currentColor;
+    /* Fill icon if active */
+}
+
+.toolbar-divider {
+    width: 1px;
+    height: 1.25rem;
+    background: #94a3b8;
+    /* Match darker border */
+    margin: 0 0.5rem;
+}
+
+/* Detail Info Column */
+.detail-info-col {
+    flex: 2;
+    /* Dominate the space */
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    height: 100%;
+    /* Ensure it fills height */
+}
+
+
+/* Detail Image Column */
+.detail-image-col {
+    flex: 0.8;
+    /* Very compact */
+    display: flex;
+    flex-direction: column;
+    /* Stack image and specs vertical */
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    gap: 1.5rem;
+    height: 100%;
+    /* Strict centering vs neighbor column */
+}
+
+.main-product-image {
+    max-width: 100%;
+    max-height: 500px;
+    /* Increased to fill space */
+    object-fit: contain;
+    /* Removed drop-shadow */
+}
+
+.image-wrapper {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+/* Measurements overlay scaling */
+.measurements-overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.measure-box {
+    position: absolute;
+    background: #e2e8f0;
+    padding: 0.1rem 0.4rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    color: #475569;
+    font-weight: 600;
+}
+
+/* Specs Section (Vertical in Left Column) */
+.specs-section {
+    margin-top: auto;
+    /* Push to bottom if space permits */
+    padding-top: 0.75rem;
+    border-top: 1px dashed #e2e8f0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    /* Tighter gap */
+}
+
+.specs-header {
+    font-size: 0.7rem;
+    /* Smaller header */
+    font-weight: 700;
+    color: var(--text-secondary);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin: 0;
+}
+
+.specs-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    /* Very tight rows */
+}
+
+.spec-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.8rem;
+    /* Compact font size */
+}
+
+.spec-key {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.spec-val {
+    color: var(--text-secondary);
+}
+
 @keyframes popIn {
     from {
         transform: scale(0.95) translateY(10px);
@@ -184,12 +369,12 @@
 .detail-layout {
     display: flex;
     flex-direction: column;
-    padding: 1rem 1.5rem;
-    /* Reduced top padding from 1.5rem */
+    padding: 1.5rem 1.5rem 1rem;
+    /* Restored safe padding */
     gap: 1.5rem;
     /* Reduced gap from 2rem */
     background: #fff;
-    min-height: 500px;
+    min-height: 600px;
 }
 
 @media (min-width: 900px) {
@@ -199,7 +384,7 @@
         /* Info | Image */
         gap: 2rem;
         padding: 1.5rem 2.5rem;
-        /* Reduced top padding from 2.5rem */
+        /* Restored safe padding */
     }
 }
 
@@ -263,9 +448,12 @@
 }
 
 .position-row {
-    margin-top: 0;
-    margin-bottom: -0.5rem;
-    /* Pull badges closer if desired, or just 0 */
+    margin-top: -0.5rem;
+    /* Slightly less aggressive lift */
+    margin-bottom: 0.5rem;
+    /* Keep gap with refs */
+    position: relative;
+    z-index: 5;
 }
 
 .brand-section {
@@ -283,13 +471,18 @@
 
 /* Applications Table */
 /* Applications Table */
+/* Applications Table */
+/* Applications Table */
 .applications-table-container {
+    flex: 1;
+    /* Independent scroll, filling space */
+    min-height: 0;
+    /* Required for flex scroll */
     max-height: 280px;
+    /* Restored max-height for independent scroll */
     overflow-y: auto;
-    /* border-top: 1px solid #e2e8f0; Removed for cleaner box look */
-    /* border-bottom: 1px solid #e2e8f0; */
+    /* Independent scroll */
     padding: 2px;
-    /* Avoid scrollbar clip */
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
@@ -529,38 +722,44 @@
 }
 
 /* Reference Badges (Matching ProductCard) */
+/* Reference Badges (Matching ProductCard) */
 .ref-badge {
     font-size: 0.75rem;
-    font-weight: 800;
-    padding: 0.1rem 0.45rem;
+    font-weight: 700;
+    padding: 0.2rem 0.5rem;
     border-radius: 0.3rem;
-    color: #2563eb;
-    background: transparent;
-    border: 1px solid #2563eb;
+    color: white !important;
+    background: #3b82f6 !important;
+    /* Solid Blue */
+    border: none !important;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     text-align: center;
     line-height: normal;
     letter-spacing: 0.025em;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .ref-badge-gray {
-    color: #334155;
-    border: 1px solid #334155;
-    background: transparent;
+    color: white !important;
+    background: #64748b !important;
+    /* Slate 500 */
+    border: none !important;
 }
 
 .ref-badge-red {
-    color: #b91c1c;
-    border: 1px solid #b91c1c;
-    background: transparent;
+    color: white !important;
+    background: #ef4444 !important;
+    /* Red 500 */
+    border: none !important;
 }
 
 .ref-badge-lightblue {
-    color: #0284c7;
-    border: 1px solid #0284c7;
-    background: transparent;
+    color: white !important;
+    background: #0ea5e9 !important;
+    /* Sky 500 */
+    border: none !important;
 }
 
 .modal-actions-toolbar {
@@ -571,29 +770,31 @@
     align-items: center;
     gap: 0.5rem;
     z-index: 50;
-    background: white;
-    padding: 0.25rem;
-    border-radius: 999px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-    border: 1px solid #f1f5f9;
+    background: transparent;
+    padding: 0;
+    border-radius: 0;
+    box-shadow: none;
+    border: none;
 }
 
-.action-btn-toolbar {
+.action-btn-toolbar,
+.close-btn-toolbar {
     background: transparent;
     border: none;
-    color: #64748b;
     cursor: pointer;
+    padding: 0.6rem;
+    color: #475569;
+    /* Darker slate for better visibility */
     transition: all 0.2s;
-    padding: 0.4rem;
-    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.action-btn-toolbar:hover {
-    background-color: #f1f5f9;
-    color: #3b82f6;
+.action-btn-toolbar:hover,
+.close-btn-toolbar:hover {
+    color: var(--accent-primary);
+    transform: scale(1.2);
 }
 
 .action-btn-toolbar.active {

@@ -1,12 +1,15 @@
 /* Base Layout */
 .footer-wrapper {
-    background: #000000;
-    /* AMOLED Black */
+    background: linear-gradient(180deg, #000000 0%, #0a0a0a 100%);
+    /* Subtle gradient for depth */
     color: #cbd5e1;
     margin-top: auto;
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    border-top: 1px solid rgba(139, 92, 246, 0.15);
+    /* Purple accent border */
     position: relative;
     overflow: hidden;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
+    /* Subtle lift effect */
 }
 
 .footer-accent-line {
@@ -14,199 +17,158 @@
     /* Removed to save height */
 }
 
-.footer-content {
-    max-width: 1200px;
+.footer-unified-content {
+    max-width: 100%;
+    width: 1100px;
     margin: 0 auto;
-    padding: 1rem 2rem;
-    /* Reduced padding for compact look */
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    /* Equal 3 columns for better balance */
-    gap: 3rem;
-    /* Decent gap for breathing room */
-    align-items: start;
-    /* Back to start for top-aligning headers */
-}
-
-/* 1. Brand Section */
-.footer-brand-section {
+    padding: 0.75rem 1.5rem;
+    /* Slightly more vertical padding */
+    min-height: 45px;
+    /* Min height instead of fixed */
     display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    /* Slightly more space */
+    justify-content: space-between;
+    align-items: center;
 }
 
-.brand-header {
+/* Left Section */
+.footer-left-section {
     display: flex;
     align-items: center;
-    gap: 0.8rem;
-    line-height: 1;
+    gap: 0.6rem;
 }
 
 .footer-logo {
     font-family: 'Outfit', sans-serif;
-    font-size: 1.5rem;
-    /* Increased from 1.3rem */
+    font-size: 0.9rem;
     font-weight: 800;
     color: white;
     letter-spacing: -0.02em;
     margin: 0;
     line-height: 1;
-    /* Fix vertical drift */
+}
+
+.footer-logo .logo-accent {
+    color: #3b82f6;
+    /* Blue accent for X */
+    text-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
+    /* Subtle glow */
 }
 
 .version-badge {
-    background: rgba(139, 92, 246, 0.15);
-    color: #a78bfa;
-    font-size: 0.6rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent !important;
+    color: #a78bfa !important;
+    font-size: 0.55rem;
     font-weight: 700;
-    padding: 0.1rem 0.4rem;
+    padding: 0.25rem 0.5rem;
+    /* Symmetric padding for perfect centering */
     border-radius: 999px;
     text-transform: uppercase;
-    border: 1px solid rgba(139, 92, 246, 0.2);
-    line-height: 1;
+    border: 1px solid rgba(139, 92, 246, 0.3);
+    vertical-align: middle;
 }
 
-.footer-description {
-    font-size: 0.9rem;
-    /* Increased from 0.75rem */
-    line-height: 1.5;
-    color: #94a3b8;
-    max-width: 300px;
+.copyright-group {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    color: #64748b;
+}
+
+.copyright {
+    font-size: 0.7rem;
+    margin: 0;
+    color: #64748b;
+}
+
+/* Right Section */
+.footer-right-section {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
 }
 
 .contact-btn {
     display: inline-flex;
     align-items: center;
     gap: 0.4rem;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: #e2e8f0;
-    padding: 0.2rem 0.6rem;
-    border-radius: 4px;
+    background: rgba(139, 92, 246, 0.08);
+    /* Subtle purple background */
+    border: 1px solid rgba(139, 92, 246, 0.2);
+    color: #a78bfa;
+    padding: 0.3rem 0.75rem;
+    border-radius: 6px;
     font-weight: 500;
     font-size: 0.7rem;
-    width: fit-content;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.3s ease;
 }
 
 .contact-btn:hover {
-    background: rgba(255, 255, 255, 0.1);
-    color: white;
-}
-
-/* 2. Navigation Styling */
-.column-title {
-    font-size: 0.8rem;
-    /* Increased from 0.7rem */
-    text-transform: uppercase;
-    color: #64748b;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    margin-bottom: 1rem;
-    /* Better spacing for larger text */
-    height: 1.5rem;
-    display: flex;
-    align-items: center;
-}
-
-.footer-nav {
-    display: flex;
-    flex-direction: column;
-    gap: 0.3rem;
-}
-
-.nav-item {
-    color: #94a3b8;
-    text-decoration: none;
-    font-size: 0.95rem;
-    /* Increased from 0.8rem */
-    transition: all 0.2s ease;
-}
-
-.nav-item:hover {
-    color: white;
-    padding-left: 2px;
-}
-
-/* 3. Social Cards (Transparent/Glassy) */
-.social-cards {
-    display: flex;
-    flex-direction: column;
-}
-
-.social-card {
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    padding: 0.4rem 0.7rem;
-    border-radius: 8px;
-    text-decoration: none;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.icon-box {
-    width: 24px;
-    height: 24px;
     background: rgba(139, 92, 246, 0.15);
-    border-radius: 50%;
+    color: #c4b5fd;
+    border-color: rgba(139, 92, 246, 0.4);
+    box-shadow: 0 0 12px rgba(139, 92, 246, 0.3);
+    /* Glow effect */
+    transform: translateY(-1px);
+}
+
+.legal-links {
+    display: flex;
+    gap: 0.8rem;
+    align-items: center;
+    font-size: 0.7rem;
+}
+
+.legal-links a {
+    color: #64748b;
+    text-decoration: none;
+    transition: all 0.2s;
+}
+
+.legal-links a:hover {
+    color: #cbd5e1;
+}
+
+.admin-link {
     display: flex;
     align-items: center;
-    justify-content: center;
-    color: #c084fc;
+    gap: 4px;
+    color: #a78bfa !important;
+    transition: all 0.3s ease;
+}
+
+.admin-link:hover {
+    color: #c4b5fd !important;
+    text-shadow: 0 0 8px rgba(139, 92, 246, 0.5);
+}
+
+.credits-group {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
 }
 
 .social-info {
     display: flex;
-    flex-direction: column;
-    flex: 1;
+    align-items: center;
+    gap: 0.5rem;
 }
 
 .social-name {
-    font-weight: 600;
-    font-size: 0.9rem;
-    /* Increased from 0.75rem */
-    color: #e2e8f0;
-}
-
-.social-sub {
-    font-size: 0.75rem;
-    /* Increased from 0.65rem */
+    font-size: 0.7rem;
     color: #64748b;
+    white-space: nowrap;
 }
 
-.arrow-icon {
-    color: #475569;
-}
-
-.social-card:hover {
-    background: rgba(139, 92, 246, 0.08);
-    border-color: rgba(139, 92, 246, 0.3);
-}
-
-/* Bottom Bar */
-.footer-bar {
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
-    padding: 0.4rem 0;
-}
-
-.bar-content {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 2rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    color: white;
-    /* Pure white for maximum contrast */
-    font-size: 0.75rem;
-}
-
-.copyright {
-    color: white;
+.divider {
+    color: rgba(139, 92, 246, 0.25);
+    /* Purple tint for dividers */
+    font-size: 1rem;
+    font-weight: 300;
+    opacity: 0.6;
 }
 
 .legal-links {
