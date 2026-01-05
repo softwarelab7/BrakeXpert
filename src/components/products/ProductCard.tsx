@@ -108,8 +108,15 @@ const ProductCard = React.memo(({ product }: ProductCardProps) => {
         return ''; // Default Blue
     };
 
+    const getHoverClass = () => {
+        if (positionInfo.display === 'DL-TR') return 'hover-ambas';
+        if (positionInfo.display === 'DELANTERA') return 'hover-delantera';
+        if (positionInfo.display === 'TRASERA') return 'hover-trasera';
+        return '';
+    };
+
     return (
-        <div className="product-card" onClick={() => openProductDetailModal(product.id)}>
+        <div className={`product-card ${getHoverClass()}`} onClick={() => openProductDetailModal(product.id)}>
             {/* Header: Position and Actions */}
             <div className="card-header">
                 <span className={`position-badge ${positionInfo.className}`}>

@@ -32,6 +32,18 @@
     border-color: var(--accent-primary);
 }
 
+.product-card.hover-delantera:hover {
+    border-color: #3b82f6;
+}
+
+.product-card.hover-trasera:hover {
+    border-color: #ef4444;
+}
+
+.product-card.hover-ambas:hover {
+    border-color: #8b5cf6;
+}
+
 .card-header {
     display: flex;
     align-items: center;
