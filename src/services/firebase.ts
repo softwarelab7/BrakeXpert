@@ -265,6 +265,27 @@ export const fetchHistoryLogs = async (limitCount = 50): Promise<HistoryLog[]> =
     }
 };
 
+// Report Error Functionality
+export const reportsCollection = collection(db, 'reports');
+
+export const addReport = async (reportData: {
+    productId: string;
+    productReference: string;
+    description: string;
+    userEmail?: string; // Optional
+}) => {
+    try {
+        await writeBatch(db).set(doc(reportsCollection), {
+            ...reportData,
+            status: 'PENDING',
+            timestamp: Date.now()
+        }).commit();
+    } catch (error) {
+        console.error("Error adding report:", error);
+        throw error;
+    }
+};
+
 // Mock data for development (remove when Firebase is configured)
 export const getMockProducts = (): Product[] => {
     return Array.from({ length: 723 }, (_, i) => ({

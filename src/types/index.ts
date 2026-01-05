@@ -58,6 +58,7 @@ export interface UIState {
   isCompareModalOpen: boolean;
   isHistoryPanelOpen: boolean;
   isProductDetailModalOpen: boolean;
+  isReportModalOpen: boolean;
   isGuideModalOpen: boolean;
   selectedProductId: string | null;
   notifications: Notification[];
@@ -65,7 +66,7 @@ export interface UIState {
 
 export interface Notification {
   id: string;
-  type: 'update' | 'data' | 'system';
+  type: 'update' | 'data' | 'system' | 'success' | 'error';
   title: string;
   message: string;
   read: boolean;
