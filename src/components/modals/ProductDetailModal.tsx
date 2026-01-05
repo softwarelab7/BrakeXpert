@@ -1,4 +1,4 @@
-import { ArrowRightLeft, X, ImageOff } from 'lucide-react';
+import { X, ArrowRightLeft, ImageOff } from 'lucide-react';
 import { useAppStore } from '../../store/useAppStore';
 import Modal from './Modal';
 import Bookmark from '../common/Bookmark';
@@ -166,7 +166,9 @@ const ProductDetailModal = () => {
                                     <tbody>
                                         {apps.map((app, idx) => (
                                             <tr key={idx}>
-                                                <td className="app-model">{app.modelo} {app.serie}</td>
+                                                <td className="app-model">
+                                                    {app.modelo === app.serie ? app.modelo : `${app.modelo} ${app.serie}`.trim()}
+                                                </td>
                                                 <td className="app-year">{app.año}</td>
                                                 <td className={`app-pos ${app.posicion === 'TRASERA' ? 'text-red' :
                                                     app.posicion === 'DELANTERA' ? 'text-blue' : 'text-purple'
@@ -197,8 +199,6 @@ const ProductDetailModal = () => {
                             </div>
                         </div>
                     </div>
-
-
                 </div>
 
                 {/* Right Column: Image */}
@@ -218,10 +218,6 @@ const ProductDetailModal = () => {
                             </div>
                         )}
                     </div>
-
-
-
-
                 </div>
             </div>
         </Modal>
