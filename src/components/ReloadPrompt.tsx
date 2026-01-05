@@ -1,5 +1,6 @@
 import { useRegisterSW } from 'virtual:pwa-register/react';
 import { RefreshCw, Wifi, ArrowRight } from 'lucide-react';
+import { useAppStore } from '../store/useAppStore';
 import '../styles/reload-prompt.css';
 
 function ReloadPrompt() {
@@ -15,9 +16,20 @@ function ReloadPrompt() {
         },
     });
 
+    const addNotification = useAppStore(state => state.addNotification);
+
     const close = () => {
         setOfflineReady(false);
         setNeedRefresh(false);
+    };
+
+    const handleUpdate = () => {
+        addNotification({
+            title: 'Actualización completada',
+            message: 'La aplicación se ha actualizado a la versión más reciente.',
+            type: 'system'
+        });
+        updateServiceWorker(true);
     };
 
     if (!offlineReady && !needRefresh) return null;
@@ -47,7 +59,7 @@ function ReloadPrompt() {
                     {needRefresh && (
                         <button
                             className="ReloadPrompt-btn ReloadPrompt-btn-primary"
-                            onClick={() => updateServiceWorker(true)}
+                            onClick={handleUpdate}
                         >
                             Actualizar ahora <ArrowRight size={20} style={{ marginLeft: '8px' }} />
                         </button>

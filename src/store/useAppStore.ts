@@ -461,11 +461,7 @@ export const useAppStore = create<AppState>()(
                 comparisons: state.comparisons,
                 searchHistory: state.searchHistory,
                 theme: state.theme,
-                itemsPerPage: state.ui.itemsPerPage,
-                gridDensity: state.ui.gridDensity,
-                // Do not persist notifications to start fresh, or persist if desired. 
-                // Given user request for "system", usually persist is good but maybe not for high volume.
-                // Assuming not persisting ui.notifications is safer for now or let it be (it's not listed in partialize).
+                ui: state.ui,
             }),
         }
     )
