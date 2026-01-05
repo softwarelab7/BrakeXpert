@@ -1,4 +1,4 @@
-import { ArrowRightLeft, X } from 'lucide-react';
+import { ArrowRightLeft, X, ImageOff } from 'lucide-react';
 import { useAppStore } from '../../store/useAppStore';
 import Modal from './Modal';
 import Bookmark from '../common/Bookmark';
@@ -205,11 +205,18 @@ const ProductDetailModal = () => {
                 <div className="detail-image-col">
                     {/* Action Icons Floating */}
                     <div className="image-wrapper">
-                        <img
-                            src={product.imagenes[0]}
-                            alt={product.referencia}
-                            className="main-product-image"
-                        />
+                        {product.imagenes && product.imagenes.length > 0 ? (
+                            <img
+                                src={product.imagenes[0]}
+                                alt={product.referencia}
+                                className="main-product-image"
+                            />
+                        ) : (
+                            <div className="no-image-placeholder-large">
+                                <ImageOff size={64} strokeWidth={1} />
+                                <span>Imagen no disponible</span>
+                            </div>
+                        )}
                     </div>
 
 

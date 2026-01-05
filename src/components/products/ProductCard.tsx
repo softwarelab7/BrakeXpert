@@ -1,6 +1,6 @@
 import React from 'react';
 import Bookmark from '../common/Bookmark';
-import { ArrowRightLeft } from 'lucide-react';
+import { ArrowRightLeft, ImageOff } from 'lucide-react';
 import { useAppStore } from '../../store/useAppStore';
 import type { Product } from '../../types';
 import '../../styles/product-card.css';
@@ -123,26 +123,35 @@ const ProductCard = React.memo(({ product }: ProductCardProps) => {
                             toggleComparison(product.id);
                         }}
                     >
-                        <ArrowRightLeft size={20} />
+                        {/* Matched size 20 and adjusted stroke to visually match the heart */}
+                        <ArrowRightLeft size={20} strokeWidth={1.8} />
                     </div>
                     <div className={`action-icon action-icon-favorite animate-hover-beat ${isFavorite ? 'active' : ''}`}>
                         <Bookmark
                             checked={isFavorite}
                             onChange={() => toggleFavorite(product.id)}
-                            size={18}
+                            size={22}
                         />
                     </div>
                 </div>
             </div>
 
             {/* Image */}
+            {/* Image */}
             <div className="image-container">
-                <img
-                    src={product.imagenes?.[0] || 'https://via.placeholder.com/200x150?text=Brake+Pad'}
-                    alt={product.referencia}
-                    className="product-image"
-                    loading="lazy"
-                />
+                {product.imagenes && product.imagenes.length > 0 ? (
+                    <img
+                        src={product.imagenes[0]}
+                        alt={product.referencia}
+                        className="product-image"
+                        loading="lazy"
+                    />
+                ) : (
+                    <div className="no-image-placeholder">
+                        <ImageOff size={32} strokeWidth={1.5} />
+                        <span>Sin Imagen</span>
+                    </div>
+                )}
             </div>
 
             {/* References */}

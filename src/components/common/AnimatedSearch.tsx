@@ -44,12 +44,14 @@ const StyledWrapper = styled.div`
   .form {
     position: relative;
     width: 100%;
+    display: flex;
+    align-items: center;
   }
 
   .input {
     width: 100%;
     border-radius: 9999px;
-    padding: 0.65rem 2.5rem; /* Better balance for icons */
+    padding: 0.65rem 2.8rem 0.65rem 2.5rem; /* Extra padding on right for clear btn */
     border: 1px solid var(--border-primary);
     outline: none;
     background: var(--bg-secondary);
@@ -87,19 +89,20 @@ const StyledWrapper = styled.div`
     z-index: 10;
   }
 
-  .icon-btn:hover {
-    color: var(--text-primary);
-    background: rgba(128, 128, 128, 0.1);
-    border-radius: 50%;
-  }
-
   .search-btn {
     left: 8px;
-    pointer-events: none; /* Just an icon usually */
+    pointer-events: none;
   }
 
   .reset-btn {
     right: 8px;
+    color: var(--text-tertiary);
+    border-radius: 50%;
+  }
+
+  .reset-btn:hover {
+    background: rgba(0, 0, 0, 0.05); /* Subtle dark hover */
+    color: var(--color-danger); /* Red on hover */
   }
 
   .icon-svg {

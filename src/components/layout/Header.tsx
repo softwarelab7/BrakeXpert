@@ -44,7 +44,9 @@ const Header = () => {
                     >
                         <Bell size={20} />
                         {notificationCount > 0 && (
-                            <span className="notification-badge">{notificationCount}</span>
+                            <span className="notification-badge">
+                                {notificationCount > 9 ? '9+' : notificationCount}
+                            </span>
                         )}
                     </button>
                 </div>

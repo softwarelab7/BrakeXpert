@@ -123,6 +123,11 @@ const Sidebar = () => {
         products.forEach((p: Product) => {
             if (p.aplicaciones && Array.isArray(p.aplicaciones)) {
                 p.aplicaciones.forEach((app: any) => {
+                    // Check if brand is selected, if so, only show models for that brand
+                    if (filters.selectedBrand && app.marca !== filters.selectedBrand) {
+                        return;
+                    }
+
                     if (app && app.modelo) {
                         modelMap.set(app.modelo, (modelMap.get(app.modelo) || 0) + 1);
                     }
@@ -130,7 +135,7 @@ const Sidebar = () => {
             }
         });
         return Array.from(modelMap.keys()).sort((a, b) => a.localeCompare(b));
-    }, [products]);
+    }, [products, filters.selectedBrand]);
 
     const years = useMemo(() => {
         const yearSet = new Set<string>();
