@@ -10,11 +10,11 @@ import ResultsBar from './components/products/ResultsBar';
 import ProductGrid from './components/products/ProductGrid';
 import Pagination from './components/products/Pagination';
 import ProductDetailModal from './components/modals/ProductDetailModal';
-import CompareModal from './components/modals/CompareModal';
 import HistoryPanel from './components/HistoryPanel';
 import GuideModal from './components/modals/GuideModal';
 import NotificationPanel from './components/NotificationPanel';
 import AdminPanel from './components/admin/AdminPanel';
+import ComparePage from './components/pages/ComparePage';
 import ReloadPrompt from './components/ReloadPrompt';
 import ScrollToTop from './components/common/ScrollToTop';
 import './styles/global.css';
@@ -144,6 +144,15 @@ function App() {
       {/* Simple View Switcher */}
       {view === '#admin' ? (
         <AdminPanel />
+      ) : view === '#compare' ? (
+        <>
+          <Header />
+          <main className="results-panel" style={{ width: '100%', maxWidth: '100%' }}>
+            <ComparePage />
+          </main>
+          <Footer />
+          <ScrollToTop />
+        </>
       ) : (
         <>
           <Header />
@@ -186,7 +195,6 @@ function App() {
 
           {/* Modals */}
           <ProductDetailModal />
-          <CompareModal />
           <HistoryPanel />
           <GuideModal />
         </>

@@ -13,7 +13,6 @@ interface ResultsBarProps {
 const ResultsBar = ({ totalResults, currentStart, currentEnd }: ResultsBarProps) => {
     const comparisonsCount = useAppStore(state => state.comparisons.length);
     const favoritesCount = useAppStore(state => state.favorites.length);
-    const openCompareModal = useAppStore(state => state.openCompareModal);
     const toggleShowFavoritesOnly = useAppStore(state => state.toggleShowFavoritesOnly);
     const showFavoritesOnly = useAppStore(state => state.filters.showFavoritesOnly);
     const openHistoryPanel = useAppStore(state => state.openHistoryPanel);
@@ -96,7 +95,7 @@ const ResultsBar = ({ totalResults, currentStart, currentEnd }: ResultsBarProps)
                 <div className="tools-group">
                     <button
                         className={`results-action-btn results-action-btn-compare animate-hover-swap ${comparisonsCount > 0 ? 'active' : ''}`}
-                        onClick={openCompareModal}
+                        onClick={() => window.location.hash = 'compare'}
                         title="Comparar productos"
                     >
                         <ArrowRightLeft size={20} strokeWidth={1.8} />

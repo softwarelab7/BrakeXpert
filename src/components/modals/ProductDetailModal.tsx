@@ -1,9 +1,9 @@
-import { X, ArrowRightLeft, ImageOff, AlertTriangle } from 'lucide-react';
+import { X, ArrowRightLeft, ImageOff } from 'lucide-react';
 import { useAppStore } from '../../store/useAppStore';
 import Modal from './Modal';
 import Bookmark from '../common/Bookmark';
 import '../../styles/modals.css';
-import ReportErrorModal from './ReportErrorModal';
+
 
 const ProductDetailModal = () => {
     const isProductDetailModalOpen = useAppStore(state => state.ui.isProductDetailModalOpen);
@@ -14,7 +14,7 @@ const ProductDetailModal = () => {
     const toggleComparison = useAppStore(state => state.toggleComparison);
     const favorites = useAppStore(state => state.favorites);
     const comparisons = useAppStore(state => state.comparisons);
-    const openReportModal = useAppStore(state => state.openReportModal);
+
 
     const product = products.find(p => p.id === selectedProductId);
 
@@ -117,21 +117,24 @@ const ProductDetailModal = () => {
                         onClick={() => toggleComparison(product.id)}
                         title={isComparing ? "Quitar de comparar" : "Comparar"}
                     >
-                        <ArrowRightLeft size={28} />
+                        <ArrowRightLeft size={22} />
                     </button>
                     <button
                         className={`action-btn-toolbar ${isFavorite ? 'active' : ''}`}
-                        onClick={() => toggleFavorite(product.id)}
                         title={isFavorite ? "Quitar de favoritos" : "Guardar"}
                     >
-                        <Bookmark checked={isFavorite} onChange={() => { }} size={28} />
+                        <Bookmark
+                            checked={isFavorite}
+                            onChange={() => toggleFavorite(product.id)}
+                            size={22}
+                        />
                     </button>
                     <button
                         className="close-btn-toolbar"
                         onClick={closeProductDetailModal}
                         title="Cerrar"
                     >
-                        <X size={32} />
+                        <X size={24} />
                     </button>
                 </div>
 
@@ -220,20 +223,8 @@ const ProductDetailModal = () => {
                             </div>
                         )}
                     </div>
-
-                    {/* Report Error Button */}
-                    <button
-                        onClick={openReportModal}
-                        className="report-problem-btn"
-                        title="Reportar error en este producto"
-                    >
-                        <AlertTriangle size={18} />
-                        Reportar Error
-                    </button>
                 </div>
             </div>
-
-            <ReportErrorModal product={product} />
         </Modal>
     );
 };

@@ -36,17 +36,19 @@ const Header = () => {
                     <ThemeToggle />
 
 
-                    <button
-                        className="icon-button animate-hover-ring"
-                        title="Notificaciones"
-                        aria-label="Notificaciones"
-                        onClick={toggleNotificationPanel}
-                    >
-                        <Bell size={20} />
-                        {notificationCount > 0 && (
-                            <span className="notification-badge">{notificationCount}</span>
-                        )}
-                    </button>
+                    {window.location.hash !== '#compare' && (
+                        <button
+                            className="icon-button animate-hover-ring"
+                            title="Notificaciones"
+                            aria-label="Notificaciones"
+                            onClick={toggleNotificationPanel}
+                        >
+                            <Bell size={20} />
+                            {notificationCount > 0 && (
+                                <span className="notification-badge">{notificationCount}</span>
+                            )}
+                        </button>
+                    )}
                 </div>
             </div>
         </header>

@@ -9,7 +9,7 @@ export default defineConfig(({ command }) => ({
   plugins: [
     react(),
     VitePWA({
-      registerType: 'autoUpdate',
+      registerType: 'prompt',
       injectRegister: 'inline',
       workbox: {
         cleanupOutdatedCaches: true,

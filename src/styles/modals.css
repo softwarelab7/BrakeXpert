@@ -139,15 +139,12 @@
     }
 }
 
+/* Old toolbar styles replaced at bottom of file */
 .action-btn-toolbar,
 .close-btn-toolbar {
-    background: transparent;
+    /* Styles moved to end of file for consolidation */
     border: none;
     cursor: pointer;
-    padding: 0.25rem;
-    color: #475569;
-    /* Darker slate for better visibility */
-    transition: all 0.2s;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -373,7 +370,8 @@
     /* Restored safe padding */
     gap: 1.5rem;
     /* Reduced gap from 2rem */
-    background: #fff;
+    background: var(--bg-secondary);
+    /* Fixed: Theme aware background */
     min-height: 600px;
 }
 
@@ -505,8 +503,10 @@
 .brand-group {
     display: flex;
     flex-direction: column;
-    background-color: #f8fafc;
-    border: 1px solid #e2e8f0;
+    background-color: var(--bg-tertiary);
+    /* Fixed: Theme aware (lighter than secondary in dark mode?) or use subtle rgba */
+    border: 1px solid var(--border-color);
+    /* Fixed: Theme aware */
     border-radius: 0.5rem;
     padding: 0.5rem 0.75rem;
 }
@@ -514,10 +514,12 @@
 .brand-header-in-list {
     font-size: 0.75rem;
     font-weight: 800;
-    color: #0f172a;
+    color: var(--text-primary);
+    /* Fixed: Theme aware */
     background: transparent;
     padding: 0 0 0.25rem 0;
-    border-bottom: 1px solid #e2e8f0;
+    border-bottom: 1px solid var(--border-color);
+    /* Theme aware border */
     margin: 0 0 0.25rem 0;
     display: block;
     width: 100%;
@@ -547,12 +549,14 @@
 .app-table td {
     padding: 0.15rem 0;
     /* Much tighter */
-    color: #475569;
+    color: var(--text-secondary);
+    /* Fixed: Theme aware */
 }
 
 .app-model {
     font-weight: 500;
-    color: #334155;
+    color: var(--text-primary);
+    /* Fixed: Theme aware */
     width: 65%;
 }
 
@@ -591,7 +595,8 @@
 .specs-header {
     font-size: 0.7rem;
     font-weight: 800;
-    color: #0f172a;
+    color: var(--text-secondary);
+    /* Fixed: Theme aware */
     margin: 0 0 0.5rem 0;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -620,13 +625,15 @@
     width: 100px;
     font-size: 0.7rem;
     font-weight: 700;
-    color: #0f172a;
+    color: var(--text-primary);
+    /* Fixed: Theme aware color */
     flex-shrink: 0;
 }
 
 .spec-val {
     font-size: 0.7rem;
-    color: #475569;
+    color: var(--text-secondary);
+    /* Fixed: Theme aware color */
 }
 
 .spec-val-badges {
@@ -645,7 +652,10 @@
     padding: 0;
     /* Full bleed image logic inside wrapper */
     overflow: hidden;
-    height: fit-content;
+    height: auto;
+    /* Allow stretch */
+    justify-content: center;
+    /* Vertically center image */
 }
 
 /* Cleaned up old action styles */
@@ -665,6 +675,7 @@
     /* Compare */
 }
 
+/* ... existing styles ... */
 .image-wrapper {
     width: 100%;
     min-height: 400px;
@@ -673,6 +684,9 @@
     justify-content: center;
     position: relative;
     background: #fff;
+    /* Restored white background for technical drawings */
+    border-radius: 0.75rem;
+    /* Added radius for better look */
     padding: 2rem;
 }
 
@@ -795,64 +809,56 @@
     padding: 0;
     border-radius: 0;
     box-shadow: none;
-    border: none;
 }
 
 .action-btn-toolbar,
 .close-btn-toolbar {
-    background: transparent;
-    border: none;
+    background: transparent !important;
+    /* Clean like cards - FORCE transparent */
+    border: none !important;
     cursor: pointer;
-    padding: 0.6rem;
-    color: #475569;
-    /* Darker slate for better visibility */
-    transition: all 0.2s;
+    padding: 0.25rem;
+    color: var(--text-secondary);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     display: flex;
     align-items: center;
     justify-content: center;
+    width: auto;
+    height: auto;
+    border-radius: 0.25rem;
+    box-shadow: none !important;
+}
+
+/* Force white buttons in dark mode as requested - High Specificity */
+html[data-theme='dark'] .modal-actions-toolbar .action-btn-toolbar,
+html[data-theme='dark'] .modal-actions-toolbar .close-btn-toolbar {
+    color: #ffffff !important;
+    filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.9));
+    /* Stronger shadow */
 }
 
 .action-btn-toolbar:hover,
 .close-btn-toolbar:hover {
     color: var(--accent-primary);
-    transform: scale(1.2);
+    transform: scale(1.1);
+    background: transparent !important;
+    box-shadow: none !important;
 }
 
 .action-btn-toolbar.active {
-    color: #ef4444;
-    /* or blue for compare */
-    background-color: #fee2e2;
+    color: #9333ea !important;
+    background: transparent !important;
+    /* Verified Purple Match from ProductCard */
 }
 
-.action-btn-toolbar:first-child.active {
-    color: #3b82f6;
-    background-color: #dbeafe;
+/* Force Active Color Override in Dark Mode (Specificity Fix) */
+html[data-theme='dark'] .modal-actions-toolbar .action-btn-toolbar.active {
+    color: #9333ea !important;
+    filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.5));
+    /* Keep shadow but softer */
 }
 
-.toolbar-divider {
-    width: 1px;
-    height: 1.25rem;
-    background-color: #e2e8f0;
-    margin: 0 0.25rem;
-}
 
-.close-btn-toolbar {
-    background: transparent;
-    border: none;
-    color: #64748b;
-    cursor: pointer;
-    transition: all 0.2s;
-    padding: 0.4rem;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.close-btn-toolbar:hover {
-    background-color: #f1f5f9;
-    color: #ef4444;
-}
 
 /* Remove scroll from modal body when noPadding is used, if desired */
 /* We rely on .modal-body-p0 padding: 0 !important; which is already there. 
