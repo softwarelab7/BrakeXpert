@@ -20,6 +20,7 @@ export interface VehicleApplication {
   modelo: string;
   serie?: string;
   año: string;
+  motor?: string; // Engine liters/info
   posicion: 'DELANTERA' | 'TRASERA' | 'AMBAS'; // Mandatory here
 }
 

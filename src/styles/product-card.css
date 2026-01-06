@@ -116,8 +116,8 @@
 }
 
 .action-icon svg {
-    width: var(--icon-size, 1.25rem);
-    height: var(--icon-size, 1.25rem);
+    width: var(--icon-size, 0.75rem) !important;
+    height: var(--icon-size, 0.75rem) !important;
 }
 
 .action-icon:hover {

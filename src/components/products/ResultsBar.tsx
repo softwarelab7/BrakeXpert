@@ -98,7 +98,7 @@ const ResultsBar = ({ totalResults, currentStart, currentEnd }: ResultsBarProps)
                         onClick={() => window.location.hash = 'compare'}
                         title="Comparar productos"
                     >
-                        <ArrowRightLeft size={20} strokeWidth={1.8} />
+                        <ArrowRightLeft strokeWidth={1.5} />
                         {comparisonsCount > 0 && (
                             <span className="action-badge badge-compare">
                                 {comparisonsCount}
@@ -115,8 +115,8 @@ const ResultsBar = ({ totalResults, currentStart, currentEnd }: ResultsBarProps)
                             <Bookmark
                                 checked={showFavoritesOnly}
                                 onChange={() => { }}
-                                size={22}
                                 animate={false}
+                                strokeWidth={1.5}
                             />
                         </div>
                         {favoritesCount > 0 && (
@@ -131,7 +131,7 @@ const ResultsBar = ({ totalResults, currentStart, currentEnd }: ResultsBarProps)
                         onClick={openHistoryPanel}
                         title="Historial de búsquedas"
                     >
-                        <History size={20} strokeWidth={1.8} />
+                        <History strokeWidth={1.5} />
                     </button>
                 </div>
             </div>

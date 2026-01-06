@@ -125,6 +125,11 @@
     background: var(--bg-hover);
 }
 
+.results-action-btn svg {
+    width: 1.15rem;
+    height: 1.15rem;
+}
+
 .results-action-btn-compare.active {
     color: #9333ea;
     background: rgba(147, 51, 234, 0.15);

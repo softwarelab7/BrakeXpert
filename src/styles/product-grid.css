@@ -12,8 +12,8 @@
     --ref-padding: 0.4rem 1rem;
     --footer-padding: 0.6rem 1rem 0.8rem;
     --app-font-size: 0.725rem;
-    --icon-size: 1.425rem;
-    --icon-gap: 0.4rem;
+    --icon-size: 1.15rem;
+    --icon-gap: 0.75rem;
     --ref-section-height: 4.25rem;
     /* Slightly reduced */
     /* Default/Normal Height */
@@ -38,8 +38,8 @@
     --ref-padding: 0.2rem 0.75rem;
     --footer-padding: 0.35rem 0.75rem 0.5rem;
     --app-font-size: 0.625rem;
-    --icon-size: 1.1875rem;
-    --icon-gap: 0.25rem;
+    --icon-size: 1rem;
+    --icon-gap: 0.5rem;
     --ref-section-height: 3.25rem;
     /* Slightly reduced */
     /* Compact Height */
@@ -59,8 +59,8 @@
     --ref-padding: 0.75rem 1.5rem;
     --footer-padding: 1.25rem 2rem 1.75rem;
     --app-font-size: 0.85rem;
-    --icon-size: 1.6625rem;
-    --icon-gap: 0.75rem;
+    --icon-size: 1.35rem;
+    --icon-gap: 1rem;
     --ref-section-height: 5.5rem;
     /* Slightly reduced */
     gap: 1.5rem;

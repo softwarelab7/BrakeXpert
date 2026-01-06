@@ -1,7 +1,4 @@
-/* Heart Animation CSS */
 .like {
-    width: var(--icon-size, 1.25rem);
-    height: var(--icon-size, 1.25rem);
     border-radius: 999px;
     position: relative;
     cursor: pointer;

@@ -38,7 +38,7 @@ const Footer = () => {
                     <div className="legal-links">
                         <a href="#">Privacidad</a>
                         <span className="dot">·</span>
-                        <a href="#admin" className="admin-link">
+                        <a href="#admin" className="admin-link" target="_blank" rel="noopener noreferrer">
                             <Shield size={10} />
                             <span>Admin</span>
                         </a>

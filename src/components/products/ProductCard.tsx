@@ -130,14 +130,13 @@ const ProductCard = React.memo(({ product }: ProductCardProps) => {
                             toggleComparison(product.id);
                         }}
                     >
-                        {/* Matched size 20 and adjusted stroke to visually match the heart */}
-                        <ArrowRightLeft size={20} strokeWidth={1.8} />
+                        <ArrowRightLeft strokeWidth={1.5} />
                     </div>
                     <div className={`action-icon action-icon-favorite animate-hover-beat ${isFavorite ? 'active' : ''}`}>
                         <Bookmark
                             checked={isFavorite}
                             onChange={() => toggleFavorite(product.id)}
-                            size={22}
+                            strokeWidth={1.5}
                         />
                     </div>
                 </div>

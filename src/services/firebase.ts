@@ -67,13 +67,32 @@ export const normalizeProduct = (docId: string, data: any): Product => {
     p.oem = ensureArray(p.oem);
     p.ref = ensureArray(p.ref);
     p.imagenes = ensureArray(p.imagenes);
-    p.aplicaciones = ensureArray(p.aplicaciones).map((app: any) => ({
-        marca: app?.marca || '',
-        modelo: app?.modelo || app?.serie || '',
-        serie: app?.serie || '',
-        año: app?.año || '',
-        posicion: (app?.posicion || 'DELANTERA').toUpperCase()
-    }));
+    p.aplicaciones = ensureArray(p.aplicaciones).map((app: any) => {
+        // Helper to find year robustly (including Unicode Normalization)
+        const findYear = (obj: any) => {
+            if (!obj) return '';
+
+            // 1. Try to find the key by normalizing both search term and keys
+            const keys = Object.keys(obj);
+            for (const key of keys) {
+                // Normalize key to NFC to ensure consistent char codes for 'ñ'
+                const normKey = key.trim().normalize('NFC').toLowerCase();
+                if (['año', 'ano', 'anio', 'year', 'years'].includes(normKey)) {
+                    return obj[key];
+                }
+            }
+            return '';
+        };
+
+        return {
+            marca: app?.marca || '',
+            modelo: app?.modelo || app?.serie || '',
+            serie: app?.serie || '',
+            año: findYear(app),
+            motor: app?.motor || app?.litros || app?.engine || '',
+            posicion: (app?.posicion || 'DELANTERA').toUpperCase()
+        };
+    });
 
     // 4. Fallback for reference
     p.referencia = p.referencia || (p.ref && p.ref[0]) || 'SIN-REF';
@@ -219,6 +238,17 @@ export const addProduct = async (productData: Partial<Product>) => {
         return productRef.id;
     } catch (error) {
         console.error('Error adding product:', error);
+        throw error;
+    }
+};
+
+// Delete a product
+export const deleteProduct = async (id: string) => {
+    try {
+        const productRef = doc(db, 'pastillas', id);
+        await writeBatch(db).delete(productRef).commit();
+    } catch (error) {
+        console.error('Error deleting product:', error);
         throw error;
     }
 };

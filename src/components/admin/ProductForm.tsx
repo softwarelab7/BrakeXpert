@@ -58,7 +58,15 @@ const normalizeProductData = (data: any): Partial<Product> => {
                 marca: String(app.marca || ''),
                 modelo: String(app.modelo || app.serie || ''),
                 serie: String(app.serie || ''),
-                año: String(app.año || ''),
+                // Normalize variations
+                año: (() => {
+                    if (app.año) return String(app.año);
+                    if (app.ano) return String(app.ano);
+                    if (app.year) return String(app.year);
+                    const k = Object.keys(app).find(key => /^(a(ñ|n)o|years?|anio)$/i.test(key.trim()));
+                    return k ? String(app[k]) : '';
+                })(),
+                motor: String(app.motor || app.litros || app.engine || ''),
                 posicion: String(app.posicion || 'DELANTERA').toUpperCase() as any
             };
         }
@@ -87,6 +95,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ initialData, onSave }) => {
         modelo: '',
         serie: '',
         año: '',
+        motor: '',
         posicion: 'DELANTERA'
     });
 
@@ -100,7 +109,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ initialData, onSave }) => {
             ...prev,
             aplicaciones: [...(prev.aplicaciones || []), newApp]
         }));
-        setNewApp({ marca: '', modelo: '', serie: '', año: '', posicion: 'DELANTERA' });
+        setNewApp({ marca: '', modelo: '', serie: '', año: '', motor: '', posicion: 'DELANTERA' });
     };
 
     const removeApp = (index: number) => {
@@ -325,6 +334,12 @@ const ProductForm: React.FC<ProductFormProps> = ({ initialData, onSave }) => {
                             value={newApp.año}
                             onChange={e => setNewApp({ ...newApp, año: e.target.value })}
                         />
+                        <input
+                            placeholder="Motor (Litros)"
+                            className="admin-input"
+                            value={newApp.motor || ''}
+                            onChange={e => setNewApp({ ...newApp, motor: e.target.value })}
+                        />
 
                         <div className="pos-selector">
                             <button
@@ -374,6 +389,12 @@ const ProductForm: React.FC<ProductFormProps> = ({ initialData, onSave }) => {
                                             onChange={e => setTempApp({ ...tempApp, año: e.target.value })}
                                             placeholder="Año"
                                         />
+                                        <input
+                                            className="admin-input small"
+                                            value={tempApp.motor || ''}
+                                            onChange={e => setTempApp({ ...tempApp, motor: e.target.value })}
+                                            placeholder="Motor"
+                                        />
                                         <div className="edit-app-actions">
                                             <button onClick={saveEditingApp} className="icon-btn success"><Check size={16} /></button>
                                             <button onClick={cancelEditingApp} className="icon-btn danger"><X size={16} /></button>
@@ -387,7 +408,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ initialData, onSave }) => {
                                                 {app?.marca || 'N/A'} <span style={{ color: 'var(--admin-accent)' }}>{app?.serie || app?.modelo || '(Sin Serie)'}</span>
                                             </strong>
                                             <span style={{ fontSize: '0.85rem', color: 'var(--admin-text-muted)', fontWeight: 500 }}>
-                                                Año: {app?.año || 'N/A'}
+                                                Año: {app?.año || 'N/A'} {app?.motor && <span style={{ marginLeft: '0.5rem', color: 'var(--admin-accent)' }}>• Motor: {app.motor}</span>}
                                             </span>
                                         </div>
 
@@ -595,7 +616,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ initialData, onSave }) => {
 
                 .app-edit-grid {
                     display: grid;
-                    grid-template-columns: 1fr 1fr 0.8fr auto;
+                    grid-template-columns: 1fr 1fr 0.6fr 0.6fr auto;
                     gap: 0.5rem;
                     width: 100%;
                     align-items: center;
