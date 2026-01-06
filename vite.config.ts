@@ -13,8 +13,6 @@ export default defineConfig(({ command }) => ({
       injectRegister: 'inline',
       workbox: {
         cleanupOutdatedCaches: true,
-        skipWaiting: true,
-        clientsClaim: true,
         sourcemap: true
       },
       devOptions: {
