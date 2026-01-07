@@ -181,10 +181,30 @@
 }
 
 /* Mobile Responsive */
-@media (max-width: 968px) {
-    .footer-content {
-        grid-template-columns: 1fr;
-        gap: 2rem;
-        padding: 2rem 1.5rem;
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .footer-unified-content {
+        flex-direction: column;
+        gap: 1.5rem;
+        padding: 1.5rem;
+        height: auto;
+    }
+
+    .footer-left-section,
+    .footer-right-section {
+        flex-direction: column;
+        gap: 1rem;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .copyright-group,
+    .credits-group {
+        justify-content: center;
+    }
+
+    .divider {
+        display: none;
+        /* Hide vertical dividers in stack mode */
     }
 }

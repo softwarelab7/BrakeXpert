@@ -1,5 +1,5 @@
 import { X } from 'lucide-react';
-import { useEffect, type ReactNode } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import '../../styles/modals.css';
 
@@ -14,6 +14,16 @@ interface ModalProps {
 }
 
 const Modal = ({ isOpen, onClose, title, children, size = 'default', hideHeader = false, noPadding = false }: ModalProps) => {
+    const [shouldRender, setShouldRender] = useState(isOpen);
+
+    useEffect(() => {
+        if (isOpen) setShouldRender(true);
+    }, [isOpen]);
+
+    const onAnimationEnd = () => {
+        if (!isOpen) setShouldRender(false);
+    };
+
     // Lock body scroll when modal is open
     useEffect(() => {
         if (isOpen) {
@@ -39,7 +49,7 @@ const Modal = ({ isOpen, onClose, title, children, size = 'default', hideHeader 
         return () => window.removeEventListener('keydown', handleEscape);
     }, [isOpen, onClose]);
 
-    if (!isOpen) return null;
+    if (!shouldRender) return null;
 
     const sizeClass =
         size === 'small' ? 'modal-sm' :
@@ -48,11 +58,16 @@ const Modal = ({ isOpen, onClose, title, children, size = 'default', hideHeader 
                     '';
 
     const bodyClass = `modal-body ${noPadding ? 'modal-body-p0' : ''}`;
+    const animationClass = isOpen ? '' : 'closing';
 
     return createPortal(
-        <div className="modal-overlay" onClick={onClose}>
+        <div
+            className={`modal-overlay ${animationClass}`}
+            onClick={onClose}
+            onAnimationEnd={onAnimationEnd}
+        >
             <div
-                className={`modal-container ${sizeClass}`}
+                className={`modal-container ${sizeClass} ${animationClass}`}
                 onClick={(e) => e.stopPropagation()}
                 role="dialog"
                 aria-modal="true"

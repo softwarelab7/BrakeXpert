@@ -115,15 +115,6 @@ const ProductCard = React.memo(({ product }: ProductCardProps) => {
         return '';
     };
 
-    const [copiedRef, setCopiedRef] = React.useState<string | null>(null);
-
-    const handleCopy = (text: string, e: React.MouseEvent) => {
-        e.stopPropagation();
-        navigator.clipboard.writeText(text);
-        setCopiedRef(text);
-        setTimeout(() => setCopiedRef(null), 1500);
-    };
-
     return (
         <div className={`product-card ${getHoverClass()}`} onClick={() => openProductDetailModal(product.id)}>
             {/* Header: Position and Actions */}
@@ -179,19 +170,12 @@ const ProductCard = React.memo(({ product }: ProductCardProps) => {
                     .flatMap(r => r.split(' ')) // Split space-separated strings
                     .filter(Boolean) // Remove empty strings
                     .map((reference) => (
-                        <div key={reference} style={{ position: 'relative', display: 'inline-block' }}>
-                            <span
-                                className={`ref-badge ${getBadgeClass(reference)}`}
-                                onClick={(e) => handleCopy(reference, e)}
-                                style={{ cursor: 'copy' }}
-                                title="Click para copiar"
-                            >
-                                {reference}
-                            </span>
-                            {copiedRef === reference && (
-                                <span className="copy-tooltip">¡Copiado!</span>
-                            )}
-                        </div>
+                        <span
+                            key={reference}
+                            className={`ref-badge ${getBadgeClass(reference)}`}
+                        >
+                            {reference}
+                        </span>
                     ))}
             </div>
 

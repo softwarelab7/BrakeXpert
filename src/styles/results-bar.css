@@ -5,12 +5,14 @@
     padding: 0.6rem 1rem;
     margin-bottom: 1rem;
     background: var(--bg-secondary);
-    border: 1px solid var(--border-primary);
+    border: 1px solid var(--border-contrast);
+    /* Contrast Frame */
     border-radius: var(--radius-lg);
     gap: 1.5rem;
     flex-wrap: wrap;
     min-height: 3rem;
-    box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.05);
+    /* 3D Effect Shadow - Heavy */
+    box-shadow: var(--shadow-3d);
 }
 
 .results-text {
@@ -349,8 +351,19 @@
         width: 100%;
         overflow-x: auto;
         padding-bottom: 4px;
+        /* Hide Scrollbar */
+        scrollbar-width: none;
+        /* Firefox */
+        -ms-overflow-style: none;
+        /* IE/Edge */
     }
 
+    .results-actions-wrapper::-webkit-scrollbar {
+        display: none;
+        /* Chrome/Safari/Opera */
+    }
+
+    .control-group,
     .control-divider {
         display: none;
     }

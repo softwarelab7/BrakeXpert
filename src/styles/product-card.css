@@ -1,15 +1,17 @@
 .product-card {
-    background: var(--bg-primary);
+    background: var(--bg-secondary);
     border-radius: 1rem;
     overflow: hidden;
-    border: 1px solid var(--border-primary);
+    border: 1px solid var(--border-contrast);
+    /* Contrast Frame */
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     display: flex;
     flex-direction: column;
     height: 100%;
     position: relative;
     cursor: pointer;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    /* 3D Effect Shadow - Heavy */
+    box-shadow: var(--shadow-3d);
     animation: fadeInUpCard 0.5s ease-out forwards;
 
     opacity: 0;
@@ -194,9 +196,9 @@
     /* Align badges to start (left) per reference image */
     gap: 0.25rem;
     /* Reduced from 0.5rem per "mas juntas" */
-    border-top: 1px solid #e2e8f0;
+    border-top: 1px solid var(--border-contrast);
     /* Divider restored */
-    border-bottom: 1px solid #e2e8f0;
+    border-bottom: 1px solid var(--border-contrast);
     /* Divider restored */
     background: transparent;
     /* Background removed for seamless look */

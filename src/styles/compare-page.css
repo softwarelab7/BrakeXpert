@@ -289,8 +289,26 @@
     background: rgba(139, 92, 246, 0.1);
 }
 
-/* Empty State */
-.grid-empty {
-    text-align: center;
-    padding: 4rem;
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .compare-page-container {
+        padding: 1rem;
+    }
+
+    .compare-header {
+        flex-direction: column;
+        gap: 1rem;
+        height: auto;
+    }
+
+    .compare-back-btn {
+        position: static;
+        /* Remove absolute positioning */
+        align-self: flex-start;
+        margin-bottom: 0.5rem;
+    }
+
+    .compare-title {
+        font-size: 1.25rem;
+    }
 }

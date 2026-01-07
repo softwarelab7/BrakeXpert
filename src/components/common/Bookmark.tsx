@@ -1,36 +1,118 @@
-import '../../styles/favorite-bookmark.css';
+import styled from 'styled-components';
 
 interface BookmarkProps {
-    checked: boolean;
-    onChange: (checked: boolean) => void;
-    size?: number;
-    animate?: boolean;
-    strokeWidth?: number;
+  checked: boolean;
+  onChange: (checked: boolean) => void;
+  size?: number;
+  strokeWidth?: number;
 }
 
-const Bookmark = ({ checked, onChange, size = 42, animate = true, strokeWidth = 2 }: BookmarkProps) => {
-    // Determine scale based on requested size vs original icon size (approx 24px)
-    // The user's container is 42px, internal SVG is 24x22.
-    // If size is provided (e.g. 18), we scale the whole thing.
-    // Base scale on 24px (icon width) to match passed 'size' being the icon size.
-    return (
-        <div
-            className={`like ${checked && animate ? 'liked' : ''} ${checked && !animate ? 'is-checked' : ''}`}
-            onClick={(e) => {
-                e.stopPropagation();
-                onChange(!checked);
-            }}
-            style={{
-                width: size,
-                height: size
-            }}
-        >
-            <svg width="100%" height="100%" viewBox="0 0 24 22" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ overflow: 'visible' }}>
-                <path d="M1.5 7.827C1.5 4.0992 3.5 1.5 7.54036 1.5C10 1.5 11.5646 2.93172 13.5323 5.5C15.5 8.06828 16 12 12 12C8 12 8.5 7.827 10.4677 5.5C12 3.5 14 1.5 16.4596 1.5C20.5 1.5 22.5 4.0992 22.5 7.827C22.5 14.5 12.525 20.5 12 20.5C11.475 20.5 1.5 14.5 1.5 7.827Z" stroke="#FF3040" strokeWidth={strokeWidth * 1.5} className="thread" />
-                <path d="M1 7.66C1 12.235 4.899 16.746 10.987 20.594C11.325 20.797 11.727 21 12 21C12.283 21 12.686 20.797 13.013 20.594C19.1 16.746 23 12.234 23 7.66C23 3.736 20.245 1 16.672 1C14.603 1 12.98 1.94 12 3.352C11.042 1.952 9.408 1 7.328 1C3.766 1 1 3.736 1 7.66Z" strokeWidth={strokeWidth} className="heart" />
-            </svg>
-        </div>
-    );
+const Bookmark = ({ checked, onChange, size = 24, strokeWidth = 2 }: BookmarkProps) => {
+  return (
+    <StyledWrapper
+      onClick={(e) => {
+        e.stopPropagation();
+        onChange(!checked);
+      }}
+      style={{ fontSize: size ? size / 2 : undefined }}
+    >
+      <div className="bookmark-checkbox">
+        <input
+          type="checkbox"
+          className="bookmark-checkbox__input"
+          checked={checked}
+          readOnly
+        />
+        <label className="bookmark-checkbox__label">
+          <svg
+            className="bookmark-checkbox__icon"
+            viewBox="0 0 24 24"
+            style={{ strokeWidth: strokeWidth }}
+          >
+            <path className="bookmark-checkbox__icon-back" d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
+            <path className="bookmark-checkbox__icon-check" d="M8 11l3 3 5-5" />
+          </svg>
+        </label>
+      </div>
+    </StyledWrapper>
+  );
 }
+
+const StyledWrapper = styled.div`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  .bookmark-checkbox {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .bookmark-checkbox__input {
+    display: none;
+  }
+
+  .bookmark-checkbox__label {
+    cursor: pointer;
+    display: flex;
+  }
+
+  .bookmark-checkbox__icon {
+    width: 2em;
+    height: 2em;
+    fill: none;
+    /* stroke-width handled inline */
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: stroke 0.3s, fill 0.3s;
+  }
+
+  .bookmark-checkbox__icon-back {
+    stroke: var(--text-primary); /* Adapted for Theme Support */
+    transition: transform 0.3s;
+  }
+
+  .bookmark-checkbox__icon-check {
+    stroke: #fff;
+    stroke-dasharray: 16;
+    stroke-dashoffset: 16;
+    transition: stroke-dashoffset 0.3s, transform 0.3s;
+    transform: translateX(2px);
+  }
+
+  /* Checked State */
+  .bookmark-checkbox__input:checked
+    + .bookmark-checkbox__label
+    .bookmark-checkbox__icon {
+    fill: #ff5a5f;
+  }
+
+  .bookmark-checkbox__input:checked
+    + .bookmark-checkbox__label
+    .bookmark-checkbox__icon-back {
+    stroke: #ff5a5f;
+    transform: scale(1.1);
+    animation: bookmark-pop 0.4s ease;
+  }
+
+  .bookmark-checkbox__input:checked
+    + .bookmark-checkbox__label
+    .bookmark-checkbox__icon-check {
+    stroke-dashoffset: 0;
+    transition-delay: 0.2s;
+  }
+
+  @keyframes bookmark-pop {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.2);
+    }
+    100% {
+      transform: scale(1.1);
+    }
+  }`;
 
 export default Bookmark;

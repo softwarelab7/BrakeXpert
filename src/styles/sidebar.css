@@ -9,13 +9,15 @@
 
 .sidebar {
     background: var(--bg-secondary);
-    border: 1px solid var(--border-primary);
+    border: 1px solid var(--border-contrast);
+    /* Contrast Frame */
     border-radius: 1.25rem;
     padding: 0.7rem 0.8rem;
     display: flex;
     flex-direction: column;
     gap: 0.2rem;
-    box-shadow: var(--shadow-lg);
+    /* 3D Effect Shadow - Heavy */
+    box-shadow: var(--shadow-3d);
     transition: all var(--transition-base);
     position: sticky;
     top: 4.6rem;
@@ -190,21 +192,106 @@
 
 
 /* Responsive Scaling */
+/* Mobile Toggle Button */
+.mobile-toggle-btn {
+    display: none;
+}
+
+/* Sidebar Overlay */
+.sidebar-overlay {
+    display: none;
+}
+
+/* Responsive Scaling & Drawer Mode */
 @media (max-width: 768px) {
     .filters-column {
         flex: none;
         width: 100%;
-        margin-bottom: 1.5rem;
+        margin-bottom: 0.5rem;
+        /* Minimal spacing for button */
     }
 
+    /* Toggle Button Visible on Mobile */
+    .mobile-toggle-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        width: 100%;
+        padding: 0.75rem;
+        background: var(--bg-secondary);
+        color: var(--text-primary);
+        border: 1px solid var(--border-contrast);
+        border-radius: 0.75rem;
+        font-weight: 600;
+        cursor: pointer;
+        box-shadow: var(--shadow-sm);
+        transition: all 0.2s;
+    }
+
+    .mobile-toggle-btn:hover {
+        background: var(--bg-hover);
+        color: var(--accent-primary);
+    }
+
+    /* Sidebar Drawer Transformation */
+    /* Sidebar Drawer Transformation */
     .sidebar {
-        padding: 1.25rem;
-        position: static;
+        position: fixed;
+        /* Position below header (approx 60px) */
+        top: 60px;
+        left: 0;
+        /* Adjust height to account for header offset */
+        height: calc(100vh - 60px);
+        width: 280px;
+        z-index: 1010;
+        /* Below header (1020) but above content */
+        transform: translateX(-100%);
+        opacity: 0;
+        visibility: hidden;
+        margin: 0;
+        border-radius: 0;
+        border-right: 1px solid var(--border-contrast);
+        border-top: none;
+        border-left: none;
+        border-bottom: none;
+        overflow-y: auto;
+        padding-bottom: 2rem;
+        /* Add top padding for spacing */
+        padding-top: 1rem;
+    }
+
+    .sidebar.open {
+        transform: translateX(0);
+        opacity: 1;
+        visibility: visible;
+    }
+
+    /* Active Overlay */
+    .sidebar-overlay {
+        display: block;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1005;
+        /* Below sidebar (1010) and header (1020) */
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s;
+        backdrop-filter: blur(2px);
+    }
+
+    .sidebar-overlay.open {
+        opacity: 1;
+        visibility: visible;
     }
 
     .position-pill {
         height: 40px;
-        font-size: 1rem;
+        font-size: 0.9rem;
     }
 }
 

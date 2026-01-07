@@ -8,6 +8,7 @@ import '../../styles/sidebar.css';
 
 const Sidebar = () => {
     const store = useAppStore();
+    const [isMobileOpen, setIsMobileOpen] = useState(false);
     const { filters, products, filteredProducts } = store;
 
     // Ref for search input
@@ -177,153 +178,177 @@ const Sidebar = () => {
         setLocalHeight('');
     };
 
+    // Icon import if needed, assuming Filter icon from lucide-react
+    // Need to verify standard Lucide imports in file header if I use Filter icon.
+    // Since I cannot see top of file in this chunk, I will use text "FILTROS" and maybe svg inline or add import in separate step if missing.
+    // Actually I can scan for Filter import.
+
     return (
-        <aside className="sidebar">
-            <div className="filter-section">
-                <div className="section-header">
-                    <h3 className="filter-section-title">Búsqueda Rápida</h3>
-                </div>
-                <AnimatedSearch
-                    ref={searchInputRef}
-                    value={localQuery}
-                    onChange={setLocalQuery}
-                    placeholder="Buscar..."
-                />
-            </div>
+        <>
+            {/* Mobile Toggle Button (Visible only on mobile via CSS) */}
+            <button
+                className="mobile-toggle-btn"
+                onClick={() => setIsMobileOpen(true)}
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+                </svg>
+                FILTROS {hasActiveFilters && <span className="header-badge" style={{ background: 'var(--accent-primary)', marginLeft: '0.5rem' }}>!</span>}
+            </button>
 
-            <div className="filter-section">
-                <div className="section-header">
-                    <h3 className="filter-section-title">Detalles del Vehículo</h3>
-                </div>
-                <div className="vehicle-details-grid">
-                    <SearchableSelect
-                        placeholder="Marca"
-                        value={filters.selectedBrand || ''}
-                        options={brands.map(([name]) => name)}
-                        onChange={(value) => {
-                            store.setSelectedBrand(value);
-                            if (value) setLocalQuery('');
-                        }}
-                        className={filters.selectedBrand ? 'has-value' : ''}
-                    />
+            {/* Backdrop Overlay */}
+            <div
+                className={`sidebar-overlay ${isMobileOpen ? 'open' : ''}`}
+                onClick={() => setIsMobileOpen(false)}
+            />
 
-                    <SearchableSelect
-                        placeholder="Modelo/Serie"
-                        value={filters.selectedModel || ''}
-                        options={models}
-                        onChange={(value) => {
-                            store.setSelectedModel(value);
-                            if (value) setLocalQuery('');
-                        }}
-                        className={filters.selectedModel ? 'has-value' : ''}
-                    />
-
-                    <SearchableSelect
-                        placeholder="Año"
-                        value={filters.selectedYear || ''}
-                        options={years}
-                        onChange={(value) => {
-                            store.setSelectedYear(value);
-                            if (value) setLocalQuery('');
-                        }}
-                        className={filters.selectedYear ? 'has-value' : ''}
+            <aside className={`sidebar ${isMobileOpen ? 'open' : ''}`}>
+                <div className="filter-section">
+                    <div className="section-header">
+                        <h3 className="filter-section-title">Búsqueda Rápida</h3>
+                    </div>
+                    <AnimatedSearch
+                        ref={searchInputRef}
+                        value={localQuery}
+                        onChange={setLocalQuery}
+                        placeholder="Buscar..."
                     />
                 </div>
-            </div>
 
-            <div className="filter-section">
-                <div className="section-header">
-                    <h3 className="filter-section-title">Posición</h3>
+                <div className="filter-section">
+                    <div className="section-header">
+                        <h3 className="filter-section-title">Detalles del Vehículo</h3>
+                    </div>
+                    <div className="vehicle-details-grid">
+                        <SearchableSelect
+                            placeholder="Marca"
+                            value={filters.selectedBrand || ''}
+                            options={brands.map(([name]) => name)}
+                            onChange={(value) => {
+                                store.setSelectedBrand(value);
+                                if (value) setLocalQuery('');
+                            }}
+                            className={filters.selectedBrand ? 'has-value' : ''}
+                        />
+
+                        <SearchableSelect
+                            placeholder="Modelo/Serie"
+                            value={filters.selectedModel || ''}
+                            options={models}
+                            onChange={(value) => {
+                                store.setSelectedModel(value);
+                                if (value) setLocalQuery('');
+                            }}
+                            className={filters.selectedModel ? 'has-value' : ''}
+                        />
+
+                        <SearchableSelect
+                            placeholder="Año"
+                            value={filters.selectedYear || ''}
+                            options={years}
+                            onChange={(value) => {
+                                store.setSelectedYear(value);
+                                if (value) setLocalQuery('');
+                            }}
+                            className={filters.selectedYear ? 'has-value' : ''}
+                        />
+                    </div>
                 </div>
-                <div className="position-grid">
+
+                <div className="filter-section">
+                    <div className="section-header">
+                        <h3 className="filter-section-title">Posición</h3>
+                    </div>
+                    <div className="position-grid">
+                        <button
+                            className={`position-pill pill-blue ${filters.selectedPositions.includes('delantera') ? 'active' : ''
+                                } ${filters.selectedPositions.includes('delantera') && filters.selectedPositions.includes('trasera') ? 'both-active' : ''
+                                }`}
+                            onClick={() => {
+                                store.togglePosition('delantera');
+                            }}
+                        >
+                            <span>Delantera</span>
+                        </button>
+                        <button
+                            className={`position-pill pill-red ${filters.selectedPositions.includes('trasera') ? 'active' : ''
+                                } ${filters.selectedPositions.includes('delantera') && filters.selectedPositions.includes('trasera') ? 'both-active' : ''
+                                }`}
+                            onClick={() => {
+                                store.togglePosition('trasera');
+                            }}
+                        >
+                            <span>Trasera</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div className="filter-section">
+                    <div className="section-header">
+                        <h3 className="filter-section-title">Referencias</h3>
+                    </div>
+                    <div className="references-grid">
+                        <div className={`ref-input-wrapper ${localOem ? 'has-value' : ''}`}>
+                            <input
+                                type="text"
+                                className="ref-input"
+                                placeholder="OEM"
+                                value={localOem}
+                                onChange={(e) => setLocalOem(e.target.value)}
+                            />
+                        </div>
+                        <div className={`ref-input-wrapper ${localFmsi ? 'has-value' : ''}`}>
+                            <input
+                                type="text"
+                                className="ref-input"
+                                placeholder="FMSI"
+                                value={localFmsi}
+                                onChange={(e) => setLocalFmsi(e.target.value)}
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                <div className="filter-section">
+                    <div className="section-header">
+                        <h3 className="filter-section-title">Medidas (mm)</h3>
+                    </div>
+                    <div className="measurements-grid">
+                        <div className={`measure-input-wrapper ${localWidth ? 'has-value' : ''}`}>
+                            <input
+                                type="number"
+                                className="measure-input"
+                                placeholder="Ancho"
+                                step="0.1"
+                                value={localWidth}
+                                onChange={(e) => setLocalWidth(e.target.value)}
+                            />
+                        </div>
+                        <div className={`measure-input-wrapper ${localHeight ? 'has-value' : ''}`}>
+                            <input
+                                type="number"
+                                className="measure-input"
+                                placeholder="Alto"
+                                step="0.1"
+                                value={localHeight}
+                                onChange={(e) => setLocalHeight(e.target.value)}
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                <div className="borrar-filtros-container">
                     <button
-                        className={`position-pill pill-blue ${filters.selectedPositions.includes('delantera') ? 'active' : ''
-                            } ${filters.selectedPositions.includes('delantera') && filters.selectedPositions.includes('trasera') ? 'both-active' : ''
-                            }`}
-                        onClick={() => {
-                            store.togglePosition('delantera');
-                        }}
+                        onClick={clearFilters}
+                        disabled={!hasActiveFilters}
+                        className={`borrar-filtros-red ${!hasActiveFilters ? 'disabled' : ''}`}
                     >
-                        <span>Delantera</span>
-                    </button>
-                    <button
-                        className={`position-pill pill-red ${filters.selectedPositions.includes('trasera') ? 'active' : ''
-                            } ${filters.selectedPositions.includes('delantera') && filters.selectedPositions.includes('trasera') ? 'both-active' : ''
-                            }`}
-                        onClick={() => {
-                            store.togglePosition('trasera');
-                        }}
-                    >
-                        <span>Trasera</span>
+                        BORRAR FILTROS
+                        <span />
                     </button>
                 </div>
-            </div>
-
-            <div className="filter-section">
-                <div className="section-header">
-                    <h3 className="filter-section-title">Referencias</h3>
-                </div>
-                <div className="references-grid">
-                    <div className={`ref-input-wrapper ${localOem ? 'has-value' : ''}`}>
-                        <input
-                            type="text"
-                            className="ref-input"
-                            placeholder="OEM"
-                            value={localOem}
-                            onChange={(e) => setLocalOem(e.target.value)}
-                        />
-                    </div>
-                    <div className={`ref-input-wrapper ${localFmsi ? 'has-value' : ''}`}>
-                        <input
-                            type="text"
-                            className="ref-input"
-                            placeholder="FMSI"
-                            value={localFmsi}
-                            onChange={(e) => setLocalFmsi(e.target.value)}
-                        />
-                    </div>
-                </div>
-            </div>
-
-            <div className="filter-section">
-                <div className="section-header">
-                    <h3 className="filter-section-title">Medidas (mm)</h3>
-                </div>
-                <div className="measurements-grid">
-                    <div className={`measure-input-wrapper ${localWidth ? 'has-value' : ''}`}>
-                        <input
-                            type="number"
-                            className="measure-input"
-                            placeholder="Ancho"
-                            step="0.1"
-                            value={localWidth}
-                            onChange={(e) => setLocalWidth(e.target.value)}
-                        />
-                    </div>
-                    <div className={`measure-input-wrapper ${localHeight ? 'has-value' : ''}`}>
-                        <input
-                            type="number"
-                            className="measure-input"
-                            placeholder="Alto"
-                            step="0.1"
-                            value={localHeight}
-                            onChange={(e) => setLocalHeight(e.target.value)}
-                        />
-                    </div>
-                </div>
-            </div>
-
-            <div className="borrar-filtros-container">
-                <button
-                    onClick={clearFilters}
-                    disabled={!hasActiveFilters}
-                    className={`borrar-filtros-red ${!hasActiveFilters ? 'disabled' : ''}`}
-                >
-                    BORRAR FILTROS
-                    <span />
-                </button>
-            </div>
-        </aside>
+            </aside>
+        </>
     );
 };
 
