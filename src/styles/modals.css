@@ -557,21 +557,23 @@
     font-weight: 500;
     color: var(--text-primary);
     /* Fixed: Theme aware */
-    width: 65%;
+    width: 60%;
 }
 
 .app-year {
-    text-align: right;
+    text-align: center;
     width: 15%;
     font-family: inherit;
 }
 
 .app-pos {
     text-align: right;
-    width: 20%;
+    width: 25%;
     font-weight: 700;
     font-size: 0.65rem;
     text-transform: uppercase;
+    padding-left: 1rem;
+    /* Add spacing from year */
 }
 
 /* Specificity fix: override table cell color */

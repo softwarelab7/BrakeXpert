@@ -81,7 +81,7 @@ export const FILTER_STRATEGIES: Record<string, (item: Product, value: any, conte
         if (!value) return true;
         if (!item.aplicaciones || !Array.isArray(item.aplicaciones)) return false;
         const normalizedValue = normalizeText(value);
-        return item.aplicaciones.some(app => app && normalizeText(app.marca).includes(normalizedValue));
+        return item.aplicaciones.some(app => app && normalizeText(app.marca) === normalizedValue);
     },
 
     selectedModel: (item, value) => {
@@ -91,8 +91,8 @@ export const FILTER_STRATEGIES: Record<string, (item: Product, value: any, conte
         return item.aplicaciones.some(app => {
             if (!app) return false;
             // Check both modelo and serie
-            const modelMatch = app.modelo && normalizeText(app.modelo).includes(normalizedValue);
-            const serieMatch = app.serie && normalizeText(app.serie).includes(normalizedValue);
+            const modelMatch = app.modelo && normalizeText(app.modelo) === normalizedValue;
+            const serieMatch = app.serie && normalizeText(app.serie) === normalizedValue;
             return modelMatch || serieMatch;
         });
     },

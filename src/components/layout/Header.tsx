@@ -4,7 +4,7 @@ import ThemeToggle from './ThemeToggle';
 import '../../styles/header.css';
 
 const Header = () => {
-    const notificationCount = useAppStore(state => state.ui.notifications.length);
+    const notificationCount = useAppStore(state => state.ui.notifications.filter(n => !n.read).length);
     const toggleNotificationPanel = useAppStore(state => state.toggleNotificationPanel);
     const openGuideModal = useAppStore(state => state.openGuideModal);
 
