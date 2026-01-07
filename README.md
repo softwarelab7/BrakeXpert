@@ -1,10 +1,10 @@
-# 🚗 BRAKE X HUB
+# 🚗 Brake Xpert
 
 **Consulta rápida. Frenado seguro.**
 
 ## 📋 Descripción
 
-**BRAKE X HUB** es una plataforma web profesional diseñada para optimizar la búsqueda y consulta de pastillas de freno en el mercado automotriz.
+**BRAKE XPERT** es una plataforma web profesional diseñada para optimizar la búsqueda y consulta de pastillas de freno en el mercado automotriz.
 
 Su objetivo principal es proporcionar a mecánicos, refaccionarias y especialistas una herramienta ágil para identificar el producto exacto mediante múltiples criterios de búsqueda.
 
