@@ -115,7 +115,6 @@ const ResultsBar = ({ totalResults, currentStart, currentEnd }: ResultsBarProps)
                             <Bookmark
                                 checked={showFavoritesOnly}
                                 onChange={() => { }}
-                                animate={false}
                                 strokeWidth={1.5}
                             />
                         </div>
