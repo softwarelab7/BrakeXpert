@@ -1,4 +1,4 @@
-import { useMemo, useState, useEffect } from 'react';
+import { useMemo, useState, useEffect, useRef } from 'react';
 
 import { useAppStore } from '../../store/useAppStore';
 import type { Product } from '../../types';
@@ -9,6 +9,21 @@ import '../../styles/sidebar.css';
 const Sidebar = () => {
     const store = useAppStore();
     const { filters, products, filteredProducts } = store;
+
+    // Ref for search input
+    const searchInputRef = useRef<HTMLInputElement>(null);
+
+    // Keyboard Shortcut Ctrl+K
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+                e.preventDefault();
+                searchInputRef.current?.focus();
+            }
+        };
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, []);
 
     // Local state for smooth typing
     const [localQuery, setLocalQuery] = useState(filters.searchQuery);
@@ -169,6 +184,7 @@ const Sidebar = () => {
                     <h3 className="filter-section-title">Búsqueda Rápida</h3>
                 </div>
                 <AnimatedSearch
+                    ref={searchInputRef}
                     value={localQuery}
                     onChange={setLocalQuery}
                     placeholder="Buscar..."

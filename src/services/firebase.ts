@@ -98,7 +98,15 @@ export const normalizeProduct = (docId: string, data: any): Product => {
     p.referencia = p.referencia || (p.ref && p.ref[0]) || 'SIN-REF';
 
     // 5. Timestamp normalization
-    p.createdAt = p.createdAt || p.fecha_creacion || 0;
+    let created = p.createdAt || p.fecha_creacion;
+    if (created && typeof created === 'object' && 'seconds' in created) {
+        created = created.seconds * 1000; // Firestore Timestamp
+    } else if (typeof created === 'string') {
+        // Try parsing string date
+        const date = new Date(created);
+        if (!isNaN(date.getTime())) created = date.getTime();
+    }
+    p.createdAt = typeof created === 'number' ? created : 0;
 
     return p as Product;
 };
@@ -231,6 +239,11 @@ export const addProduct = async (productData: Partial<Product>) => {
     try {
         const productRef = doc(productsCollection);
         const { id: _, ...data } = { ...productData } as any;
+
+        // Auto-assign creation date if missing
+        if (!data.createdAt) {
+            data.createdAt = Date.now();
+        }
 
         // CRITICAL: Convert measures back to legacy format for Firebase
         if (data.medidas && typeof data.medidas === 'object' && !Array.isArray(data.medidas)) {

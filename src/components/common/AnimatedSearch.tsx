@@ -7,9 +7,12 @@ interface AnimatedSearchProps {
   placeholder?: string;
 }
 
-const AnimatedSearch: React.FC<AnimatedSearchProps> = ({ value, onChange, placeholder }) => {
+const AnimatedSearch = React.forwardRef<HTMLInputElement, AnimatedSearchProps>(({ value, onChange, placeholder }, ref) => {
   const handleReset = () => {
     onChange('');
+    if (ref && 'current' in ref && ref.current) {
+      ref.current.focus();
+    }
   };
 
   return (
@@ -21,6 +24,7 @@ const AnimatedSearch: React.FC<AnimatedSearchProps> = ({ value, onChange, placeh
           </svg>
         </button>
         <input
+          ref={ref}
           className="input"
           placeholder={placeholder || "Search..."}
           required
@@ -36,7 +40,9 @@ const AnimatedSearch: React.FC<AnimatedSearchProps> = ({ value, onChange, placeh
       </form>
     </StyledWrapper>
   );
-}
+});
+
+AnimatedSearch.displayName = 'AnimatedSearch';
 
 const StyledWrapper = styled.div`
   width: 100%;

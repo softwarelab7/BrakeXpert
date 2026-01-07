@@ -318,6 +318,42 @@ const ProductForm: React.FC<ProductFormProps> = ({ initialData, onSave }) => {
                             </div>
                         </div>
 
+                        <div style={{ marginTop: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                            <div
+                                onClick={() => {
+                                    const isNew = !!(formData.createdAt && (Date.now() - formData.createdAt) < (15 * 24 * 60 * 60 * 1000));
+                                    setFormData({ ...formData, createdAt: isNew ? 0 : Date.now() });
+                                }}
+                                style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '0.5rem',
+                                    cursor: 'pointer',
+                                    userSelect: 'none',
+                                    padding: '0.5rem',
+                                    border: '1px solid var(--admin-border)',
+                                    borderRadius: '0.5rem',
+                                    background: 'var(--admin-glass)'
+                                }}
+                            >
+                                <div style={{
+                                    width: '18px',
+                                    height: '18px',
+                                    borderRadius: '4px',
+                                    border: '2px solid var(--admin-text-muted)',
+                                    background: (formData.createdAt && (Date.now() - formData.createdAt) < (15 * 24 * 60 * 60 * 1000)) ? '#10b981' : 'transparent',
+                                    borderColor: (formData.createdAt && (Date.now() - formData.createdAt) < (15 * 24 * 60 * 60 * 1000)) ? '#10b981' : 'var(--admin-text-muted)',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    color: 'white'
+                                }}>
+                                    {(formData.createdAt && (Date.now() - formData.createdAt) < (15 * 24 * 60 * 60 * 1000)) && <Check size={12} strokeWidth={4} />}
+                                </div>
+                                <span style={{ color: 'var(--admin-text)', fontWeight: 600, fontSize: '0.9rem' }}>Marcar como NUEVO</span>
+                            </div>
+                        </div>
+
                         <div className="extra-info-grid">
                             <div>
                                 <label><Ruler size={14} /> Ancho (mm)</label>
