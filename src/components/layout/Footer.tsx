@@ -1,16 +1,14 @@
-import { Mail, Shield } from 'lucide-react';
+import { Shield } from 'lucide-react';
 import '../../styles/footer.css';
 import AntigravityLogo from '../common/AntigravityLogo';
-import packageJson from '../../../package.json';
+// import packageJson from '../../../package.json'; // Removed unused import
 
 const Footer = () => {
     const currentYear = new Date().getFullYear();
-    const version = packageJson.version;
+    // const version = packageJson.version; // Removed unused variable
 
 
-    const handleContactClick = () => {
-        window.location.href = 'mailto:contacto@brakehubx.com';
-    };
+
 
     return (
         <footer className="footer-wrapper">
@@ -21,7 +19,7 @@ const Footer = () => {
                 {/* Left Section: Identity & Legal */}
                 <div className="footer-left-section">
                     <h2 className="footer-logo">Brake <span className="logo-accent">X</span>pert</h2>
-                    <span className="version-badge">v{version} Beta</span>
+                    {/* Version badge removed per user request */}
                     <div className="copyright-group">
                         <span className="divider">|</span>
                         <p className="copyright">© {currentYear} Brake Xpert Inc.</p>
@@ -30,14 +28,9 @@ const Footer = () => {
 
                 {/* Right Section: Actions & Credits */}
                 <div className="footer-right-section">
-                    <button className="contact-btn" onClick={handleContactClick}>
-                        <Mail size={12} />
-                        <span>Contáctanos</span>
-                    </button>
+                    {/* Contact button removed per user request */}
 
                     <div className="legal-links">
-                        <a href="#">Privacidad</a>
-                        <span className="dot">·</span>
                         <a href="#admin" className="admin-link" target="_blank" rel="noopener noreferrer">
                             <Shield size={10} />
                             <span>Admin</span>
