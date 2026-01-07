@@ -27,6 +27,33 @@
     }
 }
 
+.new-badge-overlay {
+    position: absolute;
+    top: 40px;
+    /* Below header */
+    left: 12px;
+    background: linear-gradient(135deg, #fbbf24, #d97706);
+    color: white;
+    font-size: 0.65rem;
+    font-weight: 800;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    z-index: 20;
+    letter-spacing: 0.05em;
+    animation: popInBadge 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes popInBadge {
+    from {
+        transform: scale(0) rotate(-10deg);
+    }
+
+    to {
+        transform: scale(1) rotate(0);
+    }
+}
+
 .product-card:hover {
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
     transform: translateY(-4px);
@@ -122,6 +149,10 @@
 
 .action-icon:hover {
     color: var(--accent-primary);
+}
+
+.action-icon:active {
+    transform: scale(0.85);
 }
 
 .action-icon.active {

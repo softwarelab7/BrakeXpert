@@ -1,4 +1,5 @@
 import { X, ArrowRightLeft, ImageOff } from 'lucide-react';
+import React from 'react';
 import { useAppStore } from '../../store/useAppStore';
 import Modal from './Modal';
 import Bookmark from '../common/Bookmark';
@@ -14,6 +15,15 @@ const ProductDetailModal = () => {
     const toggleComparison = useAppStore(state => state.toggleComparison);
     const favorites = useAppStore(state => state.favorites);
     const comparisons = useAppStore(state => state.comparisons);
+
+    // Image Loading State (Must be top level)
+    const [isImageLoaded, setIsImageLoaded] = React.useState(false);
+
+    // Reset loading state when product changes
+    // Note: We use selectedProductId dependency to be safer, though product works if stable
+    React.useEffect(() => {
+        setIsImageLoaded(false);
+    }, [selectedProductId]);
 
 
     const product = products.find(p => p.id === selectedProductId);
@@ -99,6 +109,8 @@ const ProductDetailModal = () => {
 
     // Initial 4 for top row, or all
     const topBadges = allReferences.slice(0, 4);
+
+
 
     return (
         <Modal
@@ -211,15 +223,23 @@ const ProductDetailModal = () => {
                     {/* Action Icons Floating */}
                     <div className="image-wrapper">
                         {product.imagenes && product.imagenes.length > 0 ? (
-                            <img
-                                src={product.imagenes[0]}
-                                alt={product.referencia}
-                                className="main-product-image"
-                            />
+                            <>
+                                {!isImageLoaded && (
+                                    <div className="image-skeleton-loader">
+                                        <div className="shimmer-effect"></div>
+                                    </div>
+                                )}
+                                <img
+                                    src={product.imagenes[0]}
+                                    alt={product.referencia}
+                                    className={`main-product-image ${isImageLoaded ? 'loaded' : 'loading'}`}
+                                    onLoad={() => setIsImageLoaded(true)}
+                                />
+                            </>
                         ) : (
                             <div className="no-image-placeholder-large">
                                 <ImageOff size={64} strokeWidth={1} />
-                                <span>Imagen no disponible</span>
+                                <span className="mt-4 text-sm font-medium">Imagen no disponible</span>
                             </div>
                         )}
                     </div>

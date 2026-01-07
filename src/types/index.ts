@@ -13,6 +13,7 @@ export interface Product {
     ancho: number | string;
     alto: number | string;
   };
+  createdAt?: number; // Timestamp for "New" badge
 }
 
 export interface VehicleApplication {

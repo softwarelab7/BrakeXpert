@@ -142,6 +142,11 @@ const ProductCard = React.memo(({ product }: ProductCardProps) => {
                 </div>
             </div>
 
+            {/* NEW Badge Overlay */}
+            {!!product.createdAt && product.createdAt > 0 && (Date.now() - product.createdAt) < (30 * 24 * 60 * 60 * 1000) && (
+                <div className="new-badge-overlay">NUEVO</div>
+            )}
+
             {/* Image */}
             {/* Image */}
             <div className="image-container">

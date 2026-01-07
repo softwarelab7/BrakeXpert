@@ -2,6 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import { X, Plus, Trash2, ImageIcon, Check, Edit2, Package as PackageIcon, Ruler, Car } from 'lucide-react';
 import type { Product, VehicleApplication } from '../../types';
+import SearchableSelect from '../common/SearchableSelect';
+import { useAppStore } from '../../store/useAppStore';
 
 interface ProductFormProps {
     initialData?: Product;
@@ -98,6 +100,53 @@ const ProductForm: React.FC<ProductFormProps> = ({ initialData, onSave }) => {
         motor: '',
         posicion: 'DELANTERA'
     });
+
+    // --- Autocomplete Logic ---
+    const products = useAppStore(state => state.products);
+
+    const brandOptions = React.useMemo(() => {
+        const brands = new Set<string>();
+        products.forEach(p => {
+            if (p.aplicaciones) {
+                p.aplicaciones.forEach(app => {
+                    if (app.marca) brands.add(app.marca);
+                });
+            }
+        });
+        return Array.from(brands).sort();
+    }, [products]);
+
+    // Derived model options (global for now, can be filtered by selected brand if desired)
+    const modelOptions = React.useMemo(() => {
+        const models = new Set<string>();
+        products.forEach(p => {
+            if (p.aplicaciones) {
+                p.aplicaciones.forEach(app => {
+                    if (app.modelo) models.add(app.modelo);
+                    if (app.serie) models.add(app.serie);
+                });
+            }
+        });
+        return Array.from(models).sort();
+    }, [products]);
+
+    // Optional: filtered models if brand is selected
+    const filteredModelOptions = React.useMemo(() => {
+        if (!newApp.marca) return modelOptions;
+        const models = new Set<string>();
+        products.forEach(p => {
+            if (p.aplicaciones) {
+                p.aplicaciones.forEach(app => {
+                    if (app.marca === newApp.marca) {
+                        if (app.modelo) models.add(app.modelo);
+                        if (app.serie) models.add(app.serie);
+                    }
+                });
+            }
+        });
+        return models.size > 0 ? Array.from(models).sort() : modelOptions;
+    }, [products, newApp.marca, modelOptions]);
+
 
     // State for editing an existing application
     const [editingAppIndex, setEditingAppIndex] = useState<number | null>(null);
@@ -316,18 +365,24 @@ const ProductForm: React.FC<ProductFormProps> = ({ initialData, onSave }) => {
 
                     {/* New Application Input */}
                     <div className="new-app-box">
-                        <input
-                            placeholder="Marca"
-                            className="admin-input"
-                            value={newApp.marca}
-                            onChange={e => setNewApp({ ...newApp, marca: e.target.value })}
-                        />
-                        <input
-                            placeholder="Serie / Modelo"
-                            className="admin-input"
-                            value={newApp.serie || newApp.modelo}
-                            onChange={e => setNewApp({ ...newApp, serie: e.target.value, modelo: e.target.value })}
-                        />
+                        <div style={{ marginBottom: '0.5rem' }}>
+                            <SearchableSelect
+                                value={newApp.marca}
+                                onChange={(val) => setNewApp({ ...newApp, marca: val })}
+                                options={brandOptions}
+                                placeholder="Marca (ej. Chevrolet)"
+                                className="admin-autocomplete"
+                            />
+                        </div>
+                        <div style={{ marginBottom: '0.5rem' }}>
+                            <SearchableSelect
+                                value={newApp.modelo} // Using modelo field for simplicity
+                                onChange={(val) => setNewApp({ ...newApp, modelo: val, serie: val })}
+                                options={filteredModelOptions}
+                                placeholder="Serie / Modelo"
+                                className="admin-autocomplete"
+                            />
+                        </div>
                         <input
                             placeholder="Año"
                             className="admin-input"
@@ -371,18 +426,24 @@ const ProductForm: React.FC<ProductFormProps> = ({ initialData, onSave }) => {
                                 {editingAppIndex === idx && tempApp ? (
                                     // EDIT MODE
                                     <div className="app-edit-grid">
-                                        <input
-                                            className="admin-input small"
-                                            value={tempApp.marca || ''}
-                                            onChange={e => setTempApp({ ...tempApp, marca: e.target.value })}
-                                            placeholder="Marca"
-                                        />
-                                        <input
-                                            className="admin-input small"
-                                            value={tempApp.serie || tempApp.modelo || ''}
-                                            onChange={e => setTempApp({ ...tempApp, serie: e.target.value, modelo: e.target.value })}
-                                            placeholder="Serie/Modelo"
-                                        />
+                                        <div style={{ minWidth: 0 }}>
+                                            <SearchableSelect
+                                                value={tempApp.marca || ''}
+                                                onChange={(val) => setTempApp({ ...tempApp, marca: val })}
+                                                options={brandOptions}
+                                                placeholder="Marca"
+                                                className="admin-autocomplete small"
+                                            />
+                                        </div>
+                                        <div style={{ minWidth: 0 }}>
+                                            <SearchableSelect
+                                                value={tempApp.serie || tempApp.modelo || ''}
+                                                onChange={(val) => setTempApp({ ...tempApp, serie: val, modelo: val })}
+                                                options={filteredModelOptions} // Or global modelOptions if we want full list
+                                                placeholder="Serie/Modelo"
+                                                className="admin-autocomplete small"
+                                            />
+                                        </div>
                                         <input
                                             className="admin-input small"
                                             value={tempApp.año || ''}
@@ -685,6 +746,31 @@ const ProductForm: React.FC<ProductFormProps> = ({ initialData, onSave }) => {
                 .pos-badge.delantera { background: rgba(59, 130, 246, 0.2); color: #3b82f6; }
                 .pos-badge.trasera { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
                 .pos-badge.ambas { background: var(--accent-primary); color: #fff; border: none; }
+
+                /* Autocomplete Overrides */
+                .admin-autocomplete .searchable-select-input {
+                    background: var(--admin-glass);
+                    border: 1px solid var(--admin-border);
+                    color: var(--admin-text);
+                    height: 42px; /* Match standard admin input */
+                }
+                .admin-autocomplete.small .searchable-select-input {
+                    height: 32px;
+                    padding: 0 1.5rem 0 0.5rem;
+                    font-size: 0.85rem;
+                }
+                .admin-autocomplete .searchable-select-dropdown {
+                    background: var(--admin-card-bg);
+                    border: 1px solid var(--admin-border);
+                    z-index: 1000;
+                }
+                .admin-autocomplete .searchable-select-option {
+                    color: var(--admin-text);
+                }
+                .admin-autocomplete .searchable-select-option:hover {
+                    background: var(--admin-accent);
+                    color: white;
+                }
 `}</style>
         </div>
     );

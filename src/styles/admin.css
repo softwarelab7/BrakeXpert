@@ -586,10 +586,18 @@
 }
 
 /* Secondary/Other Active States */
+/* Secondary/Other Active States - Now Unified to Blue */
 .admin-nav-item.active {
-    background: var(--admin-glass);
-    color: var(--admin-text);
-    border: 1px solid var(--admin-border);
+    background: #3b82f6;
+    color: white;
+    box-shadow: 0 8px 16px -4px rgba(59, 130, 246, 0.5);
+    font-weight: 600;
+    border: none;
+}
+
+.admin-nav-item.active:hover {
+    background: #2563eb;
+    transform: translateY(-1px);
 }
 
 /* Secondary Action (New Pill) styles if needed specific */

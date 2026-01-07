@@ -24,6 +24,15 @@ const EmptyState = ({
             <h3 className="empty-state-title">{title}</h3>
             <p className="empty-state-description">{description}</p>
 
+            <div className="empty-state-tips-box">
+                <p className="tips-header">Sugerencias para mejorar tu búsqueda:</p>
+                <ul className="tips-list">
+                    <li>Verifica que la referencia esté bien escrita.</li>
+                    <li>Intenta buscar solo por modelo (ej: "Mazda 3").</li>
+                    <li>Prueba con menos palabras clave.</li>
+                </ul>
+            </div>
+
             {onAction && (
                 <button onClick={onAction} className="empty-state-action">
                     <RefreshCcw size={18} />

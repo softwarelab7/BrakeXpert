@@ -1,3 +1,4 @@
+import React from 'react';
 import ProductCard from './ProductCard';
 import ProductCardSkeleton from './ProductCardSkeleton';
 import EmptyState from '../common/EmptyState';
@@ -78,15 +79,58 @@ const ProductGrid = ({
 
     // Results State
     const { gridDensity } = useAppStore(state => state.ui);
+    const [visibleCount, setVisibleCount] = React.useState(24);
+    const loadMoreRef = React.useRef<HTMLDivElement>(null);
+
+    // Reset visible count when products array changes (filters applied)
+    React.useEffect(() => {
+        setVisibleCount(24);
+    }, [products]);
+
+    // Infinite Scroll Observer
+    React.useEffect(() => {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                if (entries[0].isIntersecting && visibleCount < products.length) {
+                    setVisibleCount(prev => Math.min(prev + 24, products.length));
+                }
+            },
+            { threshold: 0.1, rootMargin: '100px' }
+        );
+
+        if (loadMoreRef.current) {
+            observer.observe(loadMoreRef.current);
+        }
+
+        return () => observer.disconnect();
+    }, [visibleCount, products.length]);
+
+    const visibleProducts = products.slice(0, visibleCount);
 
     return (
         <div
             className="results-wrapper"
             data-density={gridDensity}
         >
-            {products.map((product) => (
+            {visibleProducts.map((product) => (
                 <ProductCard key={product.id} product={product} />
             ))}
+
+            {/* Sentinel for Infinite Scroll */}
+            {visibleCount < products.length && (
+                <div
+                    ref={loadMoreRef}
+                    style={{
+                        gridColumn: '1 / -1',
+                        padding: '2rem',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        opacity: 0.5
+                    }}
+                >
+                    <div className="shimmer-effect" style={{ width: '200px', height: '4px', borderRadius: '2px' }} />
+                </div>
+            )}
         </div>
     );
 };

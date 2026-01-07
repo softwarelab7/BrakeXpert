@@ -97,6 +97,9 @@ export const normalizeProduct = (docId: string, data: any): Product => {
     // 4. Fallback for reference
     p.referencia = p.referencia || (p.ref && p.ref[0]) || 'SIN-REF';
 
+    // 5. Timestamp normalization
+    p.createdAt = p.createdAt || p.fecha_creacion || 0;
+
     return p as Product;
 };
 
