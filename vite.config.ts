@@ -4,7 +4,7 @@ import { VitePWA } from 'vite-plugin-pwa'
 
 // https://vite.dev/config/
 export default defineConfig(({ command }) => ({
-  base: command === 'build' ? '/BrakeXAlfa/' : '/',
+  base: command === 'build' ? '/BrakeXpert/' : '/',
 
   plugins: [
     react(),
@@ -20,8 +20,8 @@ export default defineConfig(({ command }) => ({
       },
       includeAssets: ['favicon.svg', 'favicon.ico', 'apple-touch-icon.png', 'masked-icon.svg'],
       manifest: {
-        name: 'Brake X Hub - Catálogo',
-        short_name: 'Brake X Hub',
+        name: 'Brake Xpert - Catálogo',
+        short_name: 'Brake Xpert',
         description: 'Consulta Rápida de Pastillas de Freno',
         theme_color: '#3b82f6',
         background_color: '#09090b',

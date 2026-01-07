@@ -18,4 +18,4 @@ Su objetivo principal es proporcionar a mecánicos, refaccionarias y especialist
 
 ---
 
-**Brake X Team**
+**Brake Xpert Team**
