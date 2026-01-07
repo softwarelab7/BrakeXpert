@@ -685,11 +685,12 @@
     align-items: center;
     justify-content: center;
     position: relative;
-    background: #fff;
-    /* Restored white background for technical drawings */
-    border-radius: 0.75rem;
-    /* Added radius for better look */
-    padding: 2rem;
+    background: transparent;
+    /* Removed white background per user request */
+    border-radius: 0;
+    /* Removed radius */
+    padding: 0;
+    /* Removed padding */
 }
 
 
