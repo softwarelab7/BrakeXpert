@@ -94,11 +94,18 @@ const ProductDetailModal = () => {
         if (r.endsWith('BP')) return 'ref-badge-gray';
         if (r.startsWith('K')) return 'ref-badge-red';
         if (r.endsWith('BEX')) return 'ref-badge-lightblue';
-        if (r.endsWith('SP')) return 'ref-badge-mint';
+        if (r.startsWith('SP')) return 'ref-badge-mint';
         return ''; // Default Blue
     };
 
 
+
+    // Helper to get brand logo path
+    const getBrandLogo = (brandName: string) => {
+        const normalized = brandName.toLowerCase().replace(/\s+/g, '-');
+        // Map specific discrepancies if needed, otherwise direct mapping
+        return `/brands/${normalized}.svg`;
+    };
 
     // Prepare all references (main + secondary) split by spaces, unique
     const allReferences = Array.from(new Set(
@@ -176,28 +183,40 @@ const ProductDetailModal = () => {
                             if (!acc[brand]) acc[brand] = [];
                             acc[brand].push(app);
                             return acc;
-                        }, {} as Record<string, typeof product.aplicaciones>)).sort((a, b) => a[0].localeCompare(b[0])).map(([brand, apps]) => (
-                            <div key={brand} className="brand-group">
-                                <h3 className="brand-header-in-list">{brand}</h3>
-                                <table className="app-table">
-                                    <tbody>
-                                        {apps.map((app, idx) => (
-                                            <tr key={idx}>
-                                                <td className="app-model">
-                                                    {app.modelo === app.serie ? app.modelo : `${app.modelo} ${app.serie}`.trim()}
-                                                </td>
-                                                <td className="app-year">{app.año}</td>
-                                                <td className={`app-pos ${app.posicion === 'TRASERA' ? 'text-red' :
-                                                    app.posicion === 'DELANTERA' ? 'text-blue' : 'text-purple'
-                                                    }`}>
-                                                    {app.posicion}
-                                                </td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </div>
-                        ))}
+                        }, {} as Record<string, typeof product.aplicaciones>)).sort((a, b) => a[0].localeCompare(b[0]))
+                            .map(([brand, apps]) => (
+                                <div key={brand} className="brand-group">
+                                    <h3 className="brand-header-in-list">
+                                        <img
+                                            src={getBrandLogo(brand)}
+                                            alt={brand}
+                                            className="brand-logo-icon"
+                                            onError={(e) => {
+                                                (e.target as HTMLImageElement).style.display = 'none';
+                                            }}
+                                        />
+                                        {brand}
+                                    </h3>
+
+                                    <table className="app-table">
+                                        <tbody>
+                                            {apps.map((app, idx) => (
+                                                <tr key={idx}>
+                                                    <td className="app-model">
+                                                        {app.modelo === app.serie ? app.modelo : `${app.modelo} ${app.serie}`.trim()}
+                                                    </td>
+                                                    <td className="app-year">{app.año}</td>
+                                                    <td className={`app-pos ${app.posicion === 'TRASERA' ? 'text-red' :
+                                                        app.posicion === 'DELANTERA' ? 'text-blue' : 'text-purple'
+                                                        }`}>
+                                                        {app.posicion}
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            ))}
                     </div>
 
                     {/* Specs Section */}

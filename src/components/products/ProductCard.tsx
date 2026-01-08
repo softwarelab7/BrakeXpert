@@ -104,7 +104,10 @@ const ProductCard = React.memo(({ product }: ProductCardProps) => {
         if (r.endsWith('BP')) return 'ref-badge-gray';
         if (r.startsWith('K')) return 'ref-badge-red';
         if (r.endsWith('BEX')) return 'ref-badge-lightblue';
-        if (r.endsWith('SP')) return 'ref-badge-mint';
+        if (r.startsWith('SP')) {
+            // console.log('Mint Badge Triggered for:', ref);
+            return 'ref-badge-mint';
+        }
         return ''; // Default Blue
     };
 

@@ -265,8 +265,9 @@
     border: none !important;
 }
 
-.ref-badge-mint {
+.ref-badge.ref-badge-mint {
     color: white !important;
+    background-color: #10b981 !important;
     background: #10b981 !important;
     /* Emerald 500 */
     border: none !important;

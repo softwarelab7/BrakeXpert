@@ -25,7 +25,7 @@ const ComparePage = () => {
         if (r.endsWith('BP')) return 'ref-badge-gray';
         if (r.startsWith('K')) return 'ref-badge-red';
         if (r.endsWith('BEX')) return 'ref-badge-lightblue';
-        if (r.endsWith('SP')) return 'ref-badge-mint';
+        if (r.startsWith('SP')) return 'ref-badge-mint';
         return ''; // Default Blue
     };
 

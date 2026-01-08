@@ -557,10 +557,20 @@
     border-bottom: 1px solid var(--border-color);
     /* Theme aware border */
     margin: 0 0 0.25rem 0;
-    display: block;
+    display: flex;
+    align-items: center;
     width: 100%;
     text-transform: uppercase;
     letter-spacing: 0.05em;
+}
+
+.brand-logo-icon {
+    height: 1.25rem;
+    width: auto;
+    max-width: 3rem;
+    margin-right: 0.5rem;
+    object-fit: contain;
+    display: block;
 }
 
 .brand-group:first-child .brand-header-in-list {
