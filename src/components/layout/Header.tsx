@@ -1,6 +1,8 @@
 import { Bell, HelpCircle } from 'lucide-react';
 import { useAppStore } from '../../store/useAppStore';
 import ThemeToggle from './ThemeToggle';
+import BugReportButton from '../common/BugReportButton';
+import StyledHeaderIconButton from '../common/StyledHeaderIconButton';
 import '../../styles/header.css';
 
 const Header = () => {
@@ -24,30 +26,23 @@ const Header = () => {
                 </div>
 
                 <div className="header-actions">
-                    <button
-                        className="icon-button animate-hover-pulse"
-                        title="Guía de uso"
-                        aria-label="Guía de uso"
+                    <BugReportButton />
+
+                    <StyledHeaderIconButton
+                        icon={<HelpCircle />}
+                        tooltip="Guía de uso"
                         onClick={openGuideModal}
-                    >
-                        <HelpCircle size={20} />
-                    </button>
+                    />
 
                     <ThemeToggle />
 
-
                     {window.location.hash !== '#compare' && (
-                        <button
-                            className="icon-button animate-hover-ring"
-                            title="Notificaciones"
-                            aria-label="Notificaciones"
+                        <StyledHeaderIconButton
+                            icon={<Bell />}
+                            tooltip="Notificaciones"
                             onClick={toggleNotificationPanel}
-                        >
-                            <Bell size={20} />
-                            {notificationCount > 0 && (
-                                <span className="notification-badge">{notificationCount}</span>
-                            )}
-                        </button>
+                            badgeCount={notificationCount}
+                        />
                     )}
                 </div>
             </div>

@@ -10,8 +10,11 @@ interface ProductCardProps {
 }
 
 const ProductCard = React.memo(({ product }: ProductCardProps) => {
-    const isFavorite = useAppStore(state => state.favorites.includes(product.id));
-    const isInComparison = useAppStore(state => state.comparisons.includes(product.id));
+    const favorites = useAppStore(state => state.favorites);
+    const comparisons = useAppStore(state => state.comparisons);
+
+    const isFavorite = favorites.includes(product.id);
+    const isInComparison = comparisons.includes(product.id);
 
     const toggleFavorite = useAppStore(state => state.toggleFavorite);
     const toggleComparison = useAppStore(state => state.toggleComparison);
