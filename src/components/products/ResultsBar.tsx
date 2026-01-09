@@ -1,4 +1,4 @@
-import { ArrowRightLeft, History, Grid3x3, LayoutGrid, Maximize, Zap, RefreshCw } from 'lucide-react';
+import { ArrowRightLeft, History, Grid3x3, LayoutGrid, Maximize, Zap } from 'lucide-react';
 import Bookmark from '../common/Bookmark';
 import { useAppStore } from '../../store/useAppStore';
 import '../../styles/results-bar.css';
@@ -14,7 +14,7 @@ const ResultsBar = ({ totalResults, currentStart, currentEnd }: ResultsBarProps)
     const comparisonsCount = useAppStore(state => state.comparisons.length);
     const favoritesCount = useAppStore(state => state.favorites.length);
     const toggleShowFavoritesOnly = useAppStore(state => state.toggleShowFavoritesOnly);
-    const toggleShowNewOnly = useAppStore(state => state.toggleShowNewOnly);
+
 
     const showFavoritesOnly = useAppStore(state => state.filters.showFavoritesOnly);
     const openHistoryPanel = useAppStore(state => state.openHistoryPanel);
