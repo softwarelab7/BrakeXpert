@@ -39,6 +39,7 @@ interface AppState {
     setWidth: (width: string) => void;
     setHeight: (height: string) => void;
     toggleShowFavoritesOnly: () => void;
+    toggleShowNewOnly: () => void;
     clearFilters: () => void;
 
     // Collection Actions
@@ -115,6 +116,7 @@ const initialFilters: Filters = {
     width: '',
     height: '',
     showFavoritesOnly: false,
+    showNewOnly: false,
 };
 
 const initialUIState: UIState = {
@@ -278,6 +280,16 @@ export const useAppStore = create<AppState>()(
             toggleShowFavoritesOnly: () =>
                 set((state) => {
                     const newFilters = { ...state.filters, showFavoritesOnly: !state.filters.showFavoritesOnly };
+                    return {
+                        filters: newFilters,
+                        filteredProducts: applyFilters(state.products, newFilters, state.favorites),
+                        ui: { ...state.ui, currentPage: 1 }
+                    };
+                }),
+
+            toggleShowNewOnly: () =>
+                set((state) => {
+                    const newFilters = { ...state.filters, showNewOnly: !state.filters.showNewOnly };
                     return {
                         filters: newFilters,
                         filteredProducts: applyFilters(state.products, newFilters, state.favorites),

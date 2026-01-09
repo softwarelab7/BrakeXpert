@@ -368,3 +368,18 @@
         display: none;
     }
 }
+
+/* New Button Gold Style */
+/* New Button Gold Style - Consistent with Compare/Favorite styles */
+.results-action-btn-new.active {
+    color: #f59e0b;
+    background: rgba(245, 158, 11, 0.15);
+    box-shadow: 0 0 15px rgba(245, 158, 11, 0.2);
+    border-color: transparent;
+}
+
+.results-action-btn-new.active:hover {
+    color: #f59e0b;
+    transform: translateY(-1px);
+    background: rgba(245, 158, 11, 0.25);
+}

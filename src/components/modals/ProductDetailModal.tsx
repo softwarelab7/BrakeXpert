@@ -100,13 +100,6 @@ const ProductDetailModal = () => {
 
 
 
-    // Helper to get brand logo path
-    const getBrandLogo = (brandName: string) => {
-        const normalized = brandName.toLowerCase().replace(/\s+/g, '-');
-        // Map specific discrepancies if needed, otherwise direct mapping
-        return `/brands/${normalized}.svg`;
-    };
-
     // Prepare all references (main + secondary) split by spaces, unique
     const allReferences = Array.from(new Set(
         [product.referencia, ...(product.ref || [])]
@@ -187,14 +180,6 @@ const ProductDetailModal = () => {
                             .map(([brand, apps]) => (
                                 <div key={brand} className="brand-group">
                                     <h3 className="brand-header-in-list">
-                                        <img
-                                            src={getBrandLogo(brand)}
-                                            alt={brand}
-                                            className="brand-logo-icon"
-                                            onError={(e) => {
-                                                (e.target as HTMLImageElement).style.display = 'none';
-                                            }}
-                                        />
                                         {brand}
                                     </h3>
 

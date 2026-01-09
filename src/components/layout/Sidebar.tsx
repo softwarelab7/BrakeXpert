@@ -6,6 +6,7 @@ import AnimatedSearch from '../common/AnimatedSearch';
 import SearchableSelect from '../common/SearchableSelect';
 import '../../styles/sidebar.css';
 
+
 const Sidebar = () => {
     const store = useAppStore();
     const [isMobileOpen, setIsMobileOpen] = useState(false);
@@ -281,6 +282,8 @@ const Sidebar = () => {
                             <span>Trasera</span>
                         </button>
                     </div>
+
+
                 </div>
 
                 <div className="filter-section">

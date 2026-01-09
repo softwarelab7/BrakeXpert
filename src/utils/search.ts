@@ -25,6 +25,61 @@ export const getSortableRefNumber = (refs: string[] | undefined): number => {
     return match ? parseInt(match[0], 10) : 999999;
 };
 
+/**
+ * Smart Year Parsing Logic
+ * Handles 2-digit and 4-digit years with a pivot for 2000s vs 1900s
+ */
+const CURRENT_YEAR = new Date().getFullYear();
+const CENTURY_PIVOT = (CURRENT_YEAR % 100) + 2; // e.g., 2026 -> 28. Years <= 28 are 20xx, > 28 are 19xx
+
+export const parseSmartYear = (input: string | number): number | null => {
+    if (!input) return null;
+    const clean = String(input).trim();
+    const num = parseInt(clean, 10);
+
+    if (isNaN(num)) return null;
+
+    // 4-digit year (simple validation)
+    if (clean.length === 4) {
+        return num;
+    }
+
+    // 2-digit year
+    if (clean.length <= 2) {
+        return num <= CENTURY_PIVOT ? 2000 + num : 1900 + num;
+    }
+
+    return null;
+};
+
+export const parseYearRange = (rangeStr: string): [number, number] | null => {
+    // Standardize separators: 05-25, 05/25, 05 25
+    const parts = rangeStr.split(/[-/\s]+/).filter(Boolean);
+
+    // Check for "05 en adelante" or similar single-ended ranges could be future work
+    // For now handles explicit start-end
+    if (parts.length >= 2) {
+        const start = parseSmartYear(parts[0]);
+        let end = parseSmartYear(parts[1]);
+
+        if (start !== null) {
+            // Handle cases like "2005-presente" or just missing end by defaulting/ignoring if invalid
+            // But if end is null, maybe treating as 'current year' or just strict match? 
+            // Logic: If second part is valid year, use it. If not, if it says 'adelante', use current year.
+            // For safety in this strict task, if end is invalid, we might skip range logic or treat as start-start.
+            // Let's assume standard "05-25" format essentially.
+
+            if (end === null) {
+                // Try to detect keywords like 'adelante' could be added here, 
+                // but for now let's recover if 2nd part looks numeric
+                return null;
+            }
+            return [start, end];
+        }
+    }
+    return null;
+};
+
 interface FilterContext {
     favorites?: string[];
 }
@@ -100,8 +155,41 @@ export const FILTER_STRATEGIES: Record<string, (item: Product, value: any, conte
     selectedYear: (item, value) => {
         if (!value) return true;
         if (!item.aplicaciones || !Array.isArray(item.aplicaciones)) return false;
-        const strValue = String(value);
-        return item.aplicaciones.some(app => app && String(app.año || '').includes(strValue));
+
+        const searchValue = String(value).trim();
+        const searchYear = parseSmartYear(searchValue);
+
+        // Logical Check: If we parsed a valid year, use smart matching
+        if (searchYear !== null) {
+            return item.aplicaciones.some(app => {
+                if (!app || !app.año) return false;
+                const appYearStr = String(app.año);
+
+                // 1. Try exact match on full string first (simple case)
+                if (appYearStr.includes(searchValue)) return true;
+
+                // 2. Parse application year/range
+                // Check if it's a range
+                const range = parseYearRange(appYearStr);
+                if (range) {
+                    const [start, end] = range;
+                    // Check if search year is within params
+                    // Swap if start > end (handle 99-05 context if needed, but simple compare is safer)
+                    return searchYear >= Math.min(start, end) && searchYear <= Math.max(start, end);
+                }
+
+                // Check if it's a single year
+                const appYear = parseSmartYear(appYearStr);
+                if (appYear !== null) {
+                    return appYear === searchYear;
+                }
+
+                return false;
+            });
+        }
+
+        // Fallback: Text search (original behavior)
+        return item.aplicaciones.some(app => app && String(app.año || '').includes(searchValue));
     },
 
     // Technical Filters
@@ -184,6 +272,13 @@ export const FILTER_STRATEGIES: Record<string, (item: Product, value: any, conte
         return passes;
     },
 
-    // Favorites
-    showFavoritesOnly: (item, value, context) => !value || (context && context.favorites ? context.favorites.includes(item.id) : false)
+    // Favorites & New
+    showFavoritesOnly: (item, value, context) => !value || (context && context.favorites ? context.favorites.includes(item.id) : false),
+
+    // New Products (Created within last 15 days)
+    showNewOnly: (item, value) => {
+        if (!value) return true;
+        // Check if created in last 15 days
+        return !!item.createdAt && (Date.now() - item.createdAt) < (15 * 24 * 60 * 60 * 1000);
+    }
 };

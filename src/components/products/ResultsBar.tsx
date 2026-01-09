@@ -1,4 +1,4 @@
-import { ArrowRightLeft, History, Grid3x3, LayoutGrid, Maximize } from 'lucide-react';
+import { ArrowRightLeft, History, Grid3x3, LayoutGrid, Maximize, Zap } from 'lucide-react';
 import Bookmark from '../common/Bookmark';
 import { useAppStore } from '../../store/useAppStore';
 import '../../styles/results-bar.css';
@@ -93,6 +93,14 @@ const ResultsBar = ({ totalResults, currentStart, currentEnd }: ResultsBarProps)
 
                 {/* Tools Group */}
                 <div className="tools-group">
+                    <button
+                        className={`results-action-btn results-action-btn-new animate-hover-beat ${useAppStore(state => state.filters.showNewOnly) ? 'active' : ''}`}
+                        onClick={() => useAppStore.getState().toggleShowNewOnly()}
+                        title="Ver solo nuevos"
+                    >
+                        <Zap strokeWidth={1.5} />
+                    </button>
+
                     <button
                         className={`results-action-btn results-action-btn-compare animate-hover-swap ${comparisonsCount > 0 ? 'active' : ''}`}
                         onClick={() => window.location.hash = 'compare'}

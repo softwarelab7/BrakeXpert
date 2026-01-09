@@ -38,6 +38,7 @@ export interface Filters {
   width: string;
   height: string;
   showFavoritesOnly: boolean;
+  showNewOnly: boolean;
 }
 
 // Theme Types
