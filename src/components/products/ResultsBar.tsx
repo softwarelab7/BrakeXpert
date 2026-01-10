@@ -1,8 +1,8 @@
-import { ArrowRightLeft, History, Grid3x3, LayoutGrid, Maximize, Zap } from 'lucide-react';
-import Bookmark from '../common/Bookmark';
+import { ArrowRightLeft, History, Grid3x3, LayoutGrid, Maximize, Zap, Bookmark } from 'lucide-react';
 import { useAppStore } from '../../store/useAppStore';
 import '../../styles/results-bar.css';
 import CustomSelect from '../common/CustomSelect';
+import StyledIconButton from '../common/StyledIconButton';
 
 interface ResultsBarProps {
     totalResults: number;
@@ -21,6 +21,7 @@ const ResultsBar = ({ totalResults, currentStart, currentEnd }: ResultsBarProps)
     const { itemsPerPage, gridDensity } = useAppStore(state => state.ui);
     const setItemsPerPage = useAppStore(state => state.setItemsPerPage);
     const setGridDensity = useAppStore(state => state.setGridDensity);
+    const showNewOnly = useAppStore(state => state.filters.showNewOnly);
 
     const handleItemsPerPageChange = (newValue: number) => {
         setItemsPerPage(Number(newValue));
@@ -95,53 +96,37 @@ const ResultsBar = ({ totalResults, currentStart, currentEnd }: ResultsBarProps)
 
                 {/* Tools Group */}
                 <div className="tools-group">
-                    <button
-                        className={`results-action-btn results-action-btn-new animate-hover-beat ${useAppStore(state => state.filters.showNewOnly) ? 'active' : ''}`}
+                    <StyledIconButton
+                        icon={<Zap />}
+                        tooltip="Ver solo nuevos"
                         onClick={() => useAppStore.getState().toggleShowNewOnly()}
-                        title="Ver solo nuevos"
-                    >
-                        <Zap strokeWidth={1.5} />
-                    </button>
+                        isActive={showNewOnly}
+                        activeColor="#f59e0b" // Gold for specific active state
+                    />
 
-                    <button
-                        className={`results-action-btn results-action-btn-compare animate-hover-swap ${comparisonsCount > 0 ? 'active' : ''}`}
+                    <StyledIconButton
+                        icon={<ArrowRightLeft />}
+                        tooltip="Comparar productos"
                         onClick={() => window.location.hash = 'compare'}
-                        title="Comparar productos"
-                    >
-                        <ArrowRightLeft size={16} />
-                        {comparisonsCount > 0 && (
-                            <span className="action-badge badge-compare">
-                                {comparisonsCount}
-                            </span>
-                        )}
-                    </button>
+                        isActive={comparisonsCount > 0}
+                        activeColor="#9333ea" // Purple
+                        badgeCount={comparisonsCount}
+                    />
 
-                    <button
-                        className={`results-action-btn animate-hover-beat ${showFavoritesOnly ? 'active' : ''}`}
+                    <StyledIconButton
+                        icon={<Bookmark fill={showFavoritesOnly ? "currentColor" : "none"} />}
+                        tooltip={showFavoritesOnly ? "Ver todos los resultados" : "Ver solo favoritos"}
                         onClick={toggleShowFavoritesOnly}
-                        title={showFavoritesOnly ? "Ver todos los resultados" : "Ver solo favoritos"}
-                    >
-                        <div style={{ pointerEvents: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                            <Bookmark
-                                checked={showFavoritesOnly}
-                                onChange={() => { }}
-                                strokeWidth={1.5}
-                            />
-                        </div>
-                        {favoritesCount > 0 && (
-                            <span className="action-badge badge-favorite">
-                                {favoritesCount}
-                            </span>
-                        )}
-                    </button>
+                        isActive={showFavoritesOnly}
+                        activeColor="#3b82f6" // Blue
+                        badgeCount={favoritesCount}
+                    />
 
-                    <button
-                        className="results-action-btn animate-hover-history"
+                    <StyledIconButton
+                        icon={<History />}
+                        tooltip="Historial de búsquedas"
                         onClick={openHistoryPanel}
-                        title="Historial de búsquedas"
-                    >
-                        <History strokeWidth={1.5} />
-                    </button>
+                    />
                 </div>
             </div>
         </div>

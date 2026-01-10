@@ -1,9 +1,10 @@
 import React from 'react';
-import Bookmark from '../common/Bookmark';
-import { ArrowRightLeft, ImageOff } from 'lucide-react';
+import { ArrowRightLeft, ImageOff, Bookmark } from 'lucide-react';
 import { useAppStore } from '../../store/useAppStore';
 import type { Product } from '../../types';
 import '../../styles/product-card.css';
+
+import StyledIconButton from '../common/StyledIconButton';
 
 interface ProductCardProps {
     product: Product;
@@ -128,23 +129,23 @@ const ProductCard = React.memo(({ product }: ProductCardProps) => {
                 <span className={`position-badge ${positionInfo.className}`}>
                     {positionInfo.display}
                 </span>
-                <div className="action-icons">
-                    <div
-                        className={`action-icon action-icon-compare animate-hover-swap ${isInComparison ? 'active' : ''}`}
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            toggleComparison(product.id);
-                        }}
-                    >
-                        <ArrowRightLeft strokeWidth={1.5} />
-                    </div>
-                    <div className={`action-icon action-icon-favorite animate-hover-beat ${isFavorite ? 'active' : ''}`}>
-                        <Bookmark
-                            checked={isFavorite}
-                            onChange={() => toggleFavorite(product.id)}
-                            strokeWidth={1.5}
-                        />
-                    </div>
+                <div className="action-icons" onClick={(e) => e.stopPropagation()}>
+                    <StyledIconButton
+                        icon={<ArrowRightLeft />}
+                        tooltip={isInComparison ? "Quitar de comparar" : "Comparar"}
+                        onClick={() => toggleComparison(product.id)}
+                        isActive={isInComparison}
+                        activeColor="#9333ea"
+                        size="small"
+                    />
+                    <StyledIconButton
+                        icon={<Bookmark fill={isFavorite ? "currentColor" : "none"} />}
+                        tooltip={isFavorite ? "Quitar de favoritos" : "Guardar favorito"}
+                        onClick={() => toggleFavorite(product.id)}
+                        isActive={isFavorite}
+                        activeColor="#3b82f6"
+                        size="small"
+                    />
                 </div>
             </div>
 

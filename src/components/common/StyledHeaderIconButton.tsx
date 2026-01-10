@@ -2,25 +2,25 @@ import React from 'react';
 import styled from 'styled-components';
 
 interface StyledHeaderIconButtonProps {
-    onClick: () => void;
-    tooltip: string;
-    icon: React.ReactNode;
-    badgeCount?: number;
-    className?: string; // For any extra spacing if needed
+  onClick: () => void;
+  tooltip: string;
+  icon: React.ReactNode;
+  badgeCount?: number;
+  className?: string; // For any extra spacing if needed
 }
 
 const StyledHeaderIconButton = ({ onClick, tooltip, icon, badgeCount, className }: StyledHeaderIconButtonProps) => {
-    return (
-        <StyledWrapper className={className}>
-            <button className="HeaderButton" onClick={onClick}>
-                {icon}
-                {badgeCount !== undefined && badgeCount > 0 && (
-                    <span className="badge">{badgeCount}</span>
-                )}
-                <span className="tooltip">{tooltip}</span>
-            </button>
-        </StyledWrapper>
-    );
+  return (
+    <StyledWrapper className={className}>
+      <button className="HeaderButton" onClick={onClick}>
+        {icon}
+        {badgeCount !== undefined && badgeCount > 0 && (
+          <span className="badge">{badgeCount}</span>
+        )}
+        <span className="tooltip">{tooltip}</span>
+      </button>
+    </StyledWrapper>
+  );
 };
 
 const StyledWrapper = styled.div`
@@ -105,21 +105,23 @@ const StyledWrapper = styled.div`
   /* Badge Styling */
   .badge {
     position: absolute;
-    top: 2px;
-    right: 2px;
-    background-color: var(--accent-primary, #3b82f6);
+    top: -4px;
+    right: -4px;
+    background-color: #ef4444; /* Red for notifications */
     color: white;
-    font-size: 0.65rem;
+    font-size: 0.7rem;
     font-weight: 700;
-    min-width: 16px;
-    height: 16px;
-    border-radius: 9999px;
+    width: 18px;
+    height: 18px;
+    min-width: 18px;
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0 4px;
+    padding: 0;
+    line-height: 1;
     pointer-events: none;
-    box-shadow: 0 0 0 2px var(--bg-primary, #fff); /* border effect */
+    box-shadow: none;
   }
 `;
 

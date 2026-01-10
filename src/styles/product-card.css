@@ -128,42 +128,10 @@
 
 .action-icons {
     display: flex;
-    gap: var(--icon-gap, 0.5rem);
-    /* Reverted to simple layout */
+    gap: 0.15rem;
 }
 
-.action-icon {
-    background: none;
-    border: none;
-    padding: 0;
-    color: var(--text-primary);
-    cursor: pointer;
-    transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
 
-.action-icon svg {
-    width: var(--icon-size, 0.75rem) !important;
-    height: var(--icon-size, 0.75rem) !important;
-}
-
-.action-icon:hover {
-    color: var(--accent-primary);
-}
-
-.action-icon:active {
-    transform: scale(0.85);
-}
-
-.action-icon.active {
-    color: var(--accent-primary);
-}
-
-.action-icon-compare.active {
-    color: #9333ea;
-}
 
 /* Image Container */
 .image-container {
