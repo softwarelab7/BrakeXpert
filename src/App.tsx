@@ -17,6 +17,7 @@ import AdminPanel from './components/admin/AdminPanel';
 import ComparePage from './components/pages/ComparePage';
 import ReloadPrompt from './components/ReloadPrompt';
 import ScrollToTop from './components/common/ScrollToTop';
+import Toast from './components/common/Toast';
 import './styles/global.css';
 import './styles/app.css';
 
@@ -190,7 +191,9 @@ function App() {
           <Footer />
 
           <ScrollToTop />
+          <ScrollToTop />
           <NotificationPanel />
+          <Toast />
           <ReloadPrompt />
 
           {/* Modals */}

@@ -2,6 +2,7 @@ import React from 'react';
 import { useAppStore } from '../store/useAppStore';
 import { X, History, Clock, Search, Trash2 } from 'lucide-react';
 import type { Filters } from '../types';
+import StyledIconButton from './common/StyledIconButton';
 import '../styles/history-panel.css';
 
 const HistoryPanel: React.FC = () => {
@@ -43,19 +44,21 @@ const HistoryPanel: React.FC = () => {
                         <History size={20} className="header-icon" />
                         <h2 className="history-panel-title">Historial</h2>
                     </div>
-                    <div className="header-actions">
+                    <div className="header-actions" style={{ display: 'flex', gap: '8px' }}>
                         {searchHistory.length > 0 && (
-                            <button
+                            <StyledIconButton
+                                icon={<Trash2 />}
                                 onClick={clearSearchHistory}
-                                className="history-action-btn delete"
-                                title="Limpiar historial"
-                            >
-                                <Trash2 size={18} />
-                            </button>
+                                tooltip="Limpiar historial"
+                                activeColor="#ef4444"
+                            />
                         )}
-                        <button onClick={closeHistoryPanel} className="history-action-btn close" title="Cerrar">
-                            <X size={24} />
-                        </button>
+                        <StyledIconButton
+                            icon={<X />}
+                            onClick={closeHistoryPanel}
+                            tooltip="Cerrar"
+                            activeColor="#ef4444"
+                        />
                     </div>
                 </header>
 

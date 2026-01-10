@@ -1,8 +1,8 @@
-import { X, ArrowRightLeft, ImageOff } from 'lucide-react';
+import { X, ArrowRightLeft, ImageOff, Bookmark } from 'lucide-react';
 import React from 'react';
 import { useAppStore } from '../../store/useAppStore';
 import Modal from './Modal';
-import Bookmark from '../common/Bookmark';
+import StyledIconButton from '../common/StyledIconButton';
 import '../../styles/modals.css';
 
 
@@ -123,31 +123,27 @@ const ProductDetailModal = () => {
         >
             <div className="detail-layout">
                 {/* Top Right Actions Toolbar */}
-                <div className="modal-actions-toolbar">
-                    <button
-                        className={`action-btn-toolbar ${isComparing ? 'active' : ''}`}
+                <div className="modal-actions-toolbar" style={{ display: 'flex', gap: '0.5rem' }}>
+                    <StyledIconButton
+                        icon={<ArrowRightLeft />}
+                        tooltip={isComparing ? "Quitar de comparar" : "Comparar"}
                         onClick={() => toggleComparison(product.id)}
-                        title={isComparing ? "Quitar de comparar" : "Comparar"}
-                    >
-                        <ArrowRightLeft size={22} />
-                    </button>
-                    <button
-                        className={`action-btn-toolbar ${isFavorite ? 'active' : ''}`}
-                        title={isFavorite ? "Quitar de favoritos" : "Guardar"}
-                    >
-                        <Bookmark
-                            checked={isFavorite}
-                            onChange={() => toggleFavorite(product.id)}
-                            size={22}
-                        />
-                    </button>
-                    <button
-                        className="close-btn-toolbar"
+                        isActive={isComparing}
+                        activeColor="#8b5cf6" // Violet/Purple for compare
+                    />
+                    <StyledIconButton
+                        icon={<Bookmark fill={isFavorite ? "currentColor" : "none"} />}
+                        tooltip={isFavorite ? "Quitar de favoritos" : "Guardar"}
+                        onClick={() => toggleFavorite(product.id)}
+                        isActive={isFavorite}
+                        activeColor="#3b82f6" // Blue for favorite per user request
+                    />
+                    <StyledIconButton
+                        icon={<X />}
+                        tooltip="Cerrar"
                         onClick={closeProductDetailModal}
-                        title="Cerrar"
-                    >
-                        <X size={24} />
-                    </button>
+                        activeColor="#ef4444" // Red on hover/active
+                    />
                 </div>
 
                 {/* Left Column: Information */}

@@ -119,67 +119,7 @@
     background-size: 0.8rem;
 }
 
-/* Position Pills (Filtros de Posición) - New Premium Style */
-.position-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0.8rem;
-    margin-top: 0.2rem;
-}
 
-.position-pill {
-    height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: var(--bg-tertiary);
-    border: 1px solid var(--border-primary);
-    border-radius: 45px;
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    /* Adjusted from 2.5px for sidebar width */
-    font-weight: 600;
-    color: var(--text-primary);
-    box-shadow: var(--shadow-sm);
-    transition: all 0.3s ease 0s;
-    cursor: pointer;
-    outline: none;
-    padding: 0 1rem;
-}
-
-.position-pill:active {
-    transform: translateY(-1px);
-}
-
-/* Specific Colors: Blue for Delantera */
-.position-pill.pill-blue.active {
-    background-color: #3b82f6;
-    box-shadow: 0px 15px 20px rgba(59, 130, 246, 0.4);
-    color: #fff;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-/* Specific Colors: Red for Trasera */
-.position-pill.pill-red.active {
-    background-color: #ef4444;
-    box-shadow: 0px 15px 20px rgba(239, 68, 68, 0.4);
-    color: #fff;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-/* Mixed Colors: Purple when both are active */
-/* Mixed Colors: Purple when both are active */
-.position-pill.both-active {
-    background: linear-gradient(90deg,
-            #3b82f6 0%,
-            #8b5cf6 50%,
-            #ef4444 100%) !important;
-    border: none !important;
-    /* Purple (Blend of Blue and Red) */
-    box-shadow: 0px 15px 20px rgba(147, 51, 234, 0.4) !important;
-    color: #fff !important;
-}
 
 /* Grid Layouts for Refs & Measurements */
 .references-grid,
@@ -300,66 +240,37 @@
     margin-top: 1rem;
 }
 
-.borrar-filtros-red {
-    border: none;
-    display: block;
-    position: relative;
-    padding: 0.65em 2em;
-    font-size: 13px;
-    background: transparent;
-    cursor: pointer;
-    user-select: none;
-    overflow: hidden;
-    color: var(--color-danger);
-    z-index: 1;
-    font-family: inherit;
-    font-weight: 700;
-    border-radius: 50px;
-    width: 100%;
+/* StyledIconButton disabled state override if needed, or let component handle it. 
+   React styles usually handle opacity, but let's ensure .disabled class works */
+/* Trash Icon Animation */
+.trash-hover .IconButton:hover svg {
+    animation: trash-shake 0.5s ease-in-out infinite;
+    color: #ef4444;
+    /* Force red on hover */
 }
 
-.borrar-filtros-red.disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    filter: grayscale(1);
-    pointer-events: none;
-}
+@keyframes trash-shake {
+    0% {
+        transform: rotate(0deg);
+    }
 
-.borrar-filtros-red span {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background: transparent;
-    z-index: -1;
-    border: 3px solid var(--color-danger);
-    border-radius: 50px;
-}
+    20% {
+        transform: rotate(-15deg);
+    }
 
-.borrar-filtros-red span::before {
-    content: "";
-    display: block;
-    position: absolute;
-    width: 20%;
-    height: 2000%;
-    background: transparent;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) rotate(-60deg);
-    transition: transform 0.6s cubic-bezier(0.3, 1, 0.2, 1), background 0.6s ease;
-}
+    40% {
+        transform: rotate(15deg);
+    }
 
-.borrar-filtros-red:hover:not(.disabled) span::before {
-    transform: translate(-50%, -50%) rotate(-90deg);
-    width: 100%;
-    background: var(--color-danger);
-}
+    60% {
+        transform: rotate(-10deg);
+    }
 
-.borrar-filtros-red:hover:not(.disabled) {
-    color: white;
-}
+    80% {
+        transform: rotate(10deg);
+    }
 
-.borrar-filtros-red:active:not(.disabled) span::before {
-    background: #dc2626;
+    100% {
+        transform: rotate(0deg);
+    }
 }

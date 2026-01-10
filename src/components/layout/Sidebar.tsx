@@ -4,6 +4,8 @@ import { useAppStore } from '../../store/useAppStore';
 import type { Product } from '../../types';
 import AnimatedSearch from '../common/AnimatedSearch';
 import SearchableSelect from '../common/SearchableSelect';
+import StyledIconButton from '../common/StyledIconButton';
+import { ArrowUp, ArrowDown, Trash2 } from 'lucide-react';
 import '../../styles/sidebar.css';
 
 
@@ -260,27 +262,23 @@ const Sidebar = () => {
                     <div className="section-header">
                         <h3 className="filter-section-title">Posición</h3>
                     </div>
-                    <div className="position-grid">
-                        <button
-                            className={`position-pill pill-blue ${filters.selectedPositions.includes('delantera') ? 'active' : ''
-                                } ${filters.selectedPositions.includes('delantera') && filters.selectedPositions.includes('trasera') ? 'both-active' : ''
-                                }`}
-                            onClick={() => {
-                                store.togglePosition('delantera');
-                            }}
-                        >
-                            <span>Delantera</span>
-                        </button>
-                        <button
-                            className={`position-pill pill-red ${filters.selectedPositions.includes('trasera') ? 'active' : ''
-                                } ${filters.selectedPositions.includes('delantera') && filters.selectedPositions.includes('trasera') ? 'both-active' : ''
-                                }`}
-                            onClick={() => {
-                                store.togglePosition('trasera');
-                            }}
-                        >
-                            <span>Trasera</span>
-                        </button>
+                    <div className="position-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.8rem' }}>
+                        <StyledIconButton
+                            icon={<ArrowUp />}
+                            tooltip="Delantera"
+                            label="Delantera"
+                            onClick={() => store.togglePosition('delantera')}
+                            isActive={filters.selectedPositions.includes('delantera')}
+                            activeColor="#3b82f6"
+                        />
+                        <StyledIconButton
+                            icon={<ArrowDown />}
+                            tooltip="Trasera"
+                            label="Trasera"
+                            onClick={() => store.togglePosition('trasera')}
+                            isActive={filters.selectedPositions.includes('trasera')}
+                            activeColor="#ef4444"
+                        />
                     </div>
 
 
@@ -340,15 +338,16 @@ const Sidebar = () => {
                     </div>
                 </div>
 
-                <div className="borrar-filtros-container">
-                    <button
+                <div className="borrar-filtros-container" style={{ display: 'flex', justifyContent: 'center' }}>
+                    <StyledIconButton
+                        icon={<Trash2 />}
+                        tooltip="Borrar Filtros"
+                        label="BORRAR FILTROS"
                         onClick={clearFilters}
-                        disabled={!hasActiveFilters}
-                        className={`borrar-filtros-red ${!hasActiveFilters ? 'disabled' : ''}`}
-                    >
-                        BORRAR FILTROS
-                        <span />
-                    </button>
+                        isActive={hasActiveFilters}
+                        activeColor="#ef4444"
+                        className={`${!hasActiveFilters ? 'disabled' : ''} trash-hover`}
+                    />
                 </div>
             </aside>
         </>

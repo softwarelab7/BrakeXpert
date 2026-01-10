@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { X, AlertTriangle } from 'lucide-react';
 import { useAppStore } from '../../store/useAppStore';
 import { addReport } from '../../services/firebase';
+import StyledIconButton from '../common/StyledIconButton';
 import '../../styles/modals.css';
 
 interface ReportErrorModalProps {
@@ -56,9 +57,14 @@ const ReportErrorModal: React.FC<ReportErrorModalProps> = ({ product }) => {
     return (
         <div className="modal-overlay" style={{ zIndex: 1100 }}> {/* Higher z-index to sit above details */}
             <div className="modal-content" style={{ maxWidth: '500px' }}>
-                <button className="modal-close" onClick={closeReportModal}>
-                    <X size={24} />
-                </button>
+                <div style={{ position: 'absolute', top: '1rem', right: '1rem', zIndex: 10 }}>
+                    <StyledIconButton
+                        icon={<X />}
+                        onClick={closeReportModal}
+                        tooltip="Cerrar"
+                        activeColor="#ef4444"
+                    />
+                </div>
 
                 <div className="modal-header">
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>

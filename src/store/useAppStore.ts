@@ -66,6 +66,10 @@ interface AppState {
     closeReportModal: () => void;
     addNotification: (notification: Omit<UIState['notifications'][0], 'id' | 'timestamp' | 'read'>) => void;
 
+    // Toast Notification
+    toast: { id: string; title?: string; message: string; type: 'success' | 'error' | 'info' | 'warning' } | null;
+    hideToast: () => void;
+
     // Notification Panel
     isNotificationPanelOpen: boolean;
     toggleNotificationPanel: () => void;
@@ -147,6 +151,9 @@ export const useAppStore = create<AppState>()(
             isNotificationPanelOpen: false,
             toggleNotificationPanel: () => set((state) => ({ isNotificationPanelOpen: !state.isNotificationPanelOpen })),
             closeNotificationPanel: () => set({ isNotificationPanelOpen: false }),
+
+            toast: null,
+            hideToast: () => set({ toast: null }),
 
             notificationMessage: null,
             pwaUpdateAvailable: false,
@@ -305,7 +312,10 @@ export const useAppStore = create<AppState>()(
                 })),
 
             // Collection Actions
-            toggleFavorite: (id) =>
+            toggleFavorite: (id) => {
+                const state = get();
+                const isAdding = !state.favorites.includes(id);
+
                 set((state) => {
                     const favorites = state.favorites.includes(id)
                         ? state.favorites.filter((fav) => fav !== id)
@@ -317,7 +327,20 @@ export const useAppStore = create<AppState>()(
                         : state.filteredProducts;
 
                     return { favorites, filteredProducts };
-                }),
+                });
+
+                // Trigger Notification
+                const product = get().products.find(p => p.id === id);
+                const ref = product ? (product.referencia || product.ref?.[0] || id) : id;
+
+                get().addNotification({
+                    type: isAdding ? 'success' : 'info',
+                    title: isAdding ? 'Favorito Agregado' : 'Favorito Eliminado',
+                    message: isAdding
+                        ? `Se ha añadido la referencia ${ref} a favoritos.`
+                        : `Se ha eliminado la referencia ${ref} de favoritos.`
+                });
+            },
 
             toggleComparison: (id) =>
                 set((state) => {
@@ -436,11 +459,32 @@ export const useAppStore = create<AppState>()(
                     };
                     // Keep only last 50 notifications
                     const notifications = [newNotification, ...state.ui.notifications].slice(0, 50);
+
+                    // Show toast for the new notification
+                    const toast = {
+                        id: newNotification.id,
+                        title: newNotification.title,
+                        message: newNotification.message,
+                        type: newNotification.type === 'error' ? 'error' : 'info' as const // Types might not match perfectly, simplified mapping
+                    };
+
+                    // Improve type mapping if needed based on usage
+                    let toastType: 'success' | 'error' | 'info' | 'warning' = 'info';
+                    if (notification.type === 'success') toastType = 'success';
+                    if (notification.type === 'error') toastType = 'error';
+                    if (notification.type === 'warning') toastType = 'warning';
+
                     return {
                         ui: {
                             ...state.ui,
                             notifications,
                         },
+                        toast: {
+                            id: newNotification.id,
+                            title: newNotification.title,
+                            message: newNotification.message,
+                            type: toastType
+                        }
                     };
                 }),
 

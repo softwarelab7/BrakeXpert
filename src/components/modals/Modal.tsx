@@ -1,6 +1,7 @@
 import { X } from 'lucide-react';
 import { useEffect, useState, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
+import StyledIconButton from '../common/StyledIconButton';
 import '../../styles/modals.css';
 
 interface ModalProps {
@@ -76,13 +77,12 @@ const Modal = ({ isOpen, onClose, title, children, size = 'default', hideHeader 
                 {!hideHeader && (
                     <div className="modal-header">
                         <h2 id="modal-title" className="modal-title">{title}</h2>
-                        <button
-                            className="modal-close-btn"
+                        <StyledIconButton
+                            icon={<X />}
                             onClick={onClose}
-                            aria-label="Cerrar modal"
-                        >
-                            <X size={24} />
-                        </button>
+                            tooltip="Cerrar"
+                            activeColor="#ef4444"
+                        />
                     </div>
                 )}
 

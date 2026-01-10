@@ -1,6 +1,7 @@
 import React from 'react';
 import { useAppStore } from '../store/useAppStore';
 import { X, Bell, Check, Trash2 } from 'lucide-react';
+import StyledIconButton from './common/StyledIconButton';
 import '../styles/update-notification.css';
 
 export const NotificationPanel: React.FC = () => {
@@ -24,18 +25,19 @@ export const NotificationPanel: React.FC = () => {
                     <h2 className="notification-title">Notificaciones</h2>
                     <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
                         {notifications.length > 0 && (
-                            <button
+                            <StyledIconButton
+                                icon={<Trash2 />}
                                 onClick={clearAllNotifications}
-                                className="close-btn"
-                                title="Limpiar todo"
-                                style={{ color: '#ef4444' }}
-                            >
-                                <Trash2 size={20} />
-                            </button>
+                                tooltip="Limpiar todo"
+                                activeColor="#ef4444"
+                            />
                         )}
-                        <button onClick={closeNotificationPanel} className="close-btn" title="Cerrar">
-                            <X size={24} />
-                        </button>
+                        <StyledIconButton
+                            icon={<X />}
+                            onClick={closeNotificationPanel}
+                            tooltip="Cerrar"
+                            activeColor="#ef4444"
+                        />
                     </div>
                 </header>
 

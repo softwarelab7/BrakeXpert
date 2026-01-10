@@ -9,7 +9,8 @@ interface StyledIconButtonProps {
   className?: string;
   isActive?: boolean;
   activeColor?: string;
-  size?: 'small' | 'default'; // New prop
+  size?: 'small' | 'default';
+  label?: string; // New prop for generic text support
 }
 
 const StyledIconButton = ({
@@ -20,36 +21,58 @@ const StyledIconButton = ({
   className,
   isActive = false,
   activeColor,
-  size = 'default'
+  size = 'default',
+  label
 }: StyledIconButtonProps) => {
   return (
-    <StyledWrapper className={className} $isActive={isActive} $activeColor={activeColor} $size={size}>
+    <StyledWrapper
+      className={className}
+      $isActive={isActive}
+      $activeColor={activeColor}
+      $size={size}
+      $hasLabel={!!label}
+    >
       <button className="IconButton" onClick={onClick}>
         {icon}
+        {label && <span className="label-text">{label}</span>}
         {badgeCount !== undefined && badgeCount > 0 && (
           <span className="badge">{badgeCount}</span>
         )}
-        <span className="tooltip">{tooltip}</span>
+        {!label && <span className="tooltip">{tooltip}</span>}
       </button>
     </StyledWrapper>
   );
 };
 
-const StyledWrapper = styled.div<{ $isActive: boolean; $activeColor?: string; $size: 'small' | 'default' }>`
+const StyledWrapper = styled.div<{
+  $isActive: boolean;
+  $activeColor?: string;
+  $size: 'small' | 'default';
+  $hasLabel: boolean;
+}>`
   .IconButton {
-    width: ${props => props.$size === 'small' ? '32px' : '40px'};
+    width: ${props => props.$hasLabel ? '100%' : (props.$size === 'small' ? '32px' : '40px')};
     height: ${props => props.$size === 'small' ? '32px' : '40px'};
     display: flex;
-    flex-direction: column;
+    flex-direction: ${props => props.$hasLabel ? 'row' : 'column'};
     align-items: center;
     justify-content: center;
-    gap: 3px;
+    gap: ${props => props.$hasLabel ? '8px' : '3px'};
     background-color: ${props => props.$isActive ? (props.$activeColor ? `${props.$activeColor}20` : 'rgba(61, 41, 71, 0.1)') : 'transparent'};
-    border: none;
+    border: ${props => props.$hasLabel ? '1px solid var(--border-primary)' : 'none'};
+    border-color: ${props => props.$isActive && props.$hasLabel ? (props.$activeColor || 'var(--accent-primary)') : 'var(--border-primary)'};
     border-radius: 8px;
     cursor: pointer;
     transition: all 0.2s;
     position: relative;
+    padding: ${props => props.$hasLabel ? '0 12px' : '0'};
+  }
+
+  .label-text {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: ${props => props.$isActive ? (props.$activeColor || 'var(--text-primary, #000)') : 'var(--text-secondary, #333)'};
+    white-space: nowrap;
   }
 
   /* Icon sizing to match general scale */
@@ -64,11 +87,16 @@ const StyledWrapper = styled.div<{ $isActive: boolean; $activeColor?: string; $s
 
   .IconButton:hover {
     background-color: ${props => props.$isActive ? (props.$activeColor ? `${props.$activeColor}30` : 'rgba(61, 41, 71, 0.15)') : 'rgba(61, 41, 71, 0.1)'};
+    border-color: ${props => props.$hasLabel ? (props.$activeColor || 'var(--accent-primary)') : 'transparent'};
+  }
+
+  .IconButton:hover svg,
+  .IconButton:hover .label-text {
+    color: ${props => props.$activeColor || '#000'};
   }
 
   .IconButton:hover svg {
-    color: ${props => props.$activeColor || '#000'};
-    transform: scale(1.1);
+    transform: ${props => props.$hasLabel ? 'scale(1.1)' : 'scale(1.1)'}; /* Scale icon in both cases */
   }
 
   .IconButton:active {
