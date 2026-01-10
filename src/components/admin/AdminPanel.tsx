@@ -2,12 +2,12 @@
 import React, { useState, useEffect } from 'react';
 import { useAppStore } from '../../store/useAppStore';
 import '../../styles/admin.css';
-import { Plus, Search, LogOut, Activity, Database, Edit3, ArrowLeft, AlertTriangle, CheckCircle2, XCircle, History, FileClock, Menu, Cloud, Download, LayoutGrid, Server } from 'lucide-react';
+import { Plus, Search, LogOut, Activity, Database, Edit3, ArrowLeft, AlertTriangle, CheckCircle2, XCircle, History, FileClock, Menu, Cloud, Download, LayoutGrid, Server, FileWarning, Check } from 'lucide-react';
 import ProductForm from './ProductForm';
 import AdminLogin from './AdminLogin';
 import ThemeToggle from '../layout/ThemeToggle';
 import type { Product } from '../../types';
-import { updateProduct, addProduct, deleteProduct, auth, addHistoryLog, fetchHistoryLogs, type HistoryLog } from '../../services/firebase';
+import { updateProduct, addProduct, deleteProduct, auth, addHistoryLog, fetchHistoryLogs, fetchReports, deleteReport, type HistoryLog } from '../../services/firebase';
 import { onAuthStateChanged, signOut, type User } from 'firebase/auth';
 import Modal from '../modals/Modal';
 
@@ -26,11 +26,13 @@ class ErrorBoundary extends React.Component<{ children: React.ReactNode, fallbac
 
 const AdminPanel: React.FC = () => {
     const [user, setUser] = useState<User | null>(auth.currentUser);
-    const [activeTab, setActiveTab] = useState<'catalog' | 'new' | 'edit' | 'audit' | 'history' | 'database'>('catalog');
+    const [activeTab, setActiveTab] = useState<'catalog' | 'new' | 'edit' | 'audit' | 'history' | 'database' | 'reports'>('catalog');
     const [editingProduct, setEditingProduct] = useState<Product | undefined>(undefined);
     const [searchTerm, setSearchTerm] = useState('');
     const [historyLogs, setHistoryLogs] = useState<HistoryLog[]>([]);
+    const [reports, setReports] = useState<any[]>([]);
     const [isLoadingHistory, setIsLoadingHistory] = useState(false);
+    const [isLoadingReports, setIsLoadingReports] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
     const [notification, setNotification] = useState<{ message: string, type: 'success' | 'error' } | null>(null);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -47,6 +49,29 @@ const AdminPanel: React.FC = () => {
         });
         return () => unsubscribe();
     }, []);
+
+    useEffect(() => {
+        if (activeTab === 'reports') {
+            setIsLoadingReports(true);
+            fetchReports().then(data => {
+                setReports(data);
+                setIsLoadingReports(false);
+            });
+        }
+    }, [activeTab]);
+
+    const handleResolveReport = async (reportId: string) => {
+        if (!confirm('¿Marcar este reporte como resuelto y eliminarlo?')) return;
+
+        try {
+            await deleteReport(reportId);
+            setReports(prev => prev.filter(r => r.id !== reportId));
+            showNotification('Reporte resuelto y eliminado', 'success');
+        } catch (error) {
+            console.error(error);
+            showNotification('Error al eliminar reporte', 'error');
+        }
+    };
 
     useEffect(() => {
         if (activeTab === 'history') {
@@ -262,6 +287,14 @@ const AdminPanel: React.FC = () => {
                     <div className="nav-divider"></div>
 
                     <button
+                        onClick={() => { setActiveTab('reports'); setIsMobileMenuOpen(false); }}
+                        className={`admin-nav-item ${activeTab === 'reports' ? 'active' : ''}`}
+                        style={{ color: activeTab === 'reports' ? 'var(--color-warning)' : '' }}
+                    >
+                        <FileWarning size={20} /> Reportes
+                    </button>
+
+                    <button
                         onClick={() => { setActiveTab('audit'); setIsMobileMenuOpen(false); }}
                         className={`admin-nav-item ${activeTab === 'audit' ? 'active' : ''}`}
                     >
@@ -318,7 +351,8 @@ const AdminPanel: React.FC = () => {
                                     activeTab === 'new' ? 'Nueva Referencia' :
                                         activeTab === 'edit' ? 'Editando Referencia' :
                                             activeTab === 'audit' ? 'Panel de Auditoría' :
-                                                activeTab === 'history' ? 'Historial de Cambios' : 'Gestión de Base de Datos'}
+                                                activeTab === 'history' ? 'Historial de Cambios' :
+                                                    activeTab === 'reports' ? 'Reportes de Errores' : 'Gestión de Base de Datos'}
                             </h1>
                         </div>
                     </div>
@@ -408,6 +442,62 @@ const AdminPanel: React.FC = () => {
                                             <td data-label="Acción" style={{ textAlign: 'right' }}>
                                                 <button onClick={() => handleEdit(p)} className="edit-action-btn" style={{ borderColor: 'var(--admin-danger)', color: 'var(--admin-text)' }}>
                                                     <Edit3 size={16} /> Corregir
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                )}
+
+                {activeTab === 'reports' && (
+                    <div className="admin-card">
+                        <h3 className="admin-section-title-with-icon">
+                            <FileWarning color="var(--color-warning)" /> Reportes de Usuarios
+                        </h3>
+                        <div className="admin-table-container">
+                            <table className="admin-table">
+                                <thead>
+                                    <tr>
+                                        <th>Fecha</th>
+                                        <th>Referencia</th>
+                                        <th>Descripción</th>
+                                        <th style={{ textAlign: 'right' }}>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {isLoadingReports ? (
+                                        <tr><td colSpan={4} className="text-center p-8">Cargando reportes...</td></tr>
+                                    ) : reports.length === 0 ? (
+                                        <tr><td colSpan={4} className="text-center p-8 text-muted">No hay reportes pendientes.</td></tr>
+                                    ) : reports.map(report => (
+                                        <tr key={report.id}>
+                                            <td data-label="Fecha" className="fs-small text-muted">
+                                                {new Date(report.timestamp).toLocaleDateString()}
+                                            </td>
+                                            <td data-label="Referencia"><strong>{report.productReference}</strong></td>
+                                            <td data-label="Descripción">{report.description}</td>
+                                            <td data-label="Acciones" style={{ textAlign: 'right' }}>
+                                                <button
+                                                    onClick={() => handleResolveReport(report.id)}
+                                                    className="edit-action-btn"
+                                                    style={{ borderColor: 'var(--color-success)', color: 'var(--color-success)' }}
+                                                    title="Marcar como resuelto"
+                                                >
+                                                    <Check size={16} /> Resolver
+                                                </button>
+                                                <button
+                                                    onClick={() => {
+                                                        const prod = products.find(p => p.referencia === report.productReference || p.ref?.includes(report.productReference));
+                                                        if (prod) handleEdit(prod);
+                                                        else alert('Producto no encontrado en catálogo actual');
+                                                    }}
+                                                    className="edit-action-btn"
+                                                    style={{ marginLeft: '0.5rem' }}
+                                                >
+                                                    <Edit3 size={16} /> Editar
                                                 </button>
                                             </td>
                                         </tr>

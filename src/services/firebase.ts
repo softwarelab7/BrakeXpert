@@ -1,5 +1,17 @@
 import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, getDocs, query, where, limit, writeBatch, doc, onSnapshot, type DocumentChange } from 'firebase/firestore';
+import {
+    getFirestore,
+    collection,
+    getDocs,
+    query,
+    where,
+    limit,
+    writeBatch,
+    doc,
+    onSnapshot,
+    addDoc,
+    type DocumentChange
+} from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 import type { Product } from '../types';
 
@@ -321,17 +333,43 @@ export const addReport = async (reportData: {
     userEmail?: string; // Optional
 }) => {
     try {
-        await writeBatch(db).set(doc(reportsCollection), {
+        await addDoc(reportsCollection, {
             ...reportData,
             status: 'PENDING',
             timestamp: Date.now()
-        }).commit();
+        });
     } catch (error) {
         console.error("Error adding report:", error);
         throw error;
     }
 };
 
+// Fetch all reports
+export const fetchReports = async (): Promise<any[]> => {
+    try {
+        const q = query(reportsCollection);
+        const querySnapshot = await getDocs(q);
+        const reports: any[] = [];
+        querySnapshot.forEach(doc => {
+            reports.push({ id: doc.id, ...doc.data() });
+        });
+        // Sort by timestamp desc locally or use orderBy if index exists
+        return reports.sort((a, b) => b.timestamp - a.timestamp);
+    } catch (error) {
+        console.error("Error fetching reports:", error);
+        return [];
+    }
+};
+
+// Delete/Resolve a report
+export const deleteReport = async (reportId: string) => {
+    try {
+        await writeBatch(db).delete(doc(reportsCollection, reportId)).commit();
+    } catch (error) {
+        console.error("Error deleting report:", error);
+        throw error;
+    }
+};
 // Mock data for development (remove when Firebase is configured)
 export const getMockProducts = (): Product[] => {
     return Array.from({ length: 723 }, (_, i) => ({

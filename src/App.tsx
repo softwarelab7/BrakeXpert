@@ -18,6 +18,7 @@ import ComparePage from './components/pages/ComparePage';
 import ReloadPrompt from './components/ReloadPrompt';
 import ScrollToTop from './components/common/ScrollToTop';
 import Toast from './components/common/Toast';
+import ReportModal from './components/common/ReportModal';
 import './styles/global.css';
 import './styles/app.css';
 
@@ -36,6 +37,7 @@ function App() {
   const setProducts = useAppStore(state => state.setProducts);
   const clearFilters = useAppStore(state => state.clearFilters);
   const setCurrentPage = useAppStore(state => state.setCurrentPage);
+  const closeReportModal = useAppStore(state => state.closeReportModal);
 
   // Load products on mount
   const loadProducts = useMemo(() => async () => {
@@ -200,6 +202,11 @@ function App() {
           <ProductDetailModal />
           <HistoryPanel />
           <GuideModal />
+          <ReportModal
+            isOpen={ui.isReportModalOpen}
+            onClose={closeReportModal}
+            referenceId={ui.selectedProductId}
+          />
         </>
       )}
     </div>

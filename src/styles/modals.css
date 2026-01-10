@@ -13,6 +13,17 @@
     padding: 1rem;
 }
 
+.modal-overlay.allow-overflow {
+    overflow-y: auto;
+    align-items: flex-start;
+    padding: 2rem 1rem;
+}
+
+.modal-overlay.allow-overflow .modal-container {
+    margin: auto;
+    /* Reset max-height is handled by specific class below */
+}
+
 /* Modal Container */
 .modal-container {
     background: var(--bg-secondary);
@@ -85,6 +96,30 @@
 
 .modal-body-p0 {
     padding: 0 !important;
+}
+
+.modal-container.allow-overflow {
+    overflow: visible;
+}
+
+.modal-body.allow-overflow {
+    overflow: visible;
+}
+
+/* Fix corners when overflow is visible */
+.modal-container.allow-overflow {
+    overflow: visible;
+    max-height: unset;
+}
+
+.modal-container.allow-overflow .modal-header {
+    border-top-left-radius: 1.25rem;
+    border-top-right-radius: 1.25rem;
+}
+
+.modal-container.allow-overflow .modal-body:last-child {
+    border-bottom-left-radius: 1.25rem;
+    border-bottom-right-radius: 1.25rem;
 }
 
 /* Modal Footer */
