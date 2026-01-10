@@ -11,7 +11,8 @@ function ReloadPrompt() {
     } = useRegisterSW({
         onRegistered(r) {
             if (r) {
-                setInterval(() => r.update(), 60 * 60 * 1000);
+                // Check for updates every minute
+                setInterval(() => r.update(), 60 * 1000);
             }
         },
     });
@@ -47,11 +48,11 @@ function ReloadPrompt() {
                 </div>
 
                 <div className="ReloadPrompt-message">
-                    <h3>{offlineReady ? 'Modo Offline' : '¡Hay mejoras!'}</h3>
+                    <h3>{offlineReady ? 'Modo Offline' : 'Actualización Disponible'}</h3>
                     <p>
                         {offlineReady
                             ? 'La aplicación está lista para usarse sin conexión a internet.'
-                            : 'Una nueva versión de Brake Xpert está disponible con mejoras de rendimiento.'}
+                            : 'Hay una nueva versión de la aplicación. Es necesario actualizar para ver los cambios recientes.'}
                     </p>
                 </div>
 
