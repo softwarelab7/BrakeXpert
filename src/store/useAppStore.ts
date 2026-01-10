@@ -334,7 +334,7 @@ export const useAppStore = create<AppState>()(
                 const ref = product ? (product.referencia || product.ref?.[0] || id) : id;
 
                 get().addNotification({
-                    type: isAdding ? 'success' : 'info',
+                    type: isAdding ? 'success' : 'system',
                     title: isAdding ? 'Favorito Agregado' : 'Favorito Eliminado',
                     message: isAdding
                         ? `Se ha añadido la referencia ${ref} a favoritos.`
@@ -460,19 +460,11 @@ export const useAppStore = create<AppState>()(
                     // Keep only last 50 notifications
                     const notifications = [newNotification, ...state.ui.notifications].slice(0, 50);
 
-                    // Show toast for the new notification
-                    const toast = {
-                        id: newNotification.id,
-                        title: newNotification.title,
-                        message: newNotification.message,
-                        type: newNotification.type === 'error' ? 'error' : 'info' as const // Types might not match perfectly, simplified mapping
-                    };
-
-                    // Improve type mapping if needed based on usage
+                    // Map Notification Type to Toast Type
                     let toastType: 'success' | 'error' | 'info' | 'warning' = 'info';
                     if (notification.type === 'success') toastType = 'success';
                     if (notification.type === 'error') toastType = 'error';
-                    if (notification.type === 'warning') toastType = 'warning';
+                    // 'system', 'data', 'update' default to 'info'
 
                     return {
                         ui: {
