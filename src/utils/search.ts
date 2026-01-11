@@ -1,4 +1,54 @@
 import type { Product } from '../types';
+import Fuse from 'fuse.js';
+
+// ... existing imports ... (I will need to be careful with imports, let's just add it to the top in a separate edit if needed, or I can use replace_file_content to add it with the rest)
+
+/**
+ * Fuse.js Search Options
+ * Configured for vehicle parts searching:
+ * - High weight on technical references
+ * - Medium weight on Make/Model
+ * - Low tolerance for typos on short numbers, higher on names
+ */
+const fuseOptions = {
+    includeScore: true,
+    threshold: 0.3, // 0.0 = perfect match, 1.0 = match anything. 0.3 allows small typos.
+    ignoreLocation: true, // Search anywhere in the string
+    keys: [
+        { name: 'referencia', weight: 2.0 },
+        { name: 'ref', weight: 1.8 },
+        { name: 'oem', weight: 1.8 },
+        { name: 'wva', weight: 1.8 },
+        { name: 'fmsi', weight: 1.8 },
+        { name: 'aplicaciones.marca', weight: 1.5 },
+        { name: 'aplicaciones.modelo', weight: 1.2 },
+        { name: 'aplicaciones.serie', weight: 1.0 },
+        { name: 'aplicaciones.año', weight: 0.8 },
+        { name: 'fabricante', weight: 0.5 }
+    ]
+};
+
+/**
+ * Performs a fuzzy search on the products list.
+ * Returns the filtered and sorted list of products.
+ */
+export const performSearch = (products: Product[], query: string): Product[] => {
+    if (!query) return products;
+
+    const fuse = new Fuse(products, fuseOptions);
+    const result = fuse.search(query);
+
+    // Return just the items, effectively sorted by score (relevance)
+    return result.map(res => res.item);
+};
+
+// Update FILTER_STRATEGIES to possibly NOT handle searchQuery directly if we move logic to store,
+// OR keep it here but we can't sort efficiently inside a filter map.
+// The plan says: Update useAppStore to use performSearch first, THEN apply other filters.
+// So FILTER_STRATEGIES.searchQuery might become obsolete or unused in the new flow.
+// I will keep FILTER_STRATEGIES as is for now to avoid breaking anything immediately, 
+// but the store will bypass it for the main query.
+
 
 /**
  * Normalizes text for search comparisons:
@@ -142,13 +192,19 @@ export const FILTER_STRATEGIES: Record<string, (item: Product, value: any, conte
     selectedModel: (item, value) => {
         if (!value) return true;
         if (!item.aplicaciones || !Array.isArray(item.aplicaciones)) return false;
-        const normalizedValue = normalizeText(value);
+
+        // Normalize search value once
+        const normalizedSearch = normalizeText(value);
+
         return item.aplicaciones.some(app => {
             if (!app) return false;
-            // Check both modelo and serie
-            const modelMatch = app.modelo && normalizeText(app.modelo) === normalizedValue;
-            const serieMatch = app.serie && normalizeText(app.serie) === normalizedValue;
-            return modelMatch || serieMatch;
+
+            // Check matching in 'modelo' OR 'serie' using includes for partial matches
+            // e.g. "Frontier" will match "NP300 Frontier" or "Frontier 4x2"
+            const modelText = normalizeText(app.modelo);
+            const serieText = normalizeText(app.serie);
+
+            return modelText.includes(normalizedSearch) || serieText.includes(normalizedSearch);
         });
     },
 

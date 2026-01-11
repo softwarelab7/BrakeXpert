@@ -79,26 +79,33 @@ interface AppState {
     clearAllNotifications: () => void;
 }
 
-import { FILTER_STRATEGIES, getSortableRefNumber } from '../utils/search';
+import { FILTER_STRATEGIES, getSortableRefNumber, performSearch } from '../utils/search';
 
 const applyFilters = (products: Product[], filters: Filters, favorites: string[]): Product[] => {
     if (!products || !Array.isArray(products) || !products.length) return [];
     if (!filters) return products;
 
-    const filtered = products.filter((product) => {
+    // 1. Perform Fuzzy Search first (Relevance Sorting)
+    let filtered = filters.searchQuery
+        ? performSearch(products, filters.searchQuery)
+        : [...products]; // copy to avoid mutating original if we sort later
+
+    // 2. Apply Strict Filters (Category, Dimensions, etc.)
+    filtered = filtered.filter((product) => {
         return Object.entries(filters).every(([key, value]) => {
-            // Map store filter keys to strategy keys if needed, or ensure they match
-            // Using direct mapping based on the provided strategy implementation
+            // Skip searchQuery as it's already handled
+            if (key === 'searchQuery') return true;
+
             const strategy = FILTER_STRATEGIES[key];
             if (strategy) {
-                // Pass context (favorites) for strategies that need it
                 return strategy(product, value, { favorites });
             }
             return true;
         });
     });
 
-    // Sort by reference number if no search query is active
+    // 3. Fallback Sort: If no search query, sort by reference number
+    // (If there IS a search query, Fuse.js already returned them sorted by relevance)
     if (!filters.searchQuery) {
         filtered.sort((a, b) => {
             return getSortableRefNumber(a.ref) - getSortableRefNumber(b.ref);
