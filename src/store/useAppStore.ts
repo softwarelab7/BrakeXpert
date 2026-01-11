@@ -237,19 +237,6 @@ export const useAppStore = create<AppState>()(
                     };
                 }),
 
-            toggleBrandTag: (brand) =>
-                set((state) => {
-                    const tags = state.filters.selectedBrandTags;
-                    const newTags = tags.includes(brand)
-                        ? tags.filter((b) => b !== brand)
-                        : [...tags, brand];
-                    const newFilters = { ...state.filters, selectedBrandTags: newTags };
-                    return {
-                        filters: newFilters,
-                        filteredProducts: applyFilters(state.products, newFilters, state.favorites),
-                        ui: { ...state.ui, currentPage: 1 }
-                    };
-                }),
 
             setOemReference: (ref) =>
                 set((state) => {

@@ -58,6 +58,44 @@
     gap: 12px;
 }
 
+.ReloadPrompt-changes {
+    width: 100%;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-contrast);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 24px;
+    text-align: left;
+}
+
+.ReloadPrompt-changes-header {
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+    margin-bottom: 12px;
+    letter-spacing: 0.05em;
+}
+
+.ReloadPrompt-changes-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.ReloadPrompt-changes-list li {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    line-height: 1.4;
+}
+
+.ReloadPrompt-changes-list li strong {
+    color: var(--text-primary);
+}
+
 .ReloadPrompt-btn {
     width: 100%;
     padding: 14px;

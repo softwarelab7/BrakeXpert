@@ -52,9 +52,21 @@ function ReloadPrompt() {
                     <p>
                         {offlineReady
                             ? 'La aplicación está lista para usarse sin conexión a internet.'
-                            : 'Hay una nueva versión de la aplicación. Es necesario actualizar para ver los cambios recientes.'}
+                            : 'Hay una nueva versión disponible. Hemos mejorado la interfaz para una mejor experiencia.'}
                     </p>
                 </div>
+
+                {needRefresh && (
+                    <div className="ReloadPrompt-changes">
+                        <div className="ReloadPrompt-changes-header">¿Qué hay de nuevo?</div>
+                        <ul className="ReloadPrompt-changes-list">
+                            <li>✨ <strong>Efecto Cristal:</strong> Nuevo banner superior más moderno.</li>
+                            <li>🏷️ <strong>Etiquetas de Marca:</strong> Nuevo diseño de botones más limpio.</li>
+                            <li>🎨 <strong>Interfaz Pulida:</strong> Colores y espaciados mejorados.</li>
+                            <li>🛠️ <strong>Correcciones:</strong> Mejoras de rendimiento y estabilidad.</li>
+                        </ul>
+                    </div>
+                )}
 
                 <div className="ReloadPrompt-actions">
                     {needRefresh && (
