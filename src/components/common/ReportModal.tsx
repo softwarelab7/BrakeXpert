@@ -31,10 +31,10 @@ export default function ReportModal({ isOpen, onClose, referenceId }: ReportModa
   const errorWrapperRef = useRef<HTMLDivElement>(null);
 
   const ERROR_TYPES = [
-    { value: "medida", label: "Las medidas son incorrectas" },
+    { value: "medida", label: "Medidas incorrectas" },
     { value: "posicion", label: "Posición incorrecta" },
-    { value: "foto", label: "La fotografía no coincide" },
-    { value: "aplicacion", label: "No le sirve al vehículo indicado" },
+    { value: "foto", label: "Fotografía incorrecta" },
+    { value: "aplicacion", label: "Aplicación incorrecta" },
     { value: "otro", label: "Otro problema" }
   ];
 

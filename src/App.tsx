@@ -193,7 +193,6 @@ function App() {
           <Footer />
 
           <ScrollToTop />
-          <ScrollToTop />
           <NotificationPanel />
           <Toast />
           <ReloadPrompt />

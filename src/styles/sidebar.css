@@ -238,6 +238,17 @@
 /* Red Delete Button Refactored */
 .borrar-filtros-container {
     margin-top: 1rem;
+    width: 100%;
+}
+
+.borrar-filtros-container .IconButton {
+    width: 100% !important;
+    /* Force override of styled-components if needed */
+    justify-content: center;
+}
+
+.borrar-filtros-container .trash-hover {
+    width: 100%;
 }
 
 /* StyledIconButton disabled state override if needed, or let component handle it. 

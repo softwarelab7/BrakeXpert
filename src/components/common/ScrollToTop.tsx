@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { ArrowUp } from 'lucide-react';
 import '../../styles/scroll-to-top.css';
 
 const ScrollToTop = () => {
@@ -35,10 +34,40 @@ const ScrollToTop = () => {
             {isVisible && (
                 <button
                     onClick={scrollToTop}
-                    className="scroll-to-top-btn"
+                    className="scroll-to-top-btn group"
                     aria-label="Scroll to top"
                 >
-                    <ArrowUp size={20} />
+                    {/* Arrow 1: Initially centered, moves up and fades out on hover */}
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="scroll-icon-primary"
+                    >
+                        <path d="m18 15-6-6-6 6" />
+                    </svg>
+
+                    {/* Arrow 2: Initially down, moves to center and fades in on hover */}
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="scroll-icon-secondary"
+                    >
+                        <path d="m18 15-6-6-6 6" />
+                    </svg>
                 </button>
             )}
         </>
