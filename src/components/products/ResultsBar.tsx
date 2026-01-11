@@ -53,27 +53,30 @@ const ResultsBar = ({ totalResults, currentStart, currentEnd }: ResultsBarProps)
                 <div className="control-group">
                     {/* Density Selector */}
                     <div className="density-selector">
-                        <button
+                        <StyledIconButton
+                            icon={<Grid3x3 size={16} />}
+                            tooltip="Vista Compacta"
                             onClick={() => setGridDensity('compact')}
-                            className={`density-btn ${gridDensity === 'compact' ? 'active' : ''}`}
-                            title="Vista Compacta"
-                        >
-                            <Grid3x3 size={16} />
-                        </button>
-                        <button
+                            isActive={gridDensity === 'compact'}
+                            activeColor="#3b82f6"
+                            size="small"
+                        />
+                        <StyledIconButton
+                            icon={<LayoutGrid size={16} />}
+                            tooltip="Vista Normal"
                             onClick={() => setGridDensity('normal')}
-                            className={`density-btn ${gridDensity === 'normal' ? 'active' : ''}`}
-                            title="Vista Normal"
-                        >
-                            <LayoutGrid size={16} />
-                        </button>
-                        <button
+                            isActive={gridDensity === 'normal'}
+                            activeColor="#3b82f6"
+                            size="small"
+                        />
+                        <StyledIconButton
+                            icon={<Maximize size={16} />}
+                            tooltip="Vista Cómoda"
                             onClick={() => setGridDensity('comfortable')}
-                            className={`density-btn ${gridDensity === 'comfortable' ? 'active' : ''}`}
-                            title="Vista Cómoda"
-                        >
-                            <Maximize size={16} />
-                        </button>
+                            isActive={gridDensity === 'comfortable'}
+                            activeColor="#3b82f6"
+                            size="small"
+                        />
                     </div>
 
                     {/* Items Page Selector */}

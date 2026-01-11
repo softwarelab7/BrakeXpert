@@ -3,24 +3,36 @@
     position: fixed;
     bottom: 30px;
     right: 30px;
-    width: 3.5rem;
-    /* w-14 */
-    height: 3.5rem;
-    /* h-14 */
+    width: 2.75rem;
+    /* Reduced from 3.5rem (approx 44px) */
+    height: 2.75rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: transparent;
-    border: 3px solid #2563eb;
-    /* blue-600 */
+    background: var(--bg-secondary);
+    /* Adapts to Light (White) / Dark (Zinc-900) */
+    border: 2px solid #2563eb;
+    /* Thinner border (was 3px) */
     border-radius: 9999px;
-    /* rounded-full */
     cursor: pointer;
     overflow: hidden;
     transition: all 500ms;
     z-index: 1000;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     animation: fadeInUp 0.3s ease-out;
+}
+
+/* ... existing hover styles ... */
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .scroll-to-top-btn {
+        bottom: 20px;
+        right: 20px;
+        width: 2.25rem;
+        /* Reduced from 3rem (approx 36px) */
+        height: 2.25rem;
+    }
 }
 
 .scroll-to-top-btn:hover {
@@ -81,7 +93,8 @@
     .scroll-to-top-btn {
         bottom: 20px;
         right: 20px;
-        width: 3rem;
-        height: 3rem;
+        width: 2.25rem;
+        /* Reduced from 3rem (approx 36px) */
+        height: 2.25rem;
     }
 }

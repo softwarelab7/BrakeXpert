@@ -12,18 +12,19 @@ import Fuse from 'fuse.js';
  */
 const fuseOptions = {
     includeScore: true,
-    threshold: 0.3, // 0.0 = perfect match, 1.0 = match anything. 0.3 allows small typos.
-    ignoreLocation: true, // Search anywhere in the string
+    threshold: 0.1, // STRICT MODE: 0.1 filters out 1-digit variances in 5-digit numbers (10202 vs 10209)
+    ignoreLocation: true,
+    useExtendedSearch: true,
     keys: [
-        { name: 'referencia', weight: 2.0 },
-        { name: 'ref', weight: 1.8 },
-        { name: 'oem', weight: 1.8 },
-        { name: 'wva', weight: 1.8 },
-        { name: 'fmsi', weight: 1.8 },
-        { name: 'aplicaciones.marca', weight: 1.5 },
-        { name: 'aplicaciones.modelo', weight: 1.2 },
-        { name: 'aplicaciones.serie', weight: 1.0 },
-        { name: 'aplicaciones.año', weight: 0.8 },
+        { name: 'referencia', weight: 3.0 }, // Boosting reference weight
+        { name: 'ref', weight: 2.5 },
+        { name: 'oem', weight: 2.5 },
+        { name: 'wva', weight: 2.5 },
+        { name: 'fmsi', weight: 2.5 },
+        { name: 'aplicaciones.marca', weight: 1.0 }, // Reduced from 1.5
+        { name: 'aplicaciones.modelo', weight: 0.8 }, // Reduced from 1.2
+        { name: 'aplicaciones.serie', weight: 0.8 },
+        { name: 'aplicaciones.año', weight: 0.5 },
         { name: 'fabricante', weight: 0.5 }
     ]
 };
@@ -336,5 +337,34 @@ export const FILTER_STRATEGIES: Record<string, (item: Product, value: any, conte
         if (!value) return true;
         // Check if created in last 15 days
         return !!item.createdAt && (Date.now() - item.createdAt) < (15 * 24 * 60 * 60 * 1000);
+    },
+
+    // Brand Tags (OR logic)
+    selectedBrandTags: (item, selectedTags: string[]) => {
+        if (!selectedTags || !Array.isArray(selectedTags) || selectedTags.length === 0) return true;
+
+        const rawRefs = [
+            item.referencia,
+            item.wva,
+            ...(item.ref || []),
+            ...(item.intercambios || []),
+            ...(item.oem || []),
+            ...(item.fmsi || [])
+        ].filter(Boolean) as string[];
+
+        // Tokenize references to handle combined strings like "REF1 REF2"
+        const allRefs = rawRefs.flatMap(r => r.split(/[\s,/-]+/)).filter(r => r.length > 2);
+
+        const fabricante = (item.fabricante || '').toUpperCase();
+
+        // Check if ANY of the selected tags matches ANY of the product references OR the manufacturer
+        return selectedTags.some(tag => {
+            if (tag === 'INC') return allRefs.some(r => r.trim().toUpperCase().endsWith('INC')) || fabricante.includes('INCOLBEST');
+            if (tag === 'BEX') return allRefs.some(r => r.trim().toUpperCase().endsWith('BEX')) || fabricante.includes('BEX');
+            if (tag === 'K') return allRefs.some(r => r.trim().toUpperCase().startsWith('K')) || fabricante.includes('KTC');
+            if (tag === 'BP') return allRefs.some(r => r.trim().toUpperCase().endsWith('BP')) || fabricante.includes('BRAKE PAK') || fabricante.includes('BRAKEPAK');
+            if (tag === 'SP') return allRefs.some(r => r.trim().toUpperCase().startsWith('SP'));
+            return false;
+        });
     }
 };

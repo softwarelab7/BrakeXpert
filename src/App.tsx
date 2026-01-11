@@ -19,6 +19,7 @@ import ReloadPrompt from './components/ReloadPrompt';
 import ScrollToTop from './components/common/ScrollToTop';
 import Toast from './components/common/Toast';
 import ReportModal from './components/common/ReportModal';
+import BrandTagsBar from './components/products/BrandTagsBar';
 import './styles/global.css';
 import './styles/app.css';
 
@@ -167,11 +168,14 @@ function App() {
 
             <main className="results-panel">
               <div className="content-wrapper">
+
                 <ResultsBar
                   totalResults={totalResults}
                   currentStart={startIndex + 1}
                   currentEnd={endIndex}
                 />
+
+                <BrandTagsBar />
 
                 <ProductGrid
                   products={paginatedProducts}

@@ -1,0 +1,95 @@
+/* Container Layout */
+.brand-tags-bar-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.5rem;
+    padding: 0;
+    margin-top: 0;
+    /* Align perfectly with toolbar margin */
+    margin-bottom: 0.5rem;
+    /* Exactly same gap to cards */
+    width: 100%;
+}
+
+/* Horizontal Scroll Area */
+.brand-tags-scroll {
+    display: flex;
+    gap: 0.5rem;
+    overflow-x: auto;
+    padding: 2px 4px;
+    /* Minimal padding */
+    scrollbar-width: thin;
+    max-width: 100%;
+}
+
+/* Brand Ticket -> Brand Badge (Pill Style) */
+.brand-ticket {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 26px;
+    /* Similar to small buttons */
+    border: none;
+    outline: none;
+    cursor: default;
+    padding: 0 12px;
+    margin: 0;
+    border-radius: 9999px;
+    background: transparent;
+    isolation: isolate;
+}
+
+/* Tinted Background Layer */
+.brand-ticket-bg {
+    position: absolute;
+    inset: 0;
+    background-color: var(--ticket-color);
+    opacity: 0.12;
+    /* Subtle tint */
+    z-index: 0;
+    border-radius: 9999px;
+    transition: opacity 0.2s ease;
+}
+
+/* Hover: Slightly darken tint */
+.brand-ticket:hover .brand-ticket-bg {
+    opacity: 0.2;
+}
+
+/* The Label */
+.brand-ticket-label {
+    position: relative;
+    z-index: 10;
+    color: var(--ticket-color);
+    /* Text takes brand color */
+    font-weight: 700;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+    /* Ensure readable contrast? Usually brand colors are dark enough. 
+       If yellow/light, might need shadow or darkness logic, but relying on var for now. */
+}
+
+/* Hide the old "hole" */
+.brand-ticket-hole {
+    display: none;
+}
+
+/* Removed old transform/3d effects */
+
+/* Mobile Responsive */
+@media (max-width: 640px) {
+    .brand-tags-bar-container {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+        margin-top: 0;
+    }
+
+    .brand-tags-scroll {
+        width: 100%;
+    }
+}

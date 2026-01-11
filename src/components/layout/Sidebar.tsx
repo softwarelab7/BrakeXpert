@@ -206,150 +206,153 @@ const Sidebar = () => {
             />
 
             <aside className={`sidebar ${isMobileOpen ? 'open' : ''}`}>
-                <div className="filter-section">
-                    <div className="section-header">
-                        <h3 className="filter-section-title">Búsqueda Rápida</h3>
-                    </div>
-                    <AnimatedSearch
-                        ref={searchInputRef}
-                        value={localQuery}
-                        onChange={setLocalQuery}
-                        placeholder="Buscar..."
-                    />
-                </div>
-
-                <div className="filter-section">
-                    <div className="section-header">
-                        <h3 className="filter-section-title">Detalles del Vehículo</h3>
-                    </div>
-                    <div className="vehicle-details-grid">
-                        <SearchableSelect
-                            placeholder="Marca"
-                            value={filters.selectedBrand || ''}
-                            options={brands.map(([name]) => name)}
-                            onChange={(value) => {
-                                store.setSelectedBrand(value);
-                                if (value) setLocalQuery('');
-                            }}
-                            className={filters.selectedBrand ? 'has-value' : ''}
-                        />
-
-                        <SearchableSelect
-                            placeholder="Modelo/Serie"
-                            value={filters.selectedModel || ''}
-                            options={models}
-                            onChange={(value) => {
-                                store.setSelectedModel(value);
-                                if (value) setLocalQuery('');
-                            }}
-                            className={filters.selectedModel ? 'has-value' : ''}
-                        />
-
-                        <SearchableSelect
-                            placeholder="Año"
-                            value={filters.selectedYear || ''}
-                            options={years}
-                            onChange={(value) => {
-                                store.setSelectedYear(value);
-                                if (value) setLocalQuery('');
-                            }}
-                            className={filters.selectedYear ? 'has-value' : ''}
+                <div className="sidebar-content">
+                    <div className="filter-section">
+                        <div className="section-header">
+                            <h3 className="filter-section-title">Búsqueda Rápida</h3>
+                        </div>
+                        <AnimatedSearch
+                            ref={searchInputRef}
+                            value={localQuery}
+                            onChange={setLocalQuery}
+                            placeholder="Buscar..."
                         />
                     </div>
-                </div>
 
-                <div className="filter-section">
-                    <div className="section-header">
-                        <h3 className="filter-section-title">Posición</h3>
+                    <div className="filter-section">
+                        <div className="section-header">
+                            <h3 className="filter-section-title">Detalles del Vehículo</h3>
+                        </div>
+                        <div className="vehicle-details-grid">
+                            <SearchableSelect
+                                placeholder="Marca"
+                                value={filters.selectedBrand || ''}
+                                options={brands.map(([name]) => name)}
+                                onChange={(value) => {
+                                    store.setSelectedBrand(value);
+                                    if (value) setLocalQuery('');
+                                }}
+                                className={filters.selectedBrand ? 'has-value' : ''}
+                            />
+
+                            <SearchableSelect
+                                placeholder="Modelo/Serie"
+                                value={filters.selectedModel || ''}
+                                options={models}
+                                onChange={(value) => {
+                                    store.setSelectedModel(value);
+                                    if (value) setLocalQuery('');
+                                }}
+                                className={filters.selectedModel ? 'has-value' : ''}
+                            />
+
+                            <SearchableSelect
+                                placeholder="Año"
+                                value={filters.selectedYear || ''}
+                                options={years}
+                                onChange={(value) => {
+                                    store.setSelectedYear(value);
+                                    if (value) setLocalQuery('');
+                                }}
+                                className={filters.selectedYear ? 'has-value' : ''}
+                            />
+                        </div>
                     </div>
-                    <div className="position-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.8rem' }}>
+
+                    <div className="filter-section">
+                        <div className="section-header">
+                            <h3 className="filter-section-title">Posición</h3>
+                        </div>
+                        <div className="position-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.8rem' }}>
+                            <StyledIconButton
+                                icon={<ArrowUp />}
+                                tooltip="Delantera"
+                                label="Delantera"
+                                onClick={() => store.togglePosition('delantera')}
+                                isActive={filters.selectedPositions.includes('delantera')}
+                                activeColor="#3b82f6"
+                            />
+                            <StyledIconButton
+                                icon={<ArrowDown />}
+                                tooltip="Trasera"
+                                label="Trasera"
+                                onClick={() => store.togglePosition('trasera')}
+                                isActive={filters.selectedPositions.includes('trasera')}
+                                activeColor="#ef4444"
+                            />
+                        </div>
+                    </div>
+
+                    <div className="filter-section">
+                        <div className="section-header">
+                            <h3 className="filter-section-title">Referencias</h3>
+                        </div>
+                        <div className="references-grid">
+                            <div className={`ref-input-wrapper ${localOem ? 'has-value' : ''}`}>
+                                <input
+                                    type="text"
+                                    className="ref-input"
+                                    placeholder="OEM"
+                                    value={localOem}
+                                    onChange={(e) => setLocalOem(e.target.value)}
+                                />
+                            </div>
+                            <div className={`ref-input-wrapper ${localFmsi ? 'has-value' : ''}`}>
+                                <input
+                                    type="text"
+                                    className="ref-input"
+                                    placeholder="FMSI"
+                                    value={localFmsi}
+                                    onChange={(e) => setLocalFmsi(e.target.value)}
+                                />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="filter-section">
+                        <div className="section-header">
+                            <h3 className="filter-section-title">Medidas (mm)</h3>
+                        </div>
+                        <div className="measurements-grid">
+                            <div className={`measure-input-wrapper ${localWidth ? 'has-value' : ''}`}>
+                                <input
+                                    type="number"
+                                    className="measure-input"
+                                    placeholder="Ancho"
+                                    step="0.1"
+                                    value={localWidth}
+                                    onChange={(e) => setLocalWidth(e.target.value)}
+                                />
+                            </div>
+                            <div className={`measure-input-wrapper ${localHeight ? 'has-value' : ''}`}>
+                                <input
+                                    type="number"
+                                    className="measure-input"
+                                    placeholder="Alto"
+                                    step="0.1"
+                                    value={localHeight}
+                                    onChange={(e) => setLocalHeight(e.target.value)}
+                                />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="borrar-filtros-container" style={{ display: 'flex', justifyContent: 'center' }}>
                         <StyledIconButton
-                            icon={<ArrowUp />}
-                            tooltip="Delantera"
-                            label="Delantera"
-                            onClick={() => store.togglePosition('delantera')}
-                            isActive={filters.selectedPositions.includes('delantera')}
-                            activeColor="#3b82f6"
-                        />
-                        <StyledIconButton
-                            icon={<ArrowDown />}
-                            tooltip="Trasera"
-                            label="Trasera"
-                            onClick={() => store.togglePosition('trasera')}
-                            isActive={filters.selectedPositions.includes('trasera')}
+                            icon={<Trash2 />}
+                            tooltip="Borrar Filtros"
+                            label="BORRAR FILTROS"
+                            onClick={clearFilters}
+                            isActive={hasActiveFilters}
                             activeColor="#ef4444"
+                            className={`${!hasActiveFilters ? 'disabled' : ''} trash-hover`}
                         />
                     </div>
-
-
                 </div>
 
-                <div className="filter-section">
-                    <div className="section-header">
-                        <h3 className="filter-section-title">Referencias</h3>
-                    </div>
-                    <div className="references-grid">
-                        <div className={`ref-input-wrapper ${localOem ? 'has-value' : ''}`}>
-                            <input
-                                type="text"
-                                className="ref-input"
-                                placeholder="OEM"
-                                value={localOem}
-                                onChange={(e) => setLocalOem(e.target.value)}
-                            />
-                        </div>
-                        <div className={`ref-input-wrapper ${localFmsi ? 'has-value' : ''}`}>
-                            <input
-                                type="text"
-                                className="ref-input"
-                                placeholder="FMSI"
-                                value={localFmsi}
-                                onChange={(e) => setLocalFmsi(e.target.value)}
-                            />
-                        </div>
-                    </div>
-                </div>
 
-                <div className="filter-section">
-                    <div className="section-header">
-                        <h3 className="filter-section-title">Medidas (mm)</h3>
-                    </div>
-                    <div className="measurements-grid">
-                        <div className={`measure-input-wrapper ${localWidth ? 'has-value' : ''}`}>
-                            <input
-                                type="number"
-                                className="measure-input"
-                                placeholder="Ancho"
-                                step="0.1"
-                                value={localWidth}
-                                onChange={(e) => setLocalWidth(e.target.value)}
-                            />
-                        </div>
-                        <div className={`measure-input-wrapper ${localHeight ? 'has-value' : ''}`}>
-                            <input
-                                type="number"
-                                className="measure-input"
-                                placeholder="Alto"
-                                step="0.1"
-                                value={localHeight}
-                                onChange={(e) => setLocalHeight(e.target.value)}
-                            />
-                        </div>
-                    </div>
-                </div>
 
-                <div className="borrar-filtros-container" style={{ display: 'flex', justifyContent: 'center' }}>
-                    <StyledIconButton
-                        icon={<Trash2 />}
-                        tooltip="Borrar Filtros"
-                        label="BORRAR FILTROS"
-                        onClick={clearFilters}
-                        isActive={hasActiveFilters}
-                        activeColor="#ef4444"
-                        className={`${!hasActiveFilters ? 'disabled' : ''} trash-hover`}
-                    />
-                </div>
-            </aside>
+            </aside >
         </>
     );
 };

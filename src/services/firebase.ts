@@ -78,6 +78,7 @@ export const normalizeProduct = (docId: string, data: any): Product => {
     p.fmsi = ensureArray(p.fmsi);
     p.oem = ensureArray(p.oem);
     p.ref = ensureArray(p.ref);
+    p.intercambios = ensureArray(p.intercambios);
     p.imagenes = ensureArray(p.imagenes);
     p.aplicaciones = ensureArray(p.aplicaciones).map((app: any) => {
         // Helper to find year robustly (including Unicode Normalization)

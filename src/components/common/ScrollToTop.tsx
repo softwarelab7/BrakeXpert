@@ -40,8 +40,8 @@ const ScrollToTop = () => {
                     {/* Arrow 1: Initially centered, moves up and fades out on hover */}
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
+                        width="20" /* Reduced from 24 */
+                        height="20"
                         viewBox="0 0 24 24"
                         fill="none"
                         stroke="currentColor"
@@ -56,8 +56,8 @@ const ScrollToTop = () => {
                     {/* Arrow 2: Initially down, moves to center and fades in on hover */}
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
+                        width="20" /* Reduced from 24 */
+                        height="20"
                         viewBox="0 0 24 24"
                         fill="none"
                         stroke="currentColor"

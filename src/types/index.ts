@@ -9,6 +9,7 @@ export interface Product {
   imagenes: string[];
   aplicaciones: VehicleApplication[];
   wva?: string;
+  intercambios?: string[];
   medidas: {
     ancho: number | string;
     alto: number | string;

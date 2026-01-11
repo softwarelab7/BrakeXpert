@@ -65,6 +65,12 @@
     font-weight: 700;
     font-size: 1rem;
     transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+    gap: 8px;
 }
 
 .ReloadPrompt-btn-primary {

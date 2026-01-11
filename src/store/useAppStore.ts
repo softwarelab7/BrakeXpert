@@ -311,6 +311,21 @@ export const useAppStore = create<AppState>()(
                     };
                 }),
 
+            toggleBrandTag: (tagId) =>
+                set((state) => {
+                    const currentTags = state.filters.selectedBrandTags || [];
+                    const newTags = currentTags.includes(tagId)
+                        ? currentTags.filter(t => t !== tagId)
+                        : [...currentTags, tagId];
+
+                    const newFilters = { ...state.filters, selectedBrandTags: newTags };
+                    return {
+                        filters: newFilters,
+                        filteredProducts: applyFilters(state.products, newFilters, state.favorites),
+                        ui: { ...state.ui, currentPage: 1 }
+                    };
+                }),
+
             clearFilters: () =>
                 set((state) => ({
                     filters: initialFilters,

@@ -62,7 +62,7 @@ function ReloadPrompt() {
                             className="ReloadPrompt-btn ReloadPrompt-btn-primary"
                             onClick={handleUpdate}
                         >
-                            Actualizar ahora <ArrowRight size={20} style={{ marginLeft: '8px' }} />
+                            Actualizar ahora <ArrowRight size={20} />
                         </button>
                     )}
                     {offlineReady && !needRefresh && (
