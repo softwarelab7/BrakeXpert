@@ -33,7 +33,7 @@
     width: 100%;
     max-width: 600px;
     /* Default size */
-    max-height: 90vh;
+    max-height: 85vh;
     position: relative;
     display: flex;
     flex-direction: column;
@@ -443,7 +443,8 @@
     /* Reduced gap from 2rem */
     background: var(--bg-secondary);
     /* Fixed: Theme aware background */
-    min-height: 600px;
+    min-height: auto;
+    max-height: 100%;
 }
 
 @media (min-width: 900px) {

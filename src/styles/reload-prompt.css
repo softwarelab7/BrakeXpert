@@ -12,6 +12,8 @@
     transform: translate(-50%, -50%);
     width: 440px;
     max-width: 90vw;
+    max-height: 85vh;
+    overflow-y: auto;
     background: var(--bg-secondary);
     border: 1px solid var(--border-primary);
     border-radius: 20px;
@@ -24,6 +26,21 @@
     text-align: center;
     animation: fluentScaleIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
+
+/* Custom Scrollbar for ReloadPrompt */
+.ReloadPrompt-toast::-webkit-scrollbar {
+    width: 6px;
+}
+
+.ReloadPrompt-toast::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.ReloadPrompt-toast::-webkit-scrollbar-thumb {
+    background: var(--border-primary);
+    border-radius: 10px;
+}
+
 
 .ReloadPrompt-icon-wrapper {
     width: 64px;
@@ -120,6 +137,27 @@
     background: #2b52cc;
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(53, 99, 233, 0.3);
+}
+
+.ReloadPrompt-btn.updating {
+    opacity: 0.8;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+.spin-animate {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 .ReloadPrompt-btn-secondary {

@@ -1,9 +1,11 @@
 import { useRegisterSW } from 'virtual:pwa-register/react';
-import { RefreshCw, Wifi, ArrowRight } from 'lucide-react';
+import { RefreshCw, Wifi, ArrowRight, Loader } from 'lucide-react';
+import { useState } from 'react';
 import { useAppStore } from '../store/useAppStore';
 import '../styles/reload-prompt.css';
 
 function ReloadPrompt() {
+    const [isUpdating, setIsUpdating] = useState(false);
     const {
         offlineReady: [offlineReady, setOfflineReady],
         needRefresh: [needRefresh, setNeedRefresh],
@@ -25,12 +27,16 @@ function ReloadPrompt() {
     };
 
     const handleUpdate = () => {
-        addNotification({
-            title: 'Actualización completada',
-            message: 'La aplicación se ha actualizado a la versión más reciente.',
-            type: 'system'
-        });
-        updateServiceWorker(true);
+        setIsUpdating(true);
+        // Simulate update processing before reload
+        setTimeout(() => {
+            addNotification({
+                title: 'Actualización completada',
+                message: 'La aplicación se ha actualizado a la versión más reciente.',
+                type: 'system'
+            });
+            updateServiceWorker(true);
+        }, 1500);
     };
 
     if (!offlineReady && !needRefresh) return null;
@@ -71,10 +77,19 @@ function ReloadPrompt() {
                 <div className="ReloadPrompt-actions">
                     {needRefresh && (
                         <button
-                            className="ReloadPrompt-btn ReloadPrompt-btn-primary"
+                            className={`ReloadPrompt-btn ReloadPrompt-btn-primary ${isUpdating ? 'updating' : ''}`}
                             onClick={handleUpdate}
+                            disabled={isUpdating}
                         >
-                            Actualizar ahora <ArrowRight size={20} />
+                            {isUpdating ? (
+                                <>
+                                    Actualizando... <Loader size={20} className="spin-animate" />
+                                </>
+                            ) : (
+                                <>
+                                    Actualizar ahora <ArrowRight size={20} />
+                                </>
+                            )}
                         </button>
                     )}
                     {offlineReady && !needRefresh && (
