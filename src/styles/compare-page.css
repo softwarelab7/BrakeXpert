@@ -1,0 +1,332 @@
+.compare-page-container {
+    padding: 1rem 2rem 2rem 2rem;
+    /* Reduced top padding significantly */
+    max-width: 1400px;
+    margin: 0 auto;
+    width: 100%;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+/* Header */
+.compare-header {
+    display: flex;
+    justify-content: center;
+    /* Center everything */
+    align-items: center;
+    gap: 2rem;
+    margin-bottom: 0.5rem;
+    /* Reduced margin to pull content up */
+    padding-bottom: 0.5rem;
+    /* Reduced padding */
+    border-bottom: 1px solid var(--border-color);
+    position: relative;
+}
+
+/* Back button absolute left to keep title centered */
+/* Back button */
+.compare-back-btn {
+    position: absolute;
+    left: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: transparent;
+    border: none;
+    /* Cleaner without border */
+    color: var(--text-secondary);
+    /* Softer initial color */
+    padding: 0.5rem 1rem;
+    border-radius: 2rem;
+    /* Pill shape */
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.compare-back-btn:hover {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    transform: translateX(-4px);
+    /* Subtle slide left */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.compare-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.5rem;
+    /* Slight increase for the bolder font */
+    font-weight: 800;
+    /* Match logo weight */
+    color: var(--text-primary);
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    /* Match logo letter-spacing */
+}
+
+/* Table Container */
+/* Table Container */
+/* Table Container */
+.compare-table-container {
+    background: var(--bg-secondary);
+    border-radius: 1rem;
+    /* Rounded corners */
+    border: 1px solid #64748b;
+    /* Thinner border (1px) */
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+
+    /* Centering & Sizing strategy */
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+
+    overflow: hidden;
+    /* Clips children to rounded corners */
+    overflow-x: auto;
+    /* Allow scroll if needed on small screens */
+}
+
+/* ... existing styles ... */
+
+.compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    /* Ensures equal distribution if widths are auto */
+}
+
+/* Zebra Striping & Hover */
+.compare-table tr:nth-child(even) {
+    background-color: rgba(125, 125, 125, 0.08);
+    /* Darker zebra for light mode contrast */
+}
+
+.compare-table tr:hover {
+    background-color: rgba(59, 130, 246, 0.2);
+    /* Stronger blue to match user expectation */
+    cursor: default;
+}
+
+.compare-table tr:hover .compare-feature-header {
+    background-color: rgba(59, 130, 246, 0.3);
+    /* Even stronger on header to stand out */
+}
+
+/* Header Column */
+.compare-feature-header {
+    width: 140px;
+    min-width: 140px;
+    background: rgba(125, 125, 125, 0.15);
+    /* Stronger background without relying on bg-tertiary */
+    color: var(--text-primary);
+    font-size: 0.65rem;
+    /* Reduced font size as requested */
+    font-weight: 800;
+    /* ... existing styles ... */
+    color: var(--text-primary);
+    font-size: 0.65rem;
+    /* Reduced font size as requested */
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    vertical-align: middle !important;
+    text-align: center;
+    padding: 0.6rem 0.5rem;
+    /* Reduced vertical padding */
+    border-right: 2px solid var(--border-color);
+    /* Theme aware */
+    transition: background-color 0.2s;
+}
+
+/* Product Column */
+.compare-product-col {
+    width: auto;
+    min-width: 200px;
+    max-width: 300px;
+    /* Prevent massive stretching on ultra-wide */
+    text-align: center;
+    position: relative;
+    /* Removed explicit background to allow zebra striping */
+}
+
+/* Product Info Section */
+.compare-image-container {
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0.75rem;
+}
+
+.compare-image {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    mix-blend-mode: multiply;
+    transition: filter 0.3s ease;
+}
+
+[data-theme='dark'] .compare-image {
+    filter: none;
+    mix-blend-mode: normal;
+    background-color: white;
+    /* Force white background */
+    border-radius: 4px;
+    padding: 2px;
+}
+
+.compare-ref-title {
+    font-size: 0.85rem;
+    /* Reduced from 1rem to fit long refs better */
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0 0 0.25rem 0;
+    line-height: 1.3;
+}
+
+.compare-manufacturer {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.compare-remove-text-btn {
+    font-size: 0.7rem;
+    color: #ef4444;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    text-decoration: underline;
+    opacity: 0.8;
+}
+
+.compare-remove-text-btn:hover {
+    opacity: 1;
+}
+
+/* Data Styling */
+.data-value {
+    font-size: 0.75rem;
+    /* Reduced from 0.875rem */
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+.data-sub {
+    font-size: 0.65rem;
+    /* Reduced from 0.7rem */
+    color: var(--text-tertiary);
+}
+
+/* Lists */
+.simple-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    text-align: center;
+    /* Center list items */
+}
+
+.simple-list li {
+    font-size: 0.75rem;
+    /* Reduced list items too just in case */
+    color: var(--text-secondary);
+    padding: 0.25rem 0;
+    border-bottom: 1px dashed var(--border-color-dim);
+}
+
+.simple-list li:last-child {
+    border-bottom: none;
+}
+
+.simple-list strong {
+    color: var(--text-primary);
+}
+
+/* Badges */
+.ref-badge {
+    display: inline-block;
+    font-size: 0.65rem;
+    /* Reduced from 0.7rem */
+    padding: 2px 6px;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    margin: 2px;
+    color: var(--text-secondary);
+}
+
+/* Position Badge */
+.pos-text {
+    font-size: 0.6rem;
+    /* Reduced further */
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 0.15rem 0.4rem;
+    /* More compact padding */
+    border-radius: 4px;
+    display: inline-block;
+}
+
+.pos-text-delantera {
+    color: #3b82f6;
+    background: rgba(59, 130, 246, 0.1);
+}
+
+.pos-text-trasera {
+    color: #ec4899;
+    background: rgba(236, 72, 153, 0.1);
+}
+
+.pos-text-ambas {
+    color: #8b5cf6;
+    background: rgba(139, 92, 246, 0.1);
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .compare-page-container {
+        padding: 1rem;
+    }
+
+    .compare-header {
+        flex-direction: column;
+        gap: 1rem;
+        height: auto;
+    }
+
+    .compare-back-btn {
+        position: static;
+        /* Remove absolute positioning */
+        align-self: flex-start;
+        margin-bottom: 0.5rem;
+    }
+
+    .compare-title {
+        font-size: 1.25rem;
+    }
+}
+
+/* Difference Highlighting */
+.compare-row-diff {
+    background-color: rgba(245, 158, 11, 0.08) !important;
+    /* Soft Amber highlight */
+    transition: background-color 0.3s;
+}
+
+.compare-row-diff .compare-feature-header {
+    border-left: 3px solid #f59e0b;
+    background-color: rgba(245, 158, 11, 0.15);
+    /* Slightly darker header */
+}
+
+/* Dark mode adjustment if needed, though rgba usually works well on both if low opacity */
+[data-theme='dark'] .compare-row-diff {
+    background-color: rgba(245, 158, 11, 0.15) !important;
+}

@@ -1,0 +1,1030 @@
+/* Modal Overlay/Backdrop */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: var(--z-modal);
+    padding: 1rem;
+}
+
+.modal-overlay.allow-overflow {
+    overflow-y: auto;
+    align-items: flex-start;
+    padding: 2rem 1rem;
+}
+
+.modal-overlay.allow-overflow .modal-container {
+    margin: auto;
+    /* Reset max-height is handled by specific class below */
+}
+
+/* Modal Container */
+.modal-container {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-primary);
+    border-radius: 1.25rem;
+    box-shadow: var(--shadow-xl);
+    width: 100%;
+    max-width: 600px;
+    /* Default size */
+    max-height: 90vh;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transform: scale(0.95);
+    opacity: 0;
+    animation: popIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* ... existing code ... */
+
+/* Detail Image Column */
+.detail-image-col {
+    flex: 0.8;
+    /* Very compact */
+    display: flex;
+    flex-direction: column;
+    /* Stack image and specs vertical */
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    gap: 1.5rem;
+    height: 100%;
+    /* Strict centering vs neighbor column */
+}
+
+.main-product-image {
+    max-width: 100%;
+    max-height: 350px;
+    /* Reduced to avoid crowding */
+    object-fit: contain;
+    /* Removed drop-shadow */
+}
+
+.modal-sm {
+    max-width: 450px;
+}
+
+.modal-large {
+    max-width: 1100px;
+}
+
+.modal-xl {
+    max-width: 1200px;
+}
+
+/* Modal Header */
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--border-primary);
+    background: var(--bg-glass);
+}
+
+.modal-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.modal-close-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 0.5rem;
+    color: var(--text-secondary);
+    transition: all 0.2s ease;
+}
+
+.modal-close-btn:hover {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+}
+
+/* Modal Body */
+.modal-body {
+    padding: 1.5rem;
+    overflow-y: auto;
+    color: var(--text-primary);
+}
+
+.modal-body-p0 {
+    padding: 0 !important;
+}
+
+.modal-container.allow-overflow {
+    overflow: visible;
+}
+
+.modal-body.allow-overflow {
+    overflow: visible;
+}
+
+/* Fix corners when overflow is visible */
+.modal-container.allow-overflow {
+    overflow: visible;
+    max-height: unset;
+}
+
+.modal-container.allow-overflow .modal-header {
+    border-top-left-radius: 1.25rem;
+    border-top-right-radius: 1.25rem;
+}
+
+.modal-container.allow-overflow .modal-body:last-child {
+    border-bottom-left-radius: 1.25rem;
+    border-bottom-right-radius: 1.25rem;
+}
+
+/* Modal Footer */
+.modal-footer {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid var(--border-primary);
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    background: var(--bg-secondary);
+}
+
+
+/* Product Detail Modal Specifics */
+.detail-layout {
+    display: flex;
+    gap: 2rem;
+    position: relative;
+    /* Anchor for floating toolbar */
+    min-height: 400px;
+}
+
+.modal-actions-toolbar {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: flex;
+    gap: 0.5rem;
+    background: transparent;
+    padding: 0.5rem;
+    border: none;
+    box-shadow: none;
+    align-items: center;
+    z-index: 20;
+    animation: slideDownFade 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Reverted: Individual button styles removed to match original transparent look */
+
+@keyframes slideDownFade {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Old toolbar styles replaced at bottom of file */
+.action-btn-toolbar,
+.close-btn-toolbar {
+    /* Styles moved to end of file for consolidation */
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.action-btn-toolbar:hover,
+.close-btn-toolbar:hover {
+    color: var(--accent-primary);
+    transform: scale(1.1);
+}
+
+.action-btn-toolbar:active,
+.close-btn-toolbar:active {
+    transform: scale(0.9);
+}
+
+.action-btn-toolbar.active {
+    color: var(--accent-primary);
+    /* Active color (Heart/Compare) */
+}
+
+.action-btn-toolbar.active svg {
+    fill: currentColor;
+    /* Fill icon if active */
+}
+
+.toolbar-divider {
+    width: 1px;
+    height: 1.25rem;
+    background: #94a3b8;
+    /* Match darker border */
+    margin: 0 0.5rem;
+}
+
+/* Detail Info Column */
+.detail-info-col {
+    flex: 2;
+    /* Dominate the space */
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    height: 100%;
+    /* Ensure it fills height */
+}
+
+
+/* Detail Image Column */
+.detail-image-col {
+    flex: 0.8;
+    /* Very compact */
+    display: flex;
+    flex-direction: column;
+    /* Stack image and specs vertical */
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    gap: 1.5rem;
+    height: 100%;
+    /* Strict centering vs neighbor column */
+}
+
+.main-product-image {
+    max-width: 100%;
+    max-height: 300px;
+    /* Reduced to avoid crowding and overlapping buttons */
+    object-fit: contain;
+    /* Removed drop-shadow */
+}
+
+.image-wrapper {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+/* Measurements overlay scaling */
+.measurements-overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.measure-box {
+    position: absolute;
+    background: #e2e8f0;
+    padding: 0.1rem 0.4rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    color: #475569;
+    font-weight: 600;
+}
+
+/* Specs Section (Vertical in Left Column) */
+.specs-section {
+    margin-top: auto;
+    /* Push to bottom if space permits */
+    padding-top: 0.75rem;
+    border-top: 1px dashed #e2e8f0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    /* Tighter gap */
+}
+
+.specs-header {
+    font-size: 0.7rem;
+    /* Smaller header */
+    font-weight: 700;
+    color: var(--text-secondary);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin: 0;
+}
+
+.specs-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    /* Very tight rows */
+}
+
+.spec-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.8rem;
+    /* Compact font size */
+}
+
+.spec-key {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.spec-val {
+    color: var(--text-secondary);
+}
+
+/* Closing Animations */
+.modal-overlay.closing {
+    animation: fadeOut 0.3s ease-out forwards;
+}
+
+.modal-container.closing {
+    animation: popOut 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes popIn {
+    from {
+        transform: scale(0.95) translateY(10px);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1) translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes popOut {
+    from {
+        transform: scale(1) translateY(0);
+        opacity: 1;
+    }
+
+    to {
+        transform: scale(0.95) translateY(10px);
+        opacity: 0;
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        background: rgba(0, 0, 0, 0.7);
+    }
+
+    to {
+        background: rgba(0, 0, 0, 0);
+    }
+}
+
+/* Product Detail Specific Styles */
+.detail-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+}
+
+.detail-image-section {
+    position: relative;
+    background: var(--bg-primary);
+    border-radius: 0.75rem;
+    padding: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 300px;
+}
+
+.detail-image {
+    max-width: 100%;
+    max-height: 300px;
+    object-fit: contain;
+}
+
+.detail-info-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.detail-specs-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+}
+
+.spec-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.spec-label {
+    font-size: 0.75rem;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.spec-value {
+    font-size: 1rem;
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+.detail-refs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+@media (min-width: 768px) {
+    .detail-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+/* ==========================================================================
+   New Product Detail Layout (Standardized / Non-Responsive)
+   ========================================================================== */
+
+.detail-layout {
+    display: grid;
+    grid-template-columns: 1.1fr 1.4fr;
+    /* Always side-by-side */
+    gap: 2rem;
+    padding: 1.5rem 2.5rem;
+    background: var(--bg-secondary);
+    width: 100%;
+    height: 100%;
+}
+
+/* Force standard size for the modal container when it's product detail (xl) */
+.modal-xl {
+    width: 1200px !important;
+    /* Standard fixed width */
+    max-width: 98vw !important;
+    /* Safety cap for very small screens */
+    height: 85vh !important;
+    /* Standard fixed height */
+    max-height: 1000px !important;
+}
+
+/* Remove media query since we want standard size everywhere */
+/* @media (min-width: 900px) ... removed */
+
+/* --- Left Column: Info --- */
+.detail-info-col {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    /* Reduced gap from 1rem */
+}
+
+.badges-row {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    /* Ensure alignment */
+}
+
+.badge-pill {
+    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: white;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.badge-pill-blue {
+    background-color: #2563eb;
+}
+
+.badge-pill-blue-solid {
+    background-color: #3b82f6;
+}
+
+.badge-pill-dark {
+    background-color: #1e293b;
+}
+
+.badge-pill-red {
+    background-color: #ef4444;
+}
+
+.badge-pill-gradient {
+    background: linear-gradient(90deg, #3b82f6 0%, #8b5cf6 50%, #ef4444 100%);
+}
+
+.badge-pill-blue-sm {
+    background-color: #2563eb;
+    padding: 0.15rem 0.5rem;
+    font-size: 0.7rem;
+}
+
+.badge-pill-dark-sm {
+    background-color: #1e293b;
+    padding: 0.15rem 0.5rem;
+    font-size: 0.7rem;
+}
+
+.position-row {
+    margin-top: -0.5rem;
+    /* Slightly less aggressive lift */
+    margin-bottom: 0.5rem;
+    /* Keep gap with refs */
+    position: relative;
+    z-index: 5;
+}
+
+.brand-section {
+    margin-top: 0.5rem;
+}
+
+.brand-header {
+    font-size: 0.9rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: #0f172a;
+    margin: 0;
+    letter-spacing: 0.5px;
+}
+
+/* Applications Table */
+/* Applications Table */
+/* Applications Table */
+/* Applications Table */
+.applications-table-container {
+    flex: 1;
+    /* Independent scroll, filling space */
+    min-height: 0;
+    /* Required for flex scroll */
+    max-height: 280px;
+    /* Restored max-height for independent scroll */
+    overflow-y: auto;
+    /* Independent scroll */
+    padding: 2px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+/* Custom Scrollbar for applications */
+.applications-table-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+.applications-table-container::-webkit-scrollbar-track {
+    background: #f1f5f9;
+}
+
+.applications-table-container::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 3px;
+}
+
+.brand-group {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--bg-tertiary);
+    /* Fixed: Theme aware (lighter than secondary in dark mode?) or use subtle rgba */
+    border: 1px solid var(--border-color);
+    /* Fixed: Theme aware */
+    border-radius: 0.5rem;
+    padding: 0.5rem 0.75rem;
+}
+
+.brand-header-in-list {
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    /* Fixed: Theme aware */
+    background: transparent;
+    padding: 0 0 0.25rem 0;
+    border-bottom: 1px solid var(--border-color);
+    /* Theme aware border */
+    margin: 0 0 0.25rem 0;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.brand-logo-icon {
+    height: 1.25rem;
+    width: auto;
+    max-width: 3rem;
+    margin-right: 0.5rem;
+    object-fit: contain;
+    display: block;
+}
+
+.brand-group:first-child .brand-header-in-list {
+    margin-top: 0;
+}
+
+.app-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.7rem;
+}
+
+.app-table tr {
+    /* border-bottom: 1px solid #f1f5f9; Remove internal borders for tighter look? Or keep faint */
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.app-table tr:last-child {
+    border-bottom: none;
+}
+
+.app-table td {
+    padding: 0.15rem 0;
+    /* Much tighter */
+    color: var(--text-secondary);
+    /* Fixed: Theme aware */
+}
+
+.app-model {
+    font-weight: 500;
+    color: var(--text-primary);
+    /* Fixed: Theme aware */
+    width: 60%;
+}
+
+.app-year {
+    text-align: center;
+    width: 15%;
+    font-family: inherit;
+}
+
+.app-pos {
+    text-align: right;
+    width: 25%;
+    font-weight: 700;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    padding-left: 1rem;
+    /* Add spacing from year */
+}
+
+/* Specificity fix: override table cell color */
+.app-pos.text-red {
+    color: #ef4444;
+}
+
+.app-pos.text-blue {
+    color: #3b82f6;
+}
+
+.app-pos.text-purple {
+    color: #9333ea;
+}
+
+/* Specs Section */
+.specs-section {
+    margin-top: 1rem;
+}
+
+.specs-header {
+    font-size: 0.7rem;
+    font-weight: 800;
+    color: var(--text-secondary);
+    /* Fixed: Theme aware */
+    margin: 0 0 0.5rem 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.specs-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.spec-row {
+    display: flex;
+    align-items: flex-start;
+    /* items top aligned */
+    gap: 1rem;
+    border-bottom: 1px solid #f1f5f9;
+    padding-bottom: 0.4rem;
+}
+
+.spec-row:last-child {
+    border-bottom: none;
+}
+
+.spec-key {
+    width: 100px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    /* Fixed: Theme aware color */
+    flex-shrink: 0;
+}
+
+.spec-val {
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    /* Fixed: Theme aware color */
+}
+
+.spec-val-badges {
+    display: flex;
+    gap: 0.3rem;
+    flex-wrap: wrap;
+}
+
+/* --- Right Column: Image --- */
+.detail-image-col {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    /* border: 1px solid #e2e8f0; Removed per user request */
+    border-radius: 0.5rem;
+    padding: 0;
+    /* Full bleed image logic inside wrapper */
+    overflow: hidden;
+    height: auto;
+    /* Allow stretch */
+    justify-content: center;
+    /* Vertically center image */
+}
+
+/* Cleaned up old action styles */
+
+.action-btn:hover {
+    color: #3b82f6;
+    transform: scale(1.1);
+}
+
+.action-btn.active {
+    color: #ef4444;
+    /* Favorite */
+}
+
+.action-btn:first-child.active {
+    color: #3b82f6;
+    /* Compare */
+}
+
+/* ... existing styles ... */
+.image-wrapper {
+    width: 100%;
+    min-height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    background: transparent;
+    border-radius: 0;
+    padding: 3rem 1rem 1rem;
+    /* Top padding protects buttons */
+}
+
+
+.main-product-image {
+    max-width: 100%;
+    height: auto;
+    max-height: 65vh;
+    /* Allow larger height */
+    object-fit: contain;
+}
+
+.no-image-placeholder-large {
+    width: 100%;
+    height: 100%;
+    min-height: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--bg-secondary);
+    color: var(--text-tertiary);
+    gap: 1rem;
+    font-size: 1.2rem;
+    font-weight: 500;
+    border-radius: 0.5rem;
+}
+
+.no-image-placeholder-large svg {
+    opacity: 0.4;
+}
+
+.image-ref-badge {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: #1e3a8a;
+    /* Dark Blue */
+    color: white;
+    font-weight: 800;
+    font-size: 1.2rem;
+    padding: 0.5rem 1.5rem;
+    z-index: 10;
+}
+
+/* Image Loading & Skeleton */
+.image-wrapper {
+    position: relative;
+    /* Ensure absolute children (skeleton) verify bounds */
+    min-height: 300px;
+    /* Maintain height prevents collapse */
+}
+
+.image-skeleton-loader {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--bg-secondary);
+    border-radius: 0.5rem;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.shimmer-effect {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg,
+            var(--bg-secondary) 0%,
+            var(--bg-elevated) 50%,
+            var(--bg-secondary) 100%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+.main-product-image {
+    transition: opacity 0.4s ease-in-out, transform 0.4s ease-out;
+    opacity: 0;
+    transform: scale(0.95);
+}
+
+.main-product-image.loaded {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.main-product-image.loading {
+    opacity: 0;
+}
+
+.measurements-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem;
+    pointer-events: none;
+}
+
+.measure-box {
+    background: #cbd5e1;
+    color: #334155;
+    font-weight: 700;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.9rem;
+}
+
+
+.measure-val {
+    margin-left: 0.5rem;
+    font-weight: 400;
+}
+
+/* Reference Badges (Matching ProductCard) */
+/* Reference Badges (Matching ProductCard) */
+.ref-badge {
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.2rem 0.5rem;
+    border-radius: 0.3rem;
+    color: white !important;
+    background: #3b82f6 !important;
+    /* Solid Blue */
+    border: none !important;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    line-height: normal;
+    letter-spacing: 0.025em;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.ref-badge-gray {
+    color: white !important;
+    background: #64748b !important;
+    /* Slate 500 */
+    border: none !important;
+}
+
+.ref-badge-red {
+    color: white !important;
+    background: #ef4444 !important;
+    /* Red 500 */
+    border: none !important;
+}
+
+.ref-badge-lightblue {
+    color: white !important;
+    background: #0ea5e9 !important;
+    /* Sky 500 */
+    border: none !important;
+}
+
+.modal-actions-toolbar {
+    position: absolute;
+    top: 1rem;
+    right: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    z-index: 50;
+    background: transparent;
+    padding: 0;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+.action-btn-toolbar,
+.close-btn-toolbar {
+    background: transparent !important;
+    /* Clean like cards - FORCE transparent */
+    border: none !important;
+    cursor: pointer;
+    padding: 0.25rem;
+    color: var(--text-secondary);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: auto;
+    height: auto;
+    border-radius: 0.25rem;
+    box-shadow: none !important;
+}
+
+/* Force white buttons in dark mode as requested - High Specificity */
+html[data-theme='dark'] .modal-actions-toolbar .action-btn-toolbar,
+html[data-theme='dark'] .modal-actions-toolbar .close-btn-toolbar {
+    color: #ffffff !important;
+    filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.9));
+    /* Stronger shadow */
+}
+
+/* Clean up actions toolbar */
+.action-btn-toolbar:hover,
+.close-btn-toolbar:hover {
+    color: var(--accent-primary);
+    transform: scale(1.1);
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+.action-btn-toolbar.active {
+    color: #9333ea !important;
+    background: transparent !important;
+    /* Verified Purple Match from ProductCard */
+}
+
+/* Force Active Color Override in Dark Mode */
+html[data-theme='dark'] .modal-actions-toolbar .action-btn-toolbar.active {
+    color: #9333ea !important;
+    filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.5));
+}
+
+/* Remove scroll from modal body when noPadding is used */
+.modal-body-p0 {
+    padding: 0 !important;
+    overflow-y: hidden !important;
+}

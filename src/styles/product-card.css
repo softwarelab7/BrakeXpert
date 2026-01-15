@@ -1,0 +1,322 @@
+.product-card {
+    background: var(--bg-secondary);
+    border-radius: 1rem;
+    overflow: hidden;
+    border: 1px solid var(--border-contrast);
+    /* Contrast Frame */
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    position: relative;
+    cursor: pointer;
+    /* 3D Effect Shadow - Heavy */
+    box-shadow: var(--shadow-3d);
+    animation: fadeInUpCard 0.5s ease-out forwards;
+    opacity: 0;
+}
+
+@keyframes fadeInUpCard {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.new-badge-overlay {
+    position: absolute;
+    top: 40px;
+    /* Below header */
+    left: 12px;
+    background: linear-gradient(135deg, #fbbf24, #d97706);
+    color: white;
+    font-size: 0.65rem;
+    font-weight: 800;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    z-index: 20;
+    letter-spacing: 0.05em;
+    animation: popInBadge 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes popInBadge {
+    from {
+        transform: scale(0) rotate(-10deg);
+    }
+
+    to {
+        transform: scale(1) rotate(0);
+    }
+}
+
+.product-card:hover {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    transform: translateY(-4px);
+    border-color: var(--accent-primary);
+}
+
+.product-card.hover-delantera:hover {
+    border-color: #3b82f6;
+}
+
+.product-card.hover-trasera:hover {
+    border-color: #ef4444;
+}
+
+.product-card.hover-ambas:hover {
+    border-color: #8b5cf6;
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--header-padding, 0.5rem 0.75rem);
+    /* Responsive padding */
+    background: transparent;
+    /* Background removed for seamless look */
+    border-bottom: none;
+    /* Divider removed */
+    z-index: 10;
+}
+
+.position-badge {
+    font-size: var(--badge-font-size, 0.78rem);
+    font-weight: 700;
+    /* Reverted to 700 for better visibility */
+    padding: var(--badge-padding, 0.2rem 0.6rem);
+    /* Increased padding slighty */
+    border-radius: 0.4rem;
+    /* Soft rounded corners */
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background: #3b82f6;
+    /* Solid Blue */
+    color: white;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: normal;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.badge-trasera {
+    background: #ef4444;
+    /* Solid Red */
+    color: white;
+}
+
+.badge-ambas {
+    background: linear-gradient(90deg,
+            #3b82f6 0%,
+            #8b5cf6 50%,
+            #ef4444 100%);
+    color: white;
+    border: none;
+}
+
+.action-icons {
+    display: flex;
+    gap: 0.15rem;
+}
+
+
+
+/* Image Container */
+.image-container {
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.product-image {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    transition: transform 0.3s ease;
+}
+
+.product-card:hover .product-image {
+    transform: scale(1.02);
+    /* Very subtle hover */
+}
+
+/* References Section */
+.ref-section {
+    padding: var(--ref-padding, 0.5rem 1rem);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    /* Align badges to start (left) per reference image */
+    gap: 0.25rem;
+    /* Reduced from 0.5rem per "mas juntas" */
+    border-top: 1px solid var(--border-contrast);
+    /* Divider restored */
+    border-bottom: 1px solid var(--border-contrast);
+    /* Divider restored */
+    background: transparent;
+    /* Background removed for seamless look */
+    min-height: var(--ref-section-height, 4.5rem);
+    /* Responsive fixed minimum */
+    height: var(--ref-section-height, 4.5rem);
+    /* Responsive strict fixed height */
+    overflow-y: hidden;
+    /* Hide overflow to maintain grid */
+    align-content: center;
+}
+
+.ref-badge {
+    font-size: var(--ref-badge-font-size, 0.68rem) !important;
+    font-weight: 700;
+    padding: var(--ref-badge-padding, 0.15rem 0.5rem) !important;
+    border-radius: 0.4rem;
+    /* Soft rounded corners */
+    color: white !important;
+    background: #3b82f6 !important;
+    /* Solid Blue (Lighter: Blue 500) */
+    border: none !important;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    line-height: normal;
+    letter-spacing: 0.025em;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.ref-badge-alt {
+    color: white !important;
+    background: #334155 !important;
+    /* Slate 700 (Lighter than 900) */
+    border: none !important;
+}
+
+.ref-badge-danger {
+    color: white !important;
+    background: #ef4444 !important;
+    /* Red 500 (Lighter than 700) */
+    border: none !important;
+}
+
+.ref-badge-gray {
+    color: white !important;
+    background: #64748b !important;
+    /* Slate 500 (Medium) */
+    border: none !important;
+}
+
+.ref-badge-red {
+    color: white !important;
+    background: #ef4444 !important;
+    /* Red 500 */
+    border: none !important;
+}
+
+.ref-badge-lightblue {
+    color: white !important;
+    background: #0a3cff !important;
+    /* Royal Blue (Matches Pagination/Logo) */
+    border: none !important;
+}
+
+.ref-badge.ref-badge-mint {
+    color: white !important;
+    background-color: #10b981 !important;
+    background: #10b981 !important;
+    /* Emerald 500 */
+    border: none !important;
+}
+
+
+
+
+
+.copy-tooltip {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #10b981;
+    color: white;
+    font-size: 0.65rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    margin-bottom: 4px;
+    white-space: nowrap;
+    animation: fadeInTooltip 0.2s ease;
+    z-index: 20;
+    pointer-events: none;
+}
+
+@keyframes fadeInTooltip {
+    from {
+        opacity: 0;
+        transform: translate(-50%, 5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
+}
+
+/* Applications Section */
+.card-bottom {
+    padding: var(--footer-padding, 0.75rem 1rem 1rem);
+    border-top: none;
+}
+
+.applications {
+    font-size: var(--app-font-size, 0.725rem);
+    color: var(--text-secondary);
+    line-height: 1.2;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: 0;
+}
+
+@media (max-width: 768px) {
+    .image-container {
+        padding: 1rem;
+    }
+
+
+    .product-image {
+        max-height: 120px;
+    }
+}
+
+/* No Image Placeholder */
+.no-image-placeholder {
+    width: 100%;
+    height: 100%;
+    min-height: 140px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--bg-secondary);
+    color: var(--text-tertiary);
+    gap: 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.no-image-placeholder svg {
+    opacity: 0.5;
+}

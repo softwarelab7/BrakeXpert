@@ -1,0 +1,279 @@
+/* Layout Container */
+.filters-column {
+    flex: 0 0 262px;
+    width: 262px;
+    z-index: 10;
+    padding-top: 0.8rem;
+    padding-bottom: 1.5rem;
+}
+
+.sidebar {
+    /* Layout & Position Context - Visuals moved to .sidebar-content */
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    /* Gap between framed content and tags */
+    transition: all var(--transition-base);
+    position: sticky;
+    top: 4.6rem;
+}
+
+.sidebar-content {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-contrast);
+    /* Contrast Frame */
+    border-radius: 1.25rem;
+    padding: 0.7rem 0.8rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    /* 3D Effect Shadow - Heavy */
+    box-shadow: var(--shadow-3d);
+}
+
+/* Sections Hierarchy */
+.filter-section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    margin-top: 0.4rem;
+    padding-top: 0.4rem;
+    border-top: 1px solid var(--border-primary);
+    /* Lighter divider */
+    /* Removed negative margins to stay within padding */
+}
+
+.filter-section:first-child {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: none;
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: -1px;
+}
+
+.filter-section-title {
+    font-size: 0.7rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin: 0;
+}
+
+.header-badge {
+    margin-left: auto;
+    font-size: 0.6rem;
+    background: var(--accent-primary);
+    color: white;
+    padding: 0px 5px;
+    border-radius: 8px;
+    font-weight: 800;
+}
+
+/* Base Inputs Style */
+.filter-select,
+.ref-input,
+.measure-input {
+    width: 100%;
+    height: 34px;
+    padding: 0 0.85rem;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-primary);
+    border-radius: 0.75rem;
+    color: var(--text-primary);
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+
+
+/* Interactive States: Glassmorphism & Highlighting */
+.filter-select:focus,
+.ref-input:focus,
+.measure-input:focus {
+    outline: none;
+    background: var(--bg-primary);
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 4px rgba(64, 112, 244, 0.1), var(--shadow-sm);
+    transform: translateY(-1px);
+}
+
+.has-value .filter-select,
+.has-value .ref-input,
+.has-value .measure-input {
+    border-color: rgba(64, 112, 244, 0.4);
+    background: rgba(64, 112, 244, 0.03);
+}
+
+/* Vehicle Details Grid */
+.vehicle-details-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    /* Balanced gap to not look 'pegado' */
+}
+
+.filter-select {
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 0.85rem center;
+    background-size: 0.8rem;
+}
+
+
+
+/* Grid Layouts for Refs & Measurements */
+.references-grid,
+.measurements-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+}
+
+
+
+/* Responsive Scaling */
+/* Mobile Toggle Button */
+.mobile-toggle-btn {
+    display: none;
+}
+
+/* Sidebar Overlay */
+.sidebar-overlay {
+    display: none;
+}
+
+/* Responsive Scaling & Drawer Mode */
+@media (max-width: 768px) {
+    .filters-column {
+        flex: none;
+        width: 100%;
+        margin-bottom: 0.5rem;
+        /* Minimal spacing for button */
+    }
+
+    /* Toggle Button Visible on Mobile */
+    .mobile-toggle-btn {
+        display: block;
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+
+    /* Sidebar Drawer Transformation */
+    /* Sidebar Drawer Transformation */
+    .sidebar {
+        position: fixed;
+        /* Position below header (approx 60px) */
+        top: 60px;
+        left: 0;
+        /* Adjust height to account for header offset */
+        height: calc(100vh - 60px);
+        width: 280px;
+        z-index: 1010;
+        /* Below header (1020) but above content */
+        transform: translateX(-100%);
+        opacity: 0;
+        visibility: hidden;
+        margin: 0;
+        border-radius: 0;
+        border-right: 1px solid var(--border-contrast);
+        border-top: none;
+        border-left: none;
+        border-bottom: none;
+        overflow-y: auto;
+        padding-bottom: 2rem;
+        /* Add top padding for spacing */
+        padding-top: 1rem;
+    }
+
+    .sidebar.open {
+        transform: translateX(0);
+        opacity: 1;
+        visibility: visible;
+    }
+
+    /* Active Overlay */
+    .sidebar-overlay {
+        display: block;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1005;
+        /* Below sidebar (1010) and header (1020) */
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s;
+        backdrop-filter: blur(2px);
+    }
+
+    .sidebar-overlay.open {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .position-pill {
+        height: 40px;
+        font-size: 0.9rem;
+    }
+}
+
+/* Red Delete Button Refactored */
+.borrar-filtros-container {
+    margin-top: 1rem;
+    width: 100%;
+}
+
+.borrar-filtros-container .IconButton {
+    width: 100% !important;
+    /* Force override of styled-components if needed */
+    justify-content: center;
+}
+
+.borrar-filtros-container .trash-hover {
+    width: 100%;
+}
+
+/* StyledIconButton disabled state override if needed, or let component handle it. 
+   React styles usually handle opacity, but let's ensure .disabled class works */
+/* Trash Icon Animation */
+.trash-hover .IconButton:hover svg {
+    animation: trash-shake 0.5s ease-in-out infinite;
+    color: #ef4444;
+    /* Force red on hover */
+}
+
+@keyframes trash-shake {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    20% {
+        transform: rotate(-15deg);
+    }
+
+    40% {
+        transform: rotate(15deg);
+    }
+
+    60% {
+        transform: rotate(-10deg);
+    }
+
+    80% {
+        transform: rotate(10deg);
+    }
+
+    100% {
+        transform: rotate(0deg);
+    }
+}
