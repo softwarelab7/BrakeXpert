@@ -1,0 +1,40 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Products collection: Public Read, Authenticated Admin Write
+    match /pastillas/{productId} {
+      allow read: if true;
+      
+      // Allow write only for authenticated users with admin custom claim
+      allow write: if request.auth != null && request.auth.token.admin == true;
+      
+      // Data Validation
+      function isValidProduct(data) {
+        return data.referencia is string &&
+               data.aplicaciones is list;
+      }
+      
+      allow create, update: if request.auth != null && 
+                            request.auth.token.admin == true &&
+                            isValidProduct(request.resource.data);
+    }
+
+    // History collection: Admin only
+    match /history/{historyId} {
+      allow read, write: if request.auth != null && request.auth.token.admin == true;
+    }
+
+    // Reports collection: Public Create, Admin Manage
+    match /reports/{reportId} {
+      allow create: if true;
+      allow read, update, delete: if request.auth != null && request.auth.token.admin == true;
+    }
+
+    // Default: Deny everything else
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

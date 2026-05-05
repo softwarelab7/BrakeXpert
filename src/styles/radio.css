@@ -1,0 +1,102 @@
+/* Radio Component Styles */
+.radio-container {
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+    position: relative;
+    padding: 0.25rem;
+    user-select: none;
+}
+
+/* Hide default input */
+.radio-input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+/* Custom Radio Circle */
+.radio-custom {
+    position: relative;
+    height: 1.25rem;
+    width: 1.25rem;
+    background-color: var(--bg-primary);
+    border: 2px solid var(--border-primary);
+    border-radius: 50%;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Hover State */
+.radio-container:hover .radio-input~.radio-custom {
+    border-color: var(--text-secondary);
+    background-color: var(--bg-hover);
+}
+
+/* Checked State */
+.radio-input:checked~.radio-custom {
+    border-color: var(--accent-primary);
+    background-color: var(--accent-primary);
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+}
+
+/* Inner Dot */
+.radio-custom::after {
+    content: "";
+    position: absolute;
+    display: none;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: white;
+    transform: scale(0);
+    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Show Dot when Checked */
+.radio-input:checked~.radio-custom::after {
+    display: block;
+    transform: scale(1);
+    animation: radioPop 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Label Text */
+.radio-label {
+    margin-left: 0.75rem;
+    font-size: 0.9rem;
+    color: var(--text-primary);
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.radio-input:checked~.radio-label {
+    color: var(--accent-primary);
+    font-weight: 600;
+}
+
+/* Disabled State */
+.radio-input:disabled~.radio-custom {
+    background-color: var(--bg-secondary);
+    border-color: var(--border-primary);
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.radio-input:disabled~.radio-label {
+    color: var(--text-tertiary);
+    cursor: not-allowed;
+}
+
+@keyframes radioPop {
+    0% {
+        transform: scale(0);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}

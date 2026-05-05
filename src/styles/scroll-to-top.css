@@ -1,0 +1,100 @@
+/* Scroll to Top Button */
+.scroll-to-top-btn {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 2.75rem;
+    /* Reduced from 3.5rem (approx 44px) */
+    height: 2.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-secondary);
+    /* Adapts to Light (White) / Dark (Zinc-900) */
+    border: 2px solid #2563eb;
+    /* Thinner border (was 3px) */
+    border-radius: 9999px;
+    cursor: pointer;
+    overflow: hidden;
+    transition: all 500ms;
+    z-index: 1000;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    animation: fadeInUp 0.3s ease-out;
+}
+
+/* ... existing hover styles ... */
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .scroll-to-top-btn {
+        bottom: 20px;
+        right: 20px;
+        width: 2.25rem;
+        /* Reduced from 3rem (approx 36px) */
+        height: 2.25rem;
+    }
+}
+
+.scroll-to-top-btn:hover {
+    background: #2563eb;
+    /* bg-blue-600 */
+    border-color: #2563eb;
+    box-shadow: 0 0 30px rgba(37, 99, 235, 0.6);
+    transform: translateY(-2px);
+}
+
+.scroll-to-top-btn:active {
+    transform: scale(0.9);
+}
+
+/* Primary Icon (Blue, leaves up) */
+.scroll-icon-primary {
+    position: absolute;
+    color: #2563eb;
+    /* text-blue-600 */
+    transition: all 500ms;
+}
+
+.scroll-to-top-btn:hover .scroll-icon-primary {
+    transform: translateY(-3rem);
+    /* -translate-y-12 */
+    opacity: 0;
+}
+
+/* Secondary Icon (White, comes from down) */
+.scroll-icon-secondary {
+    position: absolute;
+    color: white;
+    opacity: 0;
+    transform: translateY(3rem);
+    /* translate-y-12 */
+    transition: all 500ms;
+}
+
+.scroll-to-top-btn:hover .scroll-icon-secondary {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .scroll-to-top-btn {
+        bottom: 20px;
+        right: 20px;
+        width: 2.25rem;
+        /* Reduced from 3rem (approx 36px) */
+        height: 2.25rem;
+    }
+}

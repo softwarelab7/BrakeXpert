@@ -1,0 +1,105 @@
+.like {
+    border-radius: 999px;
+    position: relative;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.like svg {
+    width: 100%;
+    height: 100%;
+    transform: translate3d(0, 0, 0);
+}
+
+.like svg .heart {
+    opacity: 1;
+    transition: all .3s ease;
+    transform-origin: center;
+    stroke: var(--text-primary);
+}
+
+.like svg .thread {
+    stroke-dashoffset: 87;
+    stroke-dasharray: 87;
+    transform: scale(.5);
+    transform-origin: center;
+}
+
+.like.liked svg {
+    animation: bounce .8s ease;
+}
+
+.like.liked svg .heart {
+    opacity: 0;
+    transform: scale(.5);
+}
+
+.like.liked svg .thread {
+    animation: threadheart .6s ease-in forwards;
+}
+
+/* Static checked state without animation */
+.like.is-checked svg .heart {
+    opacity: 0;
+    transform: scale(.5);
+}
+
+.like.is-checked svg .thread {
+    fill: #FF3040;
+    transform: scale(1);
+    stroke-dashoffset: 0;
+}
+
+/* Bookmark specific styles */
+.like svg .bookmark-outline {
+    stroke: var(--text-primary);
+    transition: all .3s ease;
+}
+
+.like.liked svg .bookmark-outline,
+.like.is-checked svg .bookmark-outline {
+    fill: none;
+    stroke: #FFD700;
+    stroke-width: 2.5;
+}
+
+@keyframes bounce {
+    0% {
+        transform: scale(1);
+    }
+
+    60% {
+        transform: scale(1);
+    }
+
+    80% {
+        transform: scale(1.2);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes threadheart {
+    0% {
+        fill: rgba(255, 48, 64, 0);
+        transform: scale(.5);
+        stroke-dashoffset: 87;
+    }
+
+    95% {
+        fill: rgba(255, 48, 64, 0);
+        transform: scale(1);
+        stroke-dashoffset: 0;
+    }
+
+    100% {
+        fill: #FF3040;
+        transform: scale(1);
+        stroke-dashoffset: 0;
+    }
+}
