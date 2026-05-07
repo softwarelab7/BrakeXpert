@@ -1,5 +1,5 @@
 import type { Product } from '../types';
-import Fuse from 'fuse.js';
+import Fuse, { type FuseResult, type FuseResultMatch } from 'fuse.js';
 
 // ─── Fuse.js Config ───────────────────────────────────────────────────────────
 
@@ -68,10 +68,10 @@ export const performSearchWithMatches = (products: Product[], query: string): Se
         return _lastSearchResults;
     }
     const fuse = getFuseIndex(products);
-    _lastSearchResults = fuse.search(query).map((r: Fuse.FuseResult<Product>) => ({
+    _lastSearchResults = fuse.search(query).map((r: FuseResult<Product>) => ({
         item: r.item,
         score: r.score ?? 1,
-        matches: (r.matches ?? []).map((m: Fuse.FuseResultMatch) => ({
+        matches: (r.matches ?? []).map((m: FuseResultMatch) => ({
             key: m.key ?? '',
             value: String(m.value ?? ''),
             indices: m.indices as readonly [number, number][],

@@ -86,7 +86,7 @@ export interface AppState {
     closeSuggestAppModal: () => void;
 }
 
-import { FILTER_STRATEGIES, getSortableRefNumber, performSearch, performSearchWithMatches, type SearchResult } from '../utils/search';
+import { FILTER_STRATEGIES, getSortableRefNumber, performSearch, performSearchWithMatches } from '../utils/search';
 
 const applyFilters = (
     products: Product[],
