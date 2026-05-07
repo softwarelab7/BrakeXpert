@@ -4,8 +4,7 @@ import { useAppStore } from '../../store/useAppStore';
 import type { Product } from '../../types';
 import '../../styles/product-card.css';
 import StyledIconButton from '../common/StyledIconButton';
-import { buildHighlightSegments, type SearchResult } from '../../utils/search';
-import { getLastSearchResults } from '../../store/useAppStore';
+import { getLastSearchResults, buildHighlightSegments } from '../../utils/search';
 
 interface ProductCardProps {
     product: Product;
@@ -27,7 +26,7 @@ const ProductCard = React.memo(({ product }: ProductCardProps) => {
     const highlightMap = useMemo(() => {
         if (!searchQuery) return new Map<string, [number, number][]>();
         const results = getLastSearchResults();
-        const result = results.find((r: SearchResult) => r.item.id === product.id);
+        const result = results.find(r => r.item.id === product.id);
         if (!result) return new Map<string, [number, number][]>();
 
         const map = new Map<string, [number, number][]>();

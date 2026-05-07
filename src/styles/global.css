@@ -67,11 +67,11 @@
   --bg-sidebar: #f3f3f3;
 
   /* Light Zinc Text - High Contrast Improvements */
-  --text-primary: #000000;
+  --text-primary: #111827;   /* Gray-900 — legible sin fatiga */
   /* Pure black text for white bg */
-  --text-secondary: #18181b;
+  --text-secondary: #374151;  /* Gray-700 */
   /* Darker for better contrast */
-  --text-tertiary: #27272a;
+  --text-tertiary: #6b7280;   /* Gray-500 */
   /* Darker */
   --text-muted: #4b5563;
 
@@ -751,4 +751,8 @@ input::placeholder {
     color: black !important;
     box-shadow: none !important;
   }
+}
+/* ── Monospace for technical codes ── */
+code, kbd, .mono, .ref-badge {
+    font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', ui-monospace, monospace;
 }

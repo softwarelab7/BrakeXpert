@@ -130,7 +130,12 @@
 
 
 /* Grid Layouts for Refs & Measurements */
-.references-grid,
+.references-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
 .measurements-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;

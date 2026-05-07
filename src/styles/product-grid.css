@@ -1,96 +1,71 @@
+/* ═══════════════════════════════════════════════════════
+   PRODUCT GRID — Density modes con imagen protagonista
+   ═══════════════════════════════════════════════════════ */
+
 .results-wrapper {
     display: grid;
-    /* Default Density Variables (Normal - Adjusted Smaller) */
-    --card-padding: 0.5rem 1.5rem;
-    --card-image-height: 140px;
-    --grid-min-width: 220px;
-    --badge-font-size: 0.7rem;
-    --badge-padding: 0.12rem 0.5rem;
-    --ref-badge-font-size: 0.65rem;
-    --ref-badge-padding: 0.15rem 0.35rem;
-    --header-padding: 0.3rem 0.65rem;
-    --ref-padding: 0.35rem 0.75rem;
-    --footer-padding: 0.5rem 0.75rem 0.7rem;
-    --app-font-size: 0.7rem;
-    --icon-size: 1.1rem;
-    --icon-gap: 0.6rem;
-    --ref-section-height: 4rem;
-    /* Slightly reduced */
-    /* Default/Normal Height */
+
+    /* ── DEFAULT (Normal) ── */
+    --card-image-height: 200px;    /* ↑ Imagen más grande que antes (era 140px) */
+    --grid-min-width: 230px;
+    --badge-font-size: 0.72rem;
+    --badge-padding: 0.2rem 0.55rem;
+    --ref-badge-font-size: 0.68rem;
+    --ref-badge-padding: 0.18rem 0.45rem;
+    --header-padding: 0.4rem 0.75rem;
+    --ref-padding: 0.45rem 0.85rem;
+    --footer-padding: 0.6rem 0.85rem 0.8rem;
+    --app-font-size: 0.72rem;
+    --ref-section-height: 3.8rem;
 
     grid-template-columns: repeat(auto-fill, minmax(var(--grid-min-width), 1fr));
-    gap: 0.8rem;
+    gap: 0.9rem;
     padding: 0 0 1.5rem 0;
     transition: gap 0.3s ease;
 }
 
-/* Compact Mode */
+/* ── COMPACT ── */
 .results-wrapper[data-density="compact"] {
-    --card-padding: 0.35rem 1rem;
-    --card-image-height: 100px;
-    --grid-min-width: 180px;
+    --card-image-height: 130px;
+    --grid-min-width: 185px;
     --badge-font-size: 0.65rem;
-    --badge-padding: 0.1rem 0.35rem;
-    --ref-badge-font-size: 0.65rem;
-    /* Increased from 0.58rem for legibility */
-    --ref-badge-padding: 0.1rem 0.3rem;
-    --header-padding: 0.25rem 0.5rem;
-    --ref-padding: 0.2rem 0.75rem;
-    --footer-padding: 0.35rem 0.75rem 0.5rem;
-    --app-font-size: 0.625rem;
-    --icon-size: 1rem;
-    --icon-gap: 0.5rem;
-    --ref-section-height: 3.25rem;
-    /* Slightly reduced */
-    /* Compact Height */
-    gap: 0.5rem;
+    --badge-padding: 0.12rem 0.4rem;
+    --ref-badge-font-size: 0.63rem;
+    --ref-badge-padding: 0.12rem 0.32rem;
+    --header-padding: 0.3rem 0.55rem;
+    --ref-padding: 0.3rem 0.65rem;
+    --footer-padding: 0.4rem 0.65rem 0.55rem;
+    --app-font-size: 0.64rem;
+    --ref-section-height: 3.2rem;
+    gap: 0.55rem;
 }
 
-/* Comfortable Mode */
+/* ── COMFORTABLE — máxima visibilidad para comparar con el repuesto físico ── */
 .results-wrapper[data-density="comfortable"] {
-    --card-padding: 1.25rem 2rem;
-    --card-image-height: 220px;
-    --grid-min-width: 300px;
-    --badge-font-size: 0.95rem;
-    --badge-padding: 0.42rem 0.95rem;
-    --ref-badge-font-size: 0.9rem;
-    --ref-badge-padding: 0.4rem 0.9rem;
-    --header-padding: 0.6rem 1.5rem;
-    --ref-padding: 0.75rem 1.5rem;
-    --footer-padding: 1.25rem 2rem 1.75rem;
-    --app-font-size: 0.85rem;
-    --icon-size: 1.35rem;
-    --icon-gap: 1rem;
-    --ref-section-height: 5.5rem;
-    /* Slightly reduced */
-    gap: 1.5rem;
+    --card-image-height: 300px;    /* Grande para comparar con el repuesto real */
+    --grid-min-width: 320px;
+    --badge-font-size: 0.9rem;
+    --badge-padding: 0.35rem 0.85rem;
+    --ref-badge-font-size: 0.85rem;
+    --ref-badge-padding: 0.35rem 0.8rem;
+    --header-padding: 0.65rem 1.25rem;
+    --ref-padding: 0.7rem 1.25rem;
+    --footer-padding: 0.9rem 1.25rem 1.2rem;
+    --app-font-size: 0.82rem;
+    --ref-section-height: 5.2rem;
+    gap: 1.4rem;
 }
 
+/* ── Empty states ── */
 .grid-empty {
     grid-column: 1 / -1;
     text-align: center;
     padding: 4rem 2rem;
 }
 
-.empty-icon {
-    width: 4rem;
-    height: 4rem;
-    margin: 0 auto 1rem;
-    color: var(--text-tertiary);
-}
-
-.empty-title {
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: var(--text-primary);
-    margin-bottom: 0.5rem;
-}
-
-.empty-message {
-    font-size: 0.875rem;
-    color: var(--text-secondary);
-    margin-bottom: 1.5rem;
-}
+.empty-icon  { width: 4rem; height: 4rem; margin: 0 auto 1rem; color: var(--text-tertiary); }
+.empty-title { font-size: 1.25rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.5rem; }
+.empty-message { font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 1.5rem; }
 
 .empty-action {
     padding: 0.75rem 1.5rem;
@@ -100,25 +75,28 @@
     font-weight: 500;
     transition: all 0.2s ease;
 }
-
 .empty-action:hover {
     background: var(--badge-blue);
     transform: translateY(-2px);
     box-shadow: var(--shadow-md);
 }
 
+/* ── Responsive ── */
 @media (max-width: 768px) {
     .results-wrapper {
         grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-        /* Wider minimum for better card layout */
         gap: 0.75rem;
         padding: 0.5rem 0;
+    }
+    /* Comfortable on mobile stays a bit smaller */
+    .results-wrapper[data-density="comfortable"] {
+        --card-image-height: 220px;
+        --grid-min-width: 260px;
     }
 }
 
 @media (max-width: 550px) {
     .results-wrapper {
         grid-template-columns: 1fr;
-        /* Force single column on phones */
     }
 }

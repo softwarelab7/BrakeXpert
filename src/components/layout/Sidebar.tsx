@@ -8,19 +8,19 @@ import StyledIconButton from '../common/StyledIconButton';
 import { ArrowUp, ArrowDown, Trash2, Filter } from 'lucide-react';
 import '../../styles/sidebar.css';
 
-// AND/OR toggle pill component
+// AND/OR toggle pill component — labels en español para usuarios B2B
 const FilterModeToggle = ({ mode, onChange }: { mode: 'AND' | 'OR'; onChange: (m: 'AND' | 'OR') => void }) => (
-    <div className="filter-mode-toggle" title="AND: todos los filtros deben coincidir. OR: basta con cualquiera.">
+    <div className="filter-mode-toggle" title="Todos: el producto debe cumplir todos los filtros. Alguno: basta que cumpla uno.">
         <button
             className={`mode-btn ${mode === 'AND' ? 'active' : ''}`}
             onClick={() => onChange('AND')}
             type="button"
-        >AND</button>
+        >Todos</button>
         <button
             className={`mode-btn ${mode === 'OR' ? 'active' : ''}`}
             onClick={() => onChange('OR')}
             type="button"
-        >OR</button>
+        >Alguno</button>
     </div>
 );
 
