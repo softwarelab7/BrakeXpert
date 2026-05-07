@@ -85,8 +85,3 @@
 .skeleton-text.short {
     width: 40%;
 }
-/* Override image area height to match hero card */
-.product-card .image-container .skeleton {
-    height: var(--card-image-height, 200px) !important;
-    min-height: var(--card-image-height, 200px);
-}
