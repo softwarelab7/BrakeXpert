@@ -68,10 +68,10 @@ export const performSearchWithMatches = (products: Product[], query: string): Se
         return _lastSearchResults;
     }
     const fuse = getFuseIndex(products);
-    _lastSearchResults = fuse.search(query).map(r => ({
+    _lastSearchResults = fuse.search(query).map((r: Fuse.FuseResult<Product>) => ({
         item: r.item,
         score: r.score ?? 1,
-        matches: (r.matches ?? []).map(m => ({
+        matches: (r.matches ?? []).map((m: Fuse.FuseResultMatch) => ({
             key: m.key ?? '',
             value: String(m.value ?? ''),
             indices: m.indices as readonly [number, number][],
