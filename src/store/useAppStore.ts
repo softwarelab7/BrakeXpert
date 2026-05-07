@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { Product, Filters, Theme, SearchHistory, UIState } from '../types';
 
-interface AppState {
+export interface AppState {
     // Products
     products: Product[];
     filteredProducts: Product[];
@@ -137,8 +137,7 @@ const applyFilters = (
 };
 
 // Store match metadata separately so ProductCard can read it for highlighting
-let _lastSearchResults: SearchResult[] = [];
-export const getLastSearchResults = (): SearchResult[] => _lastSearchResults;
+// Moved to ../utils/search
 
 const applyFiltersWithMatches = (
     products: Product[],
@@ -147,9 +146,7 @@ const applyFiltersWithMatches = (
     filterMode: 'AND' | 'OR' = 'AND'
 ): Product[] => {
     if (filters.searchQuery) {
-        _lastSearchResults = performSearchWithMatches(products, filters.searchQuery);
-    } else {
-        _lastSearchResults = [];
+        performSearchWithMatches(products, filters.searchQuery);
     }
     return applyFilters(products, filters, favorites, filterMode);
 };

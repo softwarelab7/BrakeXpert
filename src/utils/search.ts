@@ -56,13 +56,19 @@ export interface SearchResult {
     matches: SearchMatch[];
 }
 
+// ─── Search Cache ────────────────────────────────────────────────────────────
+let _lastSearchResults: SearchResult[] = [];
+
 /**
  * Performs fuzzy search and returns results WITH match metadata for highlighting.
  */
 export const performSearchWithMatches = (products: Product[], query: string): SearchResult[] => {
-    if (!query) return products.map(p => ({ item: p, score: 1, matches: [] }));
+    if (!query) {
+        _lastSearchResults = products.map(p => ({ item: p, score: 1, matches: [] }));
+        return _lastSearchResults;
+    }
     const fuse = getFuseIndex(products);
-    return fuse.search(query).map(r => ({
+    _lastSearchResults = fuse.search(query).map(r => ({
         item: r.item,
         score: r.score ?? 1,
         matches: (r.matches ?? []).map(m => ({
@@ -71,7 +77,13 @@ export const performSearchWithMatches = (products: Product[], query: string): Se
             indices: m.indices as readonly [number, number][],
         })),
     }));
+    return _lastSearchResults;
 };
+
+/**
+ * Returns the results of the last search performed.
+ */
+export const getLastSearchResults = (): SearchResult[] => _lastSearchResults;
 
 /**
  * Simple version — returns just products (used internally by applyFilters).

@@ -1,32 +1,32 @@
 import React, { useMemo } from 'react';
 import { ArrowRightLeft, ImageOff, Bookmark } from 'lucide-react';
-import { useAppStore } from '../../store/useAppStore';
+import { useAppStore, type AppState } from '../../store/useAppStore';
 import type { Product } from '../../types';
 import '../../styles/product-card.css';
 import StyledIconButton from '../common/StyledIconButton';
-import { getLastSearchResults, buildHighlightSegments } from '../../utils/search';
+import { getLastSearchResults, buildHighlightSegments, type SearchResult } from '../../utils/search';
 
 interface ProductCardProps {
     product: Product;
 }
 
 const ProductCard = React.memo(({ product }: ProductCardProps) => {
-    const favorites = useAppStore(state => state.favorites);
-    const comparisons = useAppStore(state => state.comparisons);
-    const searchQuery = useAppStore(state => state.filters.searchQuery);
+    const favorites = useAppStore((state: AppState) => state.favorites);
+    const comparisons = useAppStore((state: AppState) => state.comparisons);
+    const searchQuery = useAppStore((state: AppState) => state.filters.searchQuery);
 
     const isFavorite = favorites.includes(product.id);
     const isInComparison = comparisons.includes(product.id);
 
-    const toggleFavorite = useAppStore(state => state.toggleFavorite);
-    const toggleComparison = useAppStore(state => state.toggleComparison);
-    const openProductDetailModal = useAppStore(state => state.openProductDetailModal);
+    const toggleFavorite = useAppStore((state: AppState) => state.toggleFavorite);
+    const toggleComparison = useAppStore((state: AppState) => state.toggleComparison);
+    const openProductDetailModal = useAppStore((state: AppState) => state.openProductDetailModal);
 
     // Get match indices for this product so we can highlight references
     const highlightMap = useMemo(() => {
         if (!searchQuery) return new Map<string, [number, number][]>();
         const results = getLastSearchResults();
-        const result = results.find(r => r.item.id === product.id);
+        const result = results.find((r: SearchResult) => r.item.id === product.id);
         if (!result) return new Map<string, [number, number][]>();
 
         const map = new Map<string, [number, number][]>();
@@ -146,7 +146,7 @@ const ProductCard = React.memo(({ product }: ProductCardProps) => {
                 <span className={`position-badge ${positionInfo.className}`}>
                     {positionInfo.display}
                 </span>
-                <div className="action-icons" onClick={(e) => e.stopPropagation()}>
+                <div className="action-icons" onClick={(e: React.MouseEvent) => e.stopPropagation()}>
                     <StyledIconButton
                         icon={<ArrowRightLeft />}
                         tooltip={isInComparison ? "Quitar de comparar" : "Comparar"}
