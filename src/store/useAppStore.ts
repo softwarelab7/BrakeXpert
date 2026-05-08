@@ -102,6 +102,13 @@ const applyFilters = (
         ? performSearch(products, filters.searchQuery)
         : [...products];
 
+    // 1.1 Strict post-filter: ensure results actually contain the terms (if not using fuzzy)
+    // This helps eliminate "low quality" fuzzy matches that show up when searching specific references
+    if (filters.searchQuery && filtered.length > 0) {
+        const strictStrategy = FILTER_STRATEGIES.searchQuery;
+        filtered = filtered.filter(product => strictStrategy(product, filters.searchQuery));
+    }
+
     // 2. Collect active non-search filter entries
     const activeFilters = Object.entries(filters).filter(([key, value]) => {
         if (key === 'searchQuery') return false;

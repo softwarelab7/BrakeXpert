@@ -6,11 +6,11 @@ import Fuse from 'fuse.js';
 const fuseOptions = {
     includeScore: true,
     includeMatches: true,         // ✅ NEW: devuelve qué campos y posiciones coincidieron
-    threshold: 0.25,              // ✅ RELAXED: más tolerante a errores tipográficos (era 0.1)
-    distance: 200,                // ✅ NEW: busca coincidencias en todo el campo, no solo al inicio
+    threshold: 0.2,              // ✅ STRICTER: menos tolerante a errores para evitar "ruido"
+    distance: 100,               // ✅ BETTER: prioriza coincidencias más cercanas al inicio
     ignoreLocation: true,
-    useExtendedSearch: true,
-    minMatchCharLength: 2,        // ✅ NEW: mínimo 2 chars para considerar match
+    useExtendedSearch: false,     // ✅ FIXED: el guion '-' ya no se trata como operador NOT
+    minMatchCharLength: 2,
     keys: [
         { name: 'referencia', weight: 3.0 },
         { name: 'ref', weight: 2.5 },
