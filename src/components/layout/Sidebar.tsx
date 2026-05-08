@@ -1,7 +1,7 @@
-import { useMemo, useState, useEffect, useRef } from 'react';
+import React, { useMemo, useState, useEffect, useRef, ChangeEvent } from 'react';
 
-import { useAppStore } from '../../store/useAppStore';
-import type { Product } from '../../types';
+import { useAppStore, type AppState } from '../../store/useAppStore';
+import type { Product, VehicleApplication } from '../../types';
 import AnimatedSearch from '../common/AnimatedSearch';
 import SearchableSelect from '../common/SearchableSelect';
 import StyledIconButton from '../common/StyledIconButton';
@@ -11,7 +11,7 @@ import '../../styles/sidebar.css';
 // AND/OR toggle pill component
 const FilterModeToggle = ({ mode, onChange }: { mode: 'AND' | 'OR'; onChange: (m: 'AND' | 'OR') => void }) => (
     <div className="filter-mode-wrapper">
-        <span className="mode-label">MODO:</span>
+        <span className="mode-label">MODO</span>
         <div className="filter-mode-toggle" title={mode === 'AND' ? "AND: Todos los filtros deben coincidir" : "OR: Al menos un filtro debe coincidir"}>
             <button
                 className={`mode-btn ${mode === 'AND' ? 'active' : ''}`}
@@ -36,8 +36,8 @@ const Sidebar = () => {
     const store = useAppStore();
     const [isMobileOpen, setIsMobileOpen] = useState(false);
     const { filters, products, filteredProducts } = store;
-    const filterMode = useAppStore(state => state.filterMode);
-    const setFilterMode = useAppStore(state => state.setFilterMode);
+    const filterMode = useAppStore((state: AppState) => state.filterMode);
+    const setFilterMode = useAppStore((state: AppState) => state.setFilterMode);
 
     // Ref for search input
     const searchInputRef = useRef<HTMLInputElement>(null);
@@ -152,21 +152,21 @@ const Sidebar = () => {
         const brandMap = new Map<string, number>();
         products.forEach((p: Product) => {
             if (p.aplicaciones && Array.isArray(p.aplicaciones)) {
-                p.aplicaciones.forEach((app: any) => {
+                p.aplicaciones.forEach((app: VehicleApplication) => {
                     if (app && app.marca) {
                         brandMap.set(app.marca, (brandMap.get(app.marca) || 0) + 1);
                     }
                 });
             }
         });
-        return Array.from(brandMap.entries()).sort((a, b) => a[0].localeCompare(b[0]));
+        return Array.from(brandMap.entries()).sort((a: [string, number], b: [string, number]) => a[0].localeCompare(b[0]));
     }, [products]);
 
     const models = useMemo(() => {
         const modelMap = new Map<string, number>();
         products.forEach((p: Product) => {
             if (p.aplicaciones && Array.isArray(p.aplicaciones)) {
-                p.aplicaciones.forEach((app: any) => {
+                p.aplicaciones.forEach((app: VehicleApplication) => {
                     // Check if brand is selected, if so, only show models for that brand
                     if (filters.selectedBrand && app.marca !== filters.selectedBrand) {
                         return;
@@ -178,14 +178,14 @@ const Sidebar = () => {
                 });
             }
         });
-        return Array.from(modelMap.keys()).sort((a, b) => a.localeCompare(b));
+        return Array.from(modelMap.keys()).sort((a: string, b: string) => a.localeCompare(b));
     }, [products, filters.selectedBrand]);
 
     const years = useMemo(() => {
         const yearSet = new Set<string>();
         products.forEach((p: Product) => {
             if (p.aplicaciones && Array.isArray(p.aplicaciones)) {
-                p.aplicaciones.forEach((app: any) => {
+                p.aplicaciones.forEach((app: VehicleApplication) => {
                     if (app && app.año) {
                         yearSet.add(String(app.año));
                     }
@@ -253,8 +253,8 @@ const Sidebar = () => {
                             <SearchableSelect
                                 placeholder="Marca"
                                 value={filters.selectedBrand || ''}
-                                options={brands.map(([name]) => name)}
-                                onChange={(value) => {
+                                options={brands.map(([name]: [string, number]) => name)}
+                                onChange={(value: string) => {
                                     store.setSelectedBrand(value);
                                     if (value) setLocalQuery('');
                                 }}
@@ -322,7 +322,7 @@ const Sidebar = () => {
                                     className="ref-input"
                                     placeholder="OEM"
                                     value={localOem}
-                                    onChange={(e) => setLocalOem(e.target.value)}
+                                    onChange={(e: ChangeEvent<HTMLInputElement>) => setLocalOem(e.target.value)}
                                 />
                             </div>
                             <div className={`ref-input-wrapper ${localFmsi ? 'has-value' : ''}`}>
@@ -331,7 +331,7 @@ const Sidebar = () => {
                                     className="ref-input"
                                     placeholder="FMSI"
                                     value={localFmsi}
-                                    onChange={(e) => setLocalFmsi(e.target.value)}
+                                    onChange={(e: ChangeEvent<HTMLInputElement>) => setLocalFmsi(e.target.value)}
                                 />
                             </div>
                         </div>
@@ -349,7 +349,7 @@ const Sidebar = () => {
                                     placeholder="Ancho"
                                     step="0.1"
                                     value={localWidth}
-                                    onChange={(e) => setLocalWidth(e.target.value)}
+                                    onChange={(e: ChangeEvent<HTMLInputElement>) => setLocalWidth(e.target.value)}
                                 />
                             </div>
                             <div className={`measure-input-wrapper ${localHeight ? 'has-value' : ''}`}>
@@ -359,7 +359,7 @@ const Sidebar = () => {
                                     placeholder="Alto"
                                     step="0.1"
                                     value={localHeight}
-                                    onChange={(e) => setLocalHeight(e.target.value)}
+                                    onChange={(e: ChangeEvent<HTMLInputElement>) => setLocalHeight(e.target.value)}
                                 />
                             </div>
                         </div>

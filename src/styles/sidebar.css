@@ -51,17 +51,20 @@
 
 .section-header {
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    margin-bottom: -1px;
+    margin-bottom: 0.6rem;
+    gap: 0.4rem;
 }
 
 .filter-section-title {
-    font-size: 0.7rem;
+    font-size: 0.68rem;
     font-weight: 800;
     color: var(--text-primary);
     text-transform: uppercase;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.03em;
     margin: 0;
+    line-height: 1.2;
 }
 
 .header-badge {
@@ -281,15 +284,16 @@
 .filter-mode-wrapper {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    margin-left: auto;
+    gap: 0.35rem;
+    flex-shrink: 0;
 }
 
 .mode-label {
-    font-size: 0.65rem;
+    font-size: 0.55rem;
     font-weight: 800;
     color: var(--text-tertiary);
     text-transform: uppercase;
+    letter-spacing: 0.02em;
 }
 
 .filter-mode-toggle {
@@ -304,10 +308,10 @@
 .mode-btn {
     background: transparent;
     border: none;
-    padding: 3px 12px;
-    font-size: 0.65rem;
+    padding: 2px 8px;
+    font-size: 0.6rem;
     font-weight: 800;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.02em;
     color: var(--text-tertiary);
     border-radius: 18px;
     cursor: pointer;

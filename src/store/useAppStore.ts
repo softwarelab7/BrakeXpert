@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { Product, Filters, Theme, SearchHistory, UIState } from '../types';
 
-interface AppState {
+export interface AppState {
     // Products
     products: Product[];
     filteredProducts: Product[];
