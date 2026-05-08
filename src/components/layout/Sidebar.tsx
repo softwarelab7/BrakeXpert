@@ -10,17 +10,24 @@ import '../../styles/sidebar.css';
 
 // AND/OR toggle pill component
 const FilterModeToggle = ({ mode, onChange }: { mode: 'AND' | 'OR'; onChange: (m: 'AND' | 'OR') => void }) => (
-    <div className="filter-mode-toggle" title="AND: todos los filtros deben coincidir. OR: basta con cualquiera.">
-        <button
-            className={`mode-btn ${mode === 'AND' ? 'active' : ''}`}
-            onClick={() => onChange('AND')}
-            type="button"
-        >AND</button>
-        <button
-            className={`mode-btn ${mode === 'OR' ? 'active' : ''}`}
-            onClick={() => onChange('OR')}
-            type="button"
-        >OR</button>
+    <div className="filter-mode-wrapper">
+        <span className="mode-label">MODO:</span>
+        <div className="filter-mode-toggle" title={mode === 'AND' ? "AND: Todos los filtros deben coincidir" : "OR: Al menos un filtro debe coincidir"}>
+            <button
+                className={`mode-btn ${mode === 'AND' ? 'active' : ''}`}
+                onClick={() => onChange('AND')}
+                type="button"
+            >
+                <span className="btn-text">TODOS</span>
+            </button>
+            <button
+                className={`mode-btn ${mode === 'OR' ? 'active' : ''}`}
+                onClick={() => onChange('OR')}
+                type="button"
+            >
+                <span className="btn-text">CUALQUIERA</span>
+            </button>
+        </div>
     </div>
 );
 
