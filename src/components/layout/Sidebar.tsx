@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect, useRef, ChangeEvent } from 'react';
+import { useMemo, useState, useEffect, useRef, type ChangeEvent } from 'react';
 
 import { useAppStore, type AppState } from '../../store/useAppStore';
 import type { Product, VehicleApplication } from '../../types';
